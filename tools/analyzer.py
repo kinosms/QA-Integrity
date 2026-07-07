@@ -1250,6 +1250,9 @@ def main():
     # ── 출력 파일 5d: tc_context_linking.csv (Phase 4-C) ───────────────────────
     _write_context_linking(tc_master_rows)
 
+    # ── 출력 파일 5e: ai_standard_tc.csv (공통 데이터 레이어) ──────────────────
+    _write_ai_standard_tc(tc_master_rows)
+
     # ── Phase 3: 품질 점검 ─────────────────────────────────────────────────────
     quality_issues, quality_stats = _run_quality_check(tc_master_rows)
 
@@ -1795,6 +1798,279 @@ def _write_context_linking(tc_master_rows: list):
             count += 1
     print(f"[OK] tc_context_linking.csv  → {count}행")
     return count
+
+
+# ── Semantic Validation 헬퍼 ─────────────────────────────────────────────────
+
+_SEM_STOP = {
+    '이다','이어야','되어야','한다','있다','없다','된다','이동','이동된','확인',
+    '수행','진입','탭','클릭','선택','표시','노출','설정','상태','화면',
+    '이상','이하','이후','이전','기준','경우','있는','없는','하는','하여',
+    '되는','되어','으로','에서','에게','부터','까지','또는','그리고','및',
+}
+
+def _sem_keywords(text: str) -> set:
+    import re as _re
+    words = _re.findall(r'[가-힣a-zA-Z]{2,}', text or '')
+    return {w for w in words if w not in _SEM_STOP}
+
+def _sem_match(orig_step, orig_exp, ai_step, ai_exp) -> int:
+    ok = _sem_keywords(orig_step + ' ' + orig_exp)
+    ak = _sem_keywords(ai_step  + ' ' + ai_exp)
+    if not ok:
+        return 100
+    return round(len(ok & ak) / len(ok) * 100)
+
+def _build_intent(cat1, cat2, expected) -> str:
+    parts = []
+    if cat1: parts.append(cat1)
+    if cat2 and cat2 != cat1: parts.append(cat2)
+    first = (expected or '').split('\n')[0].strip()
+    first = re.sub(r'^\d+[.)]\s*', '', first).strip()
+    if first and len(first) < 60:
+        parts.append(first)
+    return ' > '.join(parts)[:100]
+
+def _final_check_point(ai_exp) -> str:
+    for line in (ai_exp or '').split('\n'):
+        s = re.sub(r'^\d+[.)]\s*', '', line.strip())
+        if re.search(r'이어야|되어야|표시|노출|이동|설정', s) and len(s) > 4:
+            return s[:80]
+    first = (ai_exp or '').split('\n')[0].strip()
+    return re.sub(r'^\d+[.)]\s*', '', first)[:80]
+
+
+def _write_ai_standard_tc(tc_master_rows: list):
+    """
+    공통 데이터 레이어: ai_standard_tc.csv 생성.
+    Dashboard와 Excel Export가 동일 데이터를 사용한다.
+
+    컬럼 그룹:
+      A. 원본 식별자: service_name, row_number
+      B. Original TC: orig_cat1~orig_expected, orig_priority
+      C. AI Standard TC: ai_cat1~ai_expected, ai_priority
+      D. AI Analysis:
+           precond_norm_type, precond_evidence
+           step_norm_type, step_reason
+           expected_norm_type, expected_reason
+           quality_issues
+      E. Intent: original_intent, ai_intent, final_check_point
+      F. Semantic Validation: meaning_match_pct, meaning_status, sem_reason
+    """
+    # ── 보조 데이터 로드 ────────────────────────────────────────────────────
+    from collections import defaultdict
+
+    recon_map  = {}
+    link_map   = {}
+    precond_map = defaultdict(list)
+    qi_map     = defaultdict(list)
+
+    recon_path = os.path.join(OUTPUT_DIR, 'tc_reconstruction.csv')
+    if os.path.exists(recon_path):
+        with open(recon_path, encoding='utf-8-sig') as f:
+            for r in csv.DictReader(f):
+                recon_map[r['service_name']+'|'+r['row_number']] = r
+
+    link_path = os.path.join(OUTPUT_DIR, 'tc_context_linking.csv')
+    if os.path.exists(link_path):
+        with open(link_path, encoding='utf-8-sig') as f:
+            for r in csv.DictReader(f):
+                link_map[r['service_name']+'|'+r['row_number']] = r
+
+    pd_path = os.path.join(OUTPUT_DIR, 'precondition_detail.csv')
+    if os.path.exists(pd_path):
+        with open(pd_path, encoding='utf-8-sig') as f:
+            for r in csv.DictReader(f):
+                precond_map[r['service_name']+'|'+r['row_number']].append(r)
+
+    qi_path = os.path.join(OUTPUT_DIR, 'quality_issues.csv')
+    if os.path.exists(qi_path):
+        with open(qi_path, encoding='utf-8-sig') as f:
+            for r in csv.DictReader(f):
+                qi_map[r['service_name']+'|'+r['row_number']].append(r)
+
+    # ── 필드 정의 ────────────────────────────────────────────────────────────
+    fields = [
+        # 식별자
+        'service_name', 'row_number',
+        # Original TC
+        'orig_cat1', 'orig_cat2', 'orig_cat3', 'orig_cat4',
+        'orig_precond', 'orig_step', 'orig_expected', 'orig_priority',
+        # AI Standard TC (TC 값만, 설명 없음)
+        'ai_cat1', 'ai_cat2', 'ai_cat3', 'ai_cat4',
+        'ai_precond', 'ai_step', 'ai_expected', 'ai_priority',
+        # AI Analysis
+        'precond_norm_type', 'precond_evidence',
+        'step_norm_type', 'step_reason',
+        'expected_norm_type', 'expected_reason',
+        'quality_issues',
+        # Intent
+        'original_intent', 'ai_intent', 'final_check_point',
+        # Semantic Validation
+        'meaning_match_pct', 'meaning_status', 'sem_reason',
+    ]
+
+    path = os.path.join(OUTPUT_DIR, 'ai_standard_tc.csv')
+    with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+
+        for tc in tc_master_rows:
+            svc = tc['service_name']
+            num = tc['row_number']
+            key = svc + '|' + str(num)
+
+            recon = recon_map.get(key, {})
+            link  = link_map.get(key, {})
+            pds   = precond_map.get(key, [])
+            qis   = qi_map.get(key, [])
+
+            # ── Original TC ────────────────────────────────────────────────
+            orig_pre = tc.get('precondition', '') or ''
+            orig_stp = tc.get('test_step', '') or ''
+            orig_exp = tc.get('expected_result', '') or ''
+            orig_pri = tc.get('priority', '') or ''
+
+            # ── AI Standard TC — TC 값만 ────────────────────────────────────
+            # 사전조건: 원본 있으면 유지, 없고 추론 있으면 추론 레이블 목록
+            if orig_pre.strip():
+                ai_pre = orig_pre
+            elif pds:
+                seen = {}
+                labels = [p['label'] for p in pds if not (p['label'] in seen or seen.update({p['label']:1}))]
+                ai_pre = '\n'.join(labels[:5])
+            else:
+                ai_pre = ''
+
+            # Test Step
+            recon_type = recon.get('recon_type', '') if recon else ''
+            if recon_type in ('separated', 'clarified') and recon.get('recon_steps'):
+                ai_stp = recon['recon_steps'].replace(' / ', '\n')
+            elif link and link.get('recon_step'):
+                ai_stp = link['recon_step']
+            else:
+                ai_stp = orig_stp
+
+            # 기대결과
+            if recon_type == 'separated' and recon.get('recon_expected'):
+                ai_exp = recon['recon_expected'].replace(' / ', '\n')
+            elif recon_type == 'clarified':
+                ai_exp = '(기대결과 재작성 필요)'
+            elif link and link.get('recon_expected'):
+                ai_exp = link['recon_expected']
+            else:
+                ai_exp = orig_exp
+
+            # ── AI Analysis ─────────────────────────────────────────────────
+            # 사전조건 분석
+            precond_norm = ''
+            precond_ev   = ''
+            if pds:
+                if not orig_pre.strip():
+                    precond_norm = '사전조건 추론'
+                    ev_parts = []
+                    seen = {}
+                    for p in pds[:3]:
+                        if p['label'] not in seen:
+                            seen[p['label']] = 1
+                            ev_parts.append(f"• {p['label']}: {p['reason'][:100]}")
+                    precond_ev = '\n'.join(ev_parts)
+
+            # Test Step 분석
+            step_norm_parts = []
+            step_reason = ''
+            if recon_type == 'separated':
+                step_norm_parts.append('수행 절차 재구성')
+                step_reason = recon.get('reason', '')[:200]
+            elif recon_type == 'clarified':
+                step_norm_parts.append('기대결과 명확화')
+                step_reason = recon.get('reason', '')[:200]
+            if link and link.get('omit_expr'):
+                step_norm_parts.append('문맥 보완')
+                if not step_reason:
+                    step_reason = link.get('reason', '')[:200]
+            step_norm = ', '.join(step_norm_parts)
+
+            # 기대결과 분석
+            exp_norm_parts = []
+            exp_reason = ''
+            if recon_type == 'separated':
+                exp_norm_parts.append('수행 절차 재구성')
+            elif recon_type == 'clarified':
+                exp_norm_parts.append('기대결과 재작성 필요')
+            if link and link.get('recon_expected') and link['recon_expected'] != orig_exp:
+                exp_norm_parts.append('표현 표준화')
+                if not exp_reason:
+                    exp_reason = f'생략된 "{link.get("omit_expr","")}"를 "{link.get("subject","")}"로 보완'
+            exp_norm = ', '.join(exp_norm_parts)
+
+            # 품질 이슈
+            qi_str = '; '.join(
+                f'{q["issue_type"]}: {q["issue_reason"][:60]}'
+                for q in qis[:3]
+            )
+
+            # ── Intent ──────────────────────────────────────────────────────
+            orig_intent = _build_intent(tc.get('category_1',''), tc.get('category_2',''), orig_exp)
+            ai_intent   = _build_intent(tc.get('category_1',''), tc.get('category_2',''), ai_exp)
+            fcp         = _final_check_point(ai_exp)
+
+            # ── Semantic Validation ─────────────────────────────────────────
+            match_pct = _sem_match(orig_stp, orig_exp, ai_stp, ai_exp)
+            preserved = match_pct >= 75
+            status    = 'Meaning Preserved' if preserved else 'Meaning Changed'
+
+            step_changed = orig_stp.strip() != ai_stp.strip()
+            exp_changed  = orig_exp.strip() != ai_exp.strip()
+            pre_changed  = orig_pre.strip() != ai_pre.strip()
+
+            reason_parts = []
+            if not step_changed and not exp_changed and not pre_changed:
+                reason_parts.append('원본과 동일 — Normalization 없음.')
+            else:
+                if pre_changed:
+                    cats = list({p['label'] for p in pds})[:3]
+                    reason_parts.append(f'사전조건 추론: {", ".join(cats)}.')
+                if step_changed:
+                    if recon_type == 'separated':
+                        reason_parts.append('기대결과 내 절차를 Test Step으로 분리.')
+                    elif recon_type == 'clarified':
+                        reason_parts.append('기대결과가 절차로만 구성 → Test Step으로 이동.')
+                    elif link:
+                        reason_parts.append(f'"{link.get("omit_expr","")}" → "{link.get("subject","")}" 문맥 보완.')
+                if exp_changed and recon_type == 'separated':
+                    reason_parts.append('기대결과에서 절차를 분리하여 재구성.')
+                if match_pct < 75:
+                    reason_parts.append('⚠ 의미 변경 가능성 — 검토 필요.')
+
+            sem_reason = ' / '.join(reason_parts) if reason_parts else '—'
+
+            writer.writerow({
+                'service_name': svc, 'row_number': num,
+                # Original TC
+                'orig_cat1': tc.get('category_1',''), 'orig_cat2': tc.get('category_2',''),
+                'orig_cat3': tc.get('category_3',''), 'orig_cat4': tc.get('category_4',''),
+                'orig_precond': orig_pre, 'orig_step': orig_stp,
+                'orig_expected': orig_exp, 'orig_priority': orig_pri,
+                # AI Standard TC
+                'ai_cat1': tc.get('category_1',''), 'ai_cat2': tc.get('category_2',''),
+                'ai_cat3': tc.get('category_3',''), 'ai_cat4': tc.get('category_4',''),
+                'ai_precond': ai_pre, 'ai_step': ai_stp,
+                'ai_expected': ai_exp, 'ai_priority': orig_pri,
+                # AI Analysis
+                'precond_norm_type': precond_norm, 'precond_evidence': precond_ev,
+                'step_norm_type': step_norm, 'step_reason': step_reason,
+                'expected_norm_type': exp_norm, 'expected_reason': exp_reason,
+                'quality_issues': qi_str,
+                # Intent
+                'original_intent': orig_intent, 'ai_intent': ai_intent,
+                'final_check_point': fcp,
+                # Semantic Validation
+                'meaning_match_pct': match_pct, 'meaning_status': status,
+                'sem_reason': sem_reason,
+            })
+
+    print(f"[OK] ai_standard_tc.csv  → {len(tc_master_rows)}행")
 
 
 def _run_quality_check(tc_master_rows):

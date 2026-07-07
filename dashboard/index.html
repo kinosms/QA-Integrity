@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QA Dashboard — Phase 1·2·3</title>
+  <title>QA Dashboard — Phase 1·2·3·4</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,7 +12,8 @@
   <!-- ── 헤더 ── -->
   <header>
     <h1>QA Test Coverage Dashboard</h1>
-    <span class="badge">551 TC · Phase 1·2·3</span>
+    <span class="badge">7002 TC · Phase 1~4</span>
+    <a href="../output/ai_review.xlsx" download class="dl-btn">⬇ AI Review Excel</a>
   </header>
 
   <div class="layout">
@@ -230,11 +231,10 @@
             <span id="cmp-count" class="cmp-count"></span>
           </div>
 
-          <!-- 비교 테이블 헤더 (label | 원본 | AI) -->
+          <!-- 비교 테이블 헤더 -->
           <div class="cmp-header-row">
-            <div style="padding:10px 12px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(148,163,184,.4)">항목</div>
             <div class="cmp-orig-head">원본 TC</div>
-            <div class="cmp-ai-head">AI 분석 결과</div>
+            <div class="cmp-ai-head">AI Standard TC</div>
           </div>
 
           <!-- 비교 테이블 바디 -->
