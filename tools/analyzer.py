@@ -1244,6 +1244,12 @@ def main():
     # ── 출력 파일 5b: precondition_summary.csv (Phase 4) ──────────────────────
     _write_precondition_summary(service_stats, tc_master_rows)
 
+    # ── 출력 파일 5c: tc_reconstruction.csv (Phase 4-B) ────────────────────────
+    _write_reconstruction_summary(tc_master_rows)
+
+    # ── 출력 파일 5d: tc_context_linking.csv (Phase 4-C) ───────────────────────
+    _write_context_linking(tc_master_rows)
+
     # ── Phase 3: 품질 점검 ─────────────────────────────────────────────────────
     quality_issues, quality_stats = _run_quality_check(tc_master_rows)
 
@@ -1399,6 +1405,396 @@ def _write_precondition_summary(service_stats, tc_master_rows):
                 })
                 total_rows_b += 1
     print(f"[OK] precondition_detail.csv   → {total_rows_b}행")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 4-B: TC 문맥 분석 및 절차/기대결과 재구성 (규칙 기반)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── 기대결과 안의 절차(Action) 시그널 ─────────────────────────────────────────
+# 패턴 1: "A - B - C" 형태의 메뉴/설정 경로
+_PATH_PATTERN = re.compile(
+    r'([가-힣\w]+)\s*[-–]\s*([가-힣\w]+)\s*[-–]\s*([가-힣\w]+)',
+)
+# 패턴 2: 기대결과 문장 끝이 행위 동사로 끝남 (이동, 탭, 클릭, 선택, 진입)
+_ACT_END_PATTERN = re.compile(
+    r'(탭|클릭|선택|이동|진입|확인\s*후|터치)\s*[.,。]?\s*$',
+    re.MULTILINE,
+)
+# ── 기대결과(State) 시그널 ──────────────────────────────────────────────────
+_STATE_PATTERN = re.compile(
+    r'(이어야\s*한다|되어야\s*한다|로\s*설정\s*되|이\s*표시|이\s*노출|'
+    r'확인된다|표시된다|변경된다|활성화된다|비활성화된다|이동된다|전환된다|'
+    r'설정\s*되어\s*있|상태로\s*표시|상태여야|로\s*설정)',
+    re.IGNORECASE,
+)
+# ── Step 안의 확인 행위 시그널 (절차에 검증이 섞인 경우) ───────────────────
+_VERIFY_IN_STEP = re.compile(
+    r'확인한다\s*$|확인\s*후\s*$|상태\s*확인$',
+    re.MULTILINE,
+)
+
+# 경로 패턴을 "A > B > C" 형태로 정규화
+def _normalize_path(text: str) -> str:
+    return _PATH_PATTERN.sub(
+        lambda m: f"{m.group(1)} > {m.group(2)} > {m.group(3)}", text
+    )
+
+# 기대결과의 각 줄을 절차/기대결과로 분류
+def _classify_lines(text: str):
+    """
+    기대결과 텍스트의 각 줄을 'action' 또는 'expected'로 분류한다.
+    반환: list of (line: str, role: 'action'|'expected')
+    """
+    results = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        # 번호 제거 후 내용만 추출
+        content = re.sub(r'^\s*\d+\s*[.)]\s*', '', stripped).strip()
+        if not content:
+            continue
+
+        has_path   = bool(_PATH_PATTERN.search(content))
+        has_act    = bool(_ACT_END_PATTERN.search(content))
+        has_state  = bool(_STATE_PATTERN.search(content))
+
+        # 경로 패턴 → 행위로 판단
+        if has_path and not has_state:
+            results.append((content, 'action'))
+        # 행위 동사로 끝나고 상태 표현 없음 → 행위
+        elif has_act and not has_state:
+            results.append((content, 'action'))
+        # 상태 표현 있음 → 기대결과
+        elif has_state:
+            results.append((content, 'expected'))
+        # 판단 불가 → 기대결과로 유지
+        else:
+            results.append((content, 'expected'))
+
+    return results
+
+
+def reconstruct_tc(tc_dict: dict) -> dict:
+    """
+    Phase 4-B: 단일 TC의 절차와 기대결과를 분석·재구성한다.
+
+    반환값:
+      {
+        'recon_type'      : str,   # 'no_change'|'separated'|'clarified'
+        'recon_steps'     : list,  # 재구성된 실행 절차 (번호 없는 텍스트 목록)
+        'recon_expected'  : list,  # 재구성된 기대결과 텍스트 목록
+        'moved_lines'     : list,  # 기대결과 → 절차로 이동한 줄 목록
+        'reason'          : str,   # 재구성 사유 설명
+        'evidence'        : dict,  # {'action_signals': [...], 'state_signals': [...]}
+      }
+    """
+    step     = tc_dict.get('test_step', '') or ''
+    expected = tc_dict.get('expected_result', '') or ''
+
+    if not expected.strip():
+        return {'recon_type': 'no_change', 'recon_steps': [], 'recon_expected': [],
+                'moved_lines': [], 'reason': '기대결과가 비어있어 재구성 대상이 아닙니다.',
+                'evidence': {}}
+
+    classified = _classify_lines(expected)
+    action_lines   = [l for l, r in classified if r == 'action']
+    expected_lines = [l for l, r in classified if r == 'expected']
+
+    # 이동할 행이 없으면 변경 없음
+    if not action_lines:
+        return {'recon_type': 'no_change', 'recon_steps': [], 'recon_expected': [],
+                'moved_lines': [], 'reason': '기대결과 내 절차 혼재가 감지되지 않았습니다.',
+                'evidence': {}}
+
+    # 기존 step에서 번호 달린 줄 추출
+    orig_steps = []
+    for line in step.splitlines():
+        s = re.sub(r'^\s*\d+\s*[.)]\s*', '', line.strip()).strip()
+        if s:
+            orig_steps.append(s)
+
+    # 재구성: 기존 절차 + 이동된 절차 행
+    recon_steps = orig_steps + [_normalize_path(l) for l in action_lines]
+
+    # 기대결과가 아예 없어지는 경우 → 기대결과=없음으로 표시
+    recon_expected = expected_lines if expected_lines else []
+
+    # 재구성 유형 판단
+    if expected_lines:
+        recon_type = 'separated'   # 절차/기대결과 분리
+        reason_parts = []
+        for al in action_lines:
+            if _PATH_PATTERN.search(al):
+                reason_parts.append(
+                    f'"{al[:50]}"은 메뉴 경로 탐색 절차이므로 실행 절차로 이동하였습니다.'
+                )
+            else:
+                reason_parts.append(
+                    f'"{al[:50]}"은 행위 동사로 끝나는 실행 절차이므로 실행 절차로 이동하였습니다.'
+                )
+        for el in expected_lines:
+            reason_parts.append(
+                f'"{el[:50]}"은 최종 상태를 기술하는 기대결과로 유지하였습니다.'
+            )
+        reason = ' '.join(reason_parts)
+    else:
+        recon_type = 'clarified'   # 기대결과 전체가 절차였음
+        reason = (
+            f'기대결과 전체({len(action_lines)}줄)가 실행 절차로 판단되어 '
+            f'실행 절차로 이동하였습니다. '
+            f'명시적인 기대결과가 없어 별도 기재가 필요합니다.'
+        )
+
+    # 근거 시그널
+    action_signals = []
+    for al in action_lines:
+        if _PATH_PATTERN.search(al):
+            action_signals.append(f'경로 패턴: {al[:60]}')
+        if _ACT_END_PATTERN.search(al):
+            action_signals.append(f'행위 동사 종결: {al[:60]}')
+    state_signals = [f'상태 표현: {el[:60]}' for el in expected_lines]
+
+    return {
+        'recon_type'    : recon_type,
+        'recon_steps'   : recon_steps,
+        'recon_expected': recon_expected,
+        'moved_lines'   : action_lines,
+        'reason'        : reason,
+        'evidence'      : {
+            'action_signals': action_signals,
+            'state_signals' : state_signals,
+        },
+    }
+
+
+def _write_reconstruction_summary(tc_master_rows: list):
+    """
+    Phase 4-B: tc_reconstruction.csv 생성.
+
+    재구성이 발생한 TC만 기록한다.
+    """
+    path = os.path.join(OUTPUT_DIR, 'tc_reconstruction.csv')
+    fields = [
+        'service_name', 'row_number',
+        'recon_type',
+        'orig_step', 'orig_expected',
+        'recon_steps', 'recon_expected',
+        'moved_lines', 'reason',
+        'action_signals', 'state_signals',
+    ]
+    count = 0
+    with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for tc in tc_master_rows:
+            result = reconstruct_tc(tc)
+            if result['recon_type'] == 'no_change':
+                continue
+            writer.writerow({
+                'service_name'   : tc['service_name'],
+                'row_number'     : tc['row_number'],
+                'recon_type'     : result['recon_type'],
+                'orig_step'      : tc['test_step'][:300],
+                'orig_expected'  : tc['expected_result'][:300],
+                'recon_steps'    : ' / '.join(result['recon_steps'])[:400],
+                'recon_expected' : ' / '.join(result['recon_expected'])[:400],
+                'moved_lines'    : ' | '.join(result['moved_lines'])[:300],
+                'reason'         : result['reason'][:400],
+                'action_signals' : ' | '.join(result['evidence'].get('action_signals', []))[:200],
+                'state_signals'  : ' | '.join(result['evidence'].get('state_signals', []))[:200],
+            })
+            count += 1
+    print(f"[OK] tc_reconstruction.csv  → {count}행")
+    return count
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 4-C: Context Linking (문맥 연계 분석, 규칙 기반)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# 생략 패턴 — Step에 이 표현이 있으면 Expected에서 대상을 찾는다
+_OMIT_PATTERNS = {
+    '다음_화면':  re.compile(r'다음\s*화면', re.I),
+    '랜딩_확인':  re.compile(r'랜딩\s*확인', re.I),
+    '화면_확인':  re.compile(r'화면\s*확인', re.I),
+    '팝업_확인':  re.compile(r'팝업\s*확인', re.I),
+    '결과_확인':  re.compile(r'결과\s*확인', re.I),
+    '노출_확인':  re.compile(r'노출\s*확인', re.I),
+    '동작_확인':  re.compile(r'동작\s*확인', re.I),
+    '목록_확인':  re.compile(r'목록\s*확인', re.I),
+    'UI_확인':    re.compile(r'UI\s*확인', re.I),
+    '상태_확인':  re.compile(r'상태\s*확인', re.I),
+    '정상_여부':  re.compile(r'정상\s*여부', re.I),
+}
+
+# Expected에서 핵심 명사구(화면명·상태명)를 추출하는 패턴 (우선순위 순)
+_SUBJECT_PATS = [
+    re.compile(r'([가-힣\w\s()\-/]+?(?:화면|페이지|팝업|뷰|창|모달|시트|목록|리스트))\s*(?:이|가|으로|로)?\s*(?:이동|랜딩|노출|표시|확인)'),
+    re.compile(r'([가-힣\w\s()\-/]{2,25})\s*(?:으로|로)\s*이동'),
+    re.compile(r'([가-힣\w\s()\-/]{2,25}?)\s*(?:이|가)\s*노출'),
+    re.compile(r'([가-힣\w\s()\-/]{2,25}?)\s*(?:이|가)\s*표시'),
+    re.compile(r'^([a-zA-Z][a-zA-Z\s/\-]{2,30}(?:menu|view|screen|list))\s', re.I),
+]
+
+def _extract_subject_from_expected(exp_text: str) -> str | None:
+    """Expected 첫 줄에서 핵심 명사구를 추출한다."""
+    first = exp_text.strip().splitlines()[0].strip() if exp_text.strip() else ''
+    first = re.sub(r'^\d+\s*[.)]\s*', '', first).strip()
+    if not first:
+        return None
+    # 짧은 문장은 명사구 자체로 간주
+    if len(first) <= 20 and not re.search(r'[이가]\s*(노출|표시|이동)', first):
+        return first
+    for pat in _SUBJECT_PATS:
+        m = pat.search(first)
+        if m:
+            candidate = m.group(1).strip()
+            # 너무 짧거나 의미없는 조각은 제외
+            if len(candidate) >= 2:
+                return candidate[:35]
+    return None
+
+
+def _make_context_linked_step(step: str, omit_key: str, subject: str) -> str:
+    """
+    생략된 대상이 채워진 재구성 Step을 반환한다.
+    omit_key: 생략 패턴 키 (예: '다음_화면')
+    subject : Expected에서 추출된 대상 (예: 'MO 인증화면')
+    """
+    omit_display = omit_key.replace('_', ' ')
+    # 생략 패턴을 실제 대상으로 치환
+    pat = _OMIT_PATTERNS[omit_key]
+    rewritten = pat.sub(subject, step, count=1)
+    if rewritten == step:
+        # 치환 안 된 경우 보완 문장 추가
+        rewritten = step.rstrip() + f'\n  ※ {omit_display} = {subject}'
+    return rewritten
+
+
+def link_context(tc_dict: dict) -> dict:
+    """
+    Phase 4-C: 단일 TC에서 Step-Expected 간 문맥 연계를 분석한다.
+
+    반환값:
+      {
+        'linked'         : bool,   # 연계가 발생했는지
+        'omit_key'       : str,    # 탐지된 생략 패턴 키
+        'omit_expr'      : str,    # 생략 표현 원문
+        'subject'        : str,    # Expected에서 추출한 대상
+        'source_col'     : str,    # 대상을 찾은 컬럼 ('expected_result' 등)
+        'recon_step'     : str,    # 재구성된 Step
+        'recon_expected' : str,    # 재구성된 Expected (보완)
+        'reason'         : str,    # 판단 근거 설명
+        'confidence'     : str,    # 'high'|'medium'|'low'
+      }
+    """
+    step     = tc_dict.get('test_step', '') or ''
+    expected = tc_dict.get('expected_result', '') or ''
+    precond  = tc_dict.get('precondition', '') or ''
+
+    if not step.strip() or not expected.strip():
+        return {'linked': False}
+
+    # Step에서 생략 패턴 탐지
+    found_key   = None
+    found_match = None
+    for key, pat in _OMIT_PATTERNS.items():
+        m = pat.search(step)
+        if m:
+            found_key   = key
+            found_match = m.group(0)
+            break
+
+    if not found_key:
+        return {'linked': False}
+
+    # Expected에서 대상 추출
+    subject = _extract_subject_from_expected(expected)
+    if not subject:
+        return {
+            'linked': False,
+            'omit_key': found_key, 'omit_expr': found_match,
+            'reason': f'Step에 "{found_match}" 생략 표현이 있으나 Expected에서 대상을 추출할 수 없었습니다.',
+        }
+
+    # Step 재구성
+    recon_step = _make_context_linked_step(step, found_key, subject)
+
+    # Expected 재구성 (명확한 단언문으로)
+    first_exp = expected.strip().splitlines()[0]
+    first_exp = re.sub(r'^\d+\s*[.)]\s*', '', first_exp).strip()
+    # 단언 형태가 없으면 "~이어야 한다" 추가
+    if not _STATE_PATTERN.search(first_exp):
+        recon_expected = first_exp + ' 이어야 한다.'
+    else:
+        recon_expected = first_exp
+
+    # Confidence 판단
+    omit_display = found_key.replace('_', ' ')
+    if found_key in ('다음_화면', '랜딩_확인'):
+        confidence = 'high'
+    elif len(subject) >= 5:
+        confidence = 'high'
+    else:
+        confidence = 'medium'
+
+    reason = (
+        f'Step에 "{found_match}"라는 생략 표현이 있습니다. '
+        f'Expected Result의 첫 번째 문장에서 '
+        f'"{subject}"이(가) 확인 대상임을 파악하였습니다. '
+        f'따라서 "{omit_display}"은 "{subject}"을 의미하는 것으로 판단하였습니다.'
+    )
+
+    return {
+        'linked'         : True,
+        'omit_key'       : found_key,
+        'omit_expr'      : found_match,
+        'subject'        : subject,
+        'source_col'     : 'expected_result',
+        'recon_step'     : recon_step,
+        'recon_expected' : recon_expected,
+        'reason'         : reason,
+        'confidence'     : confidence,
+    }
+
+
+def _write_context_linking(tc_master_rows: list):
+    """Phase 4-C: tc_context_linking.csv 생성."""
+    path = os.path.join(OUTPUT_DIR, 'tc_context_linking.csv')
+    fields = [
+        'service_name', 'row_number',
+        'omit_key', 'omit_expr', 'subject', 'source_col',
+        'orig_step', 'orig_expected',
+        'recon_step', 'recon_expected',
+        'reason', 'confidence',
+    ]
+    count = 0
+    with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for tc in tc_master_rows:
+            result = link_context(tc)
+            if not result.get('linked'):
+                continue
+            writer.writerow({
+                'service_name'   : tc['service_name'],
+                'row_number'     : tc['row_number'],
+                'omit_key'       : result['omit_key'],
+                'omit_expr'      : result['omit_expr'],
+                'subject'        : result['subject'],
+                'source_col'     : result['source_col'],
+                'orig_step'      : tc['test_step'][:300],
+                'orig_expected'  : tc['expected_result'][:300],
+                'recon_step'     : result['recon_step'][:400],
+                'recon_expected' : result['recon_expected'][:300],
+                'reason'         : result['reason'][:400],
+                'confidence'     : result['confidence'],
+            })
+            count += 1
+    print(f"[OK] tc_context_linking.csv  → {count}행")
+    return count
 
 
 def _run_quality_check(tc_master_rows):
@@ -1611,7 +2007,8 @@ def _write_summary(service_stats, total_tc, quality_stats=None, excl_report=None
         '',
         '*생성 파일: tc_master.csv / service_summary.csv / category_summary.csv / coverage.json / '
         'attribute_summary.csv / quality_issues.csv / '
-        'precondition_summary.csv / precondition_detail.csv / summary.md*',
+        'precondition_summary.csv / precondition_detail.csv / '
+        'tc_reconstruction.csv / summary.md*',
     ]
 
     # ── TC 판별 통계 섹션 ──────────────────────────────────────────────────────

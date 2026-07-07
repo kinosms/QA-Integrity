@@ -141,7 +141,7 @@
 
 ---
 
-*생성 파일: tc_master.csv / service_summary.csv / category_summary.csv / coverage.json / attribute_summary.csv / quality_issues.csv / precondition_summary.csv / precondition_detail.csv / summary.md*
+*생성 파일: tc_master.csv / service_summary.csv / category_summary.csv / coverage.json / attribute_summary.csv / quality_issues.csv / precondition_summary.csv / precondition_detail.csv / tc_reconstruction.csv / summary.md*
 
 ## TC 판별 통계
 

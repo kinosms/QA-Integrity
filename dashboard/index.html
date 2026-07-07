@@ -217,22 +217,15 @@
           <span class="toggle-icon">▾</span>
         </div>
         <div class="section-body" style="padding-top:0;padding-bottom:0">
-          <!-- 필터 -->
+          <!-- 필터 (JS에서 동적 생성) -->
           <div class="filter-row" style="padding:16px 0 12px">
             <select class="fsel" id="cmp-svc">
               <option value="all">서비스 전체</option>
+              <!-- 서비스 목록: bindCmpFilters()에서 동적 삽입 -->
             </select>
             <select class="fsel" id="cmp-issue">
-              <option value="all">이슈 필터 없음</option>
-              <option value="has_issue">이슈 있는 TC만</option>
-              <option value="ambiguous_test_step">Test Step 모호</option>
-              <option value="ambiguous_expected_result">기대결과 모호</option>
-              <option value="missing_precondition">사전조건 누락</option>
-              <option value="duplicated_step_expected">Step=Expected 중복</option>
-              <option value="multiple_purpose">복수 목적 혼재</option>
-              <option value="invalid_priority">Priority 이상값</option>
-              <option value="invalid_os">OS 이상값</option>
-              <option value="invalid_category">분류 누락</option>
+              <option value="all">이슈 유형 전체</option>
+              <!-- 선택한 서비스의 실제 이슈 유형: cmp-svc 변경 시 재생성 -->
             </select>
             <span id="cmp-count" class="cmp-count"></span>
           </div>

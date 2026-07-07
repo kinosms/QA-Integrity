@@ -623,6 +623,128 @@ tbody tr:hover td { background: var(--surf2); }
 .cmp-same { color: rgba(226,232,240,.75); }
 .cmp-empty { color: rgba(148,163,184,.3); font-style: italic; font-size: 11px; }
 
+/* ── Phase 4-C: Context Linking 패널 ────────────────────── */
+.cmp-link-panel {
+  border-top: 2px solid rgba(34,211,238,.2);
+  margin-top: 2px;
+  padding: 12px 14px;
+  background: rgba(34,211,238,.03);
+}
+.cmp-link-header {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 10px;
+}
+.cmp-link-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: #22d3ee;
+}
+.link-cf {
+  font-size: 9px; font-weight: 700;
+  border-radius: 3px; padding: 1px 5px;
+}
+.cf-high { background: rgba(74,222,128,.2);  color: #4ade80; }
+.cf-med  { background: rgba(250,204,21,.15); color: #fbbf24; }
+.link-arrow {
+  font-size: 11px; color: var(--muted);
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.link-omit    { color: #fbbf24; background: rgba(250,204,21,.1); border-radius: 3px; padding: 0 4px; font-weight: 600; }
+.link-subject { color: #22d3ee; background: rgba(34,211,238,.1); border-radius: 3px; padding: 0 4px; font-weight: 600; }
+
+.cmp-link-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 10px;
+}
+.cmp-link-col {}
+.link-sub-title {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 5px;
+}
+.link-text {
+  font-size: 11px; line-height: 1.6;
+  color: var(--text); white-space: pre-wrap; word-break: break-word;
+}
+.link-exp { color: #4ade80; }
+.cmp-link-reason {
+  font-size: 10.5px; color: rgba(148,163,184,.75);
+  line-height: 1.5;
+  border-top: 1px dashed rgba(46,51,80,.4);
+  padding-top: 8px;
+}
+.link-reason-label { font-weight: 700; color: var(--muted); }
+
+/* ── Phase 4-B: TC 재구성 패널 ──────────────────────────── */
+.cmp-recon-panel {
+  border-top: 2px solid rgba(99,102,241,.25);
+  margin-top: 2px;
+  padding: 12px 14px;
+  background: rgba(99,102,241,.04);
+}
+.cmp-recon-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.cmp-recon-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--accent);
+}
+.recon-badge {
+  font-size: 10px; font-weight: 700;
+  border-radius: 4px; padding: 2px 7px;
+}
+.recon-separated { background: rgba(99,102,241,.18); color: #818cf8; }
+.recon-clarified { background: rgba(250,204,21,.18);  color: #fbbf24; }
+
+.cmp-recon-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.cmp-recon-col {}
+.recon-sub-title {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.recon-step-item {
+  display: flex; gap: 6px; align-items: flex-start;
+  font-size: 11px; line-height: 1.5; color: var(--text);
+  margin-bottom: 3px;
+}
+.recon-num {
+  color: var(--accent); font-weight: 700;
+  flex-shrink: 0; min-width: 16px;
+}
+.recon-exp-item {
+  font-size: 11px; line-height: 1.5;
+  color: #4ade80;
+  margin-bottom: 3px;
+}
+.recon-warn {
+  font-size: 11px; color: #f97316; font-style: italic;
+}
+.cmp-recon-reason {
+  font-size: 10.5px; color: rgba(148,163,184,.75);
+  line-height: 1.5;
+  border-top: 1px dashed rgba(46,51,80,.4);
+  padding-top: 8px;
+}
+.recon-reason-label {
+  font-weight: 700; color: var(--muted);
+}
+.recon-moved-wrap {
+  margin-top: 4px; font-size: 10px;
+}
+.recon-moved {
+  background: rgba(250,204,21,.12); color: #fbbf24;
+  border-radius: 3px; padding: 1px 5px; margin-right: 4px;
+  font-size: 10px;
+}
+
 /* ── Phase 4: 사전조건 추론 ─────────────────────────────── */
 .pc-infer-wrap {
   margin-top: 8px;

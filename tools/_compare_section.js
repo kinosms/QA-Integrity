@@ -343,6 +343,95 @@ function buildTCBlock(tc, isSplit) {
           '</div></div>' +
         '</div>';
     }
+
+    // TC 재구성 패널 (Phase 4-B)
+    if (typeof TC_RECON !== 'undefined') {
+      var recon = TC_RECON[key];
+      if (recon) {
+        var reconTypeLabel = recon.t === 'separated'
+          ? '<span class="recon-badge recon-separated">절차/기대결과 분리</span>'
+          : '<span class="recon-badge recon-clarified">기대결과 명확화</span>';
+
+        // 재구성된 절차 목록
+        var reconStepItems = recon.rs.split(' / ').filter(Boolean).map(function(s, i) {
+          return '<div class="recon-step-item"><span class="recon-num">①'.replace('①', '&#' + (9312+i) + ';') + '</span>' + hesc(s) + '</div>';
+        }).join('');
+        if (!reconStepItems) reconStepItems = '<span class="cmp-empty">—</span>';
+
+        // 재구성된 기대결과 목록
+        var reconExpItems = recon.re.split(' / ').filter(Boolean).map(function(e) {
+          return '<div class="recon-exp-item">' + hesc(e) + '</div>';
+        }).join('');
+        if (!reconExpItems) reconExpItems = '<span class="recon-warn">명시적 기대결과 없음 — 별도 기재 필요</span>';
+
+        // 이동된 줄
+        var movedItems = recon.mv.split(' | ').filter(Boolean).map(function(m) {
+          return '<span class="recon-moved">' + hesc(m) + '</span>';
+        }).join(' ');
+
+        fieldRows +=
+          '<div class="cmp-recon-panel">' +
+            '<div class="cmp-recon-header">' +
+              '<span class="cmp-recon-title">TC 재구성</span>' +
+              reconTypeLabel +
+            '</div>' +
+            // 2열: 원본(비어있음) | 재구성 결과
+            '<div class="cmp-recon-body">' +
+              '<div class="cmp-recon-col">' +
+                '<div class="recon-sub-title">재구성 실행 절차</div>' +
+                reconStepItems +
+              '</div>' +
+              '<div class="cmp-recon-col">' +
+                '<div class="recon-sub-title">재구성 기대결과</div>' +
+                reconExpItems +
+              '</div>' +
+            '</div>' +
+            // 재구성 사유
+            '<div class="cmp-recon-reason">' +
+              '<span class="recon-reason-label">재구성 사유</span> ' +
+              hesc(recon.rn) +
+              (movedItems ? '<div class="recon-moved-wrap">이동된 줄: ' + movedItems + '</div>' : '') +
+            '</div>' +
+          '</div>';
+      }
+    }
+
+    // Context Linking 패널 (Phase 4-C)
+    if (typeof TC_LINK !== 'undefined') {
+      var link = TC_LINK[key];
+      if (link) {
+        var cfBadge = link.cf === 'high'
+          ? '<span class="link-cf cf-high">High</span>'
+          : '<span class="link-cf cf-med">Medium</span>';
+
+        fieldRows +=
+          '<div class="cmp-link-panel">' +
+            '<div class="cmp-link-header">' +
+              '<span class="cmp-link-title">Context Linking</span>' +
+              cfBadge +
+              '<span class="link-arrow">' +
+                '<span class="link-omit">"' + hesc(link.oe) + '"</span>' +
+                ' → ' +
+                '<span class="link-subject">"' + hesc(link.sub) + '"</span>' +
+              '</span>' +
+            '</div>' +
+            '<div class="cmp-link-body">' +
+              '<div class="cmp-link-col">' +
+                '<div class="link-sub-title">재구성 실행 절차</div>' +
+                '<div class="link-text">' + hesc(link.rs) + '</div>' +
+              '</div>' +
+              '<div class="cmp-link-col">' +
+                '<div class="link-sub-title">재구성 기대결과</div>' +
+                '<div class="link-text link-exp">' + hesc(link.re) + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="cmp-link-reason">' +
+              '<span class="link-reason-label">판단 근거</span> ' +
+              hesc(link.rn) +
+            '</div>' +
+          '</div>';
+      }
+    }
   }
 
   // 헤더: 전체 너비 1행 (3열 병합)
