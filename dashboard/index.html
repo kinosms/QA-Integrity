@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Dashboard — Phase 1·2·3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ── 헤더 ── -->
+  <header>
+    <h1>QA Test Coverage Dashboard</h1>
+    <span class="badge">551 TC · Phase 1·2·3</span>
+  </header>
+
+  <div class="layout">
+
+    <!-- ── 사이드바 ── -->
+    <aside class="sidebar">
+      <div class="sidebar-label">서비스 필터</div>
+      <div id="sidebar-nav"></div>
+    </aside>
+
+    <!-- ── 메인 콘텐츠 ── -->
+    <main class="content">
+
+      <!-- KPI 행 -->
+      <div id="kpi-row" class="kpi-row"></div>
+
+      <!-- ══════════════ PHASE 1 ══════════════ -->
+
+      <!-- 서비스 분포 + 우선순위 분포 -->
+      <div class="two-col">
+
+        <div class="section-card" id="card-svc-donut">
+          <div class="section-header">
+            <span class="sec-title">서비스별 TC 분포</span>
+            <span class="sec-badge">Phase 1</span>
+            <span class="toggle-icon">▾</span>
+          </div>
+          <div class="section-body flex-row">
+            <div class="donut-wrap">
+              <canvas id="donut-service" width="180" height="180"></canvas>
+            </div>
+            <div id="legend-service" class="legend"></div>
+          </div>
+        </div>
+
+        <div class="section-card" id="card-pri-donut">
+          <div class="section-header">
+            <span class="sec-title">우선순위 분포</span>
+            <span class="sec-badge">Phase 1</span>
+            <span class="toggle-icon">▾</span>
+          </div>
+          <div class="section-body flex-row">
+            <div class="donut-wrap">
+              <canvas id="donut-priority" width="180" height="180"></canvas>
+            </div>
+            <div style="flex:1;min-width:0;padding-top:4px">
+              <div id="legend-priority" class="legend" style="margin-bottom:12px"></div>
+              <div id="priority-bars"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- OS 분포 -->
+      <div class="section-card" id="card-os">
+        <div class="section-header">
+          <span class="sec-title">OS 분포</span>
+          <span class="sec-badge">Phase 1</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div id="os-grid" class="os-grid"></div>
+        </div>
+      </div>
+
+      <!-- ══════════════ PHASE 2 ══════════════ -->
+
+      <!-- TC 속성 분포 -->
+      <div class="section-card" id="card-attr">
+        <div class="section-header">
+          <span class="sec-title">TC 속성 분포</span>
+          <span class="sec-badge p2">Phase 2</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div id="attr-bars"></div>
+        </div>
+      </div>
+
+      <!-- 서비스별 속성 히트맵 -->
+      <div class="section-card" id="card-heatmap">
+        <div class="section-header">
+          <span class="sec-title">서비스별 속성 히트맵</span>
+          <span class="sec-badge p2">Phase 2</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body" style="overflow-x:auto;padding-top:0">
+          <div id="heatmap-wrap"></div>
+        </div>
+      </div>
+
+      <!-- 복합 속성 조합 -->
+      <div class="section-card" id="card-compound">
+        <div class="section-header">
+          <span class="sec-title">복합 속성 조합 (상위 20)</span>
+          <span class="sec-badge p2">Phase 2</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div id="compound-attr-bars"></div>
+        </div>
+      </div>
+
+      <!-- ══════════════ PHASE 3 ══════════════ -->
+
+      <!-- 품질 점검 요약 -->
+      <div class="section-card" id="card-quality">
+        <div class="section-header">
+          <span class="sec-title">품질 점검 요약</span>
+          <span class="sec-badge p3">Phase 3</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div id="q-kpis" class="q-kpis"></div>
+          <div class="two-col" style="margin-top:20px;gap:20px">
+            <div>
+              <div class="sub-title">이슈 유형별</div>
+              <div id="q-type-bars"></div>
+            </div>
+            <div>
+              <div class="sub-title">서비스별 이슈 수</div>
+              <div id="q-svc-bars"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 품질 이슈 목록 -->
+      <div class="section-card" id="card-qi">
+        <div class="section-header">
+          <span class="sec-title">품질 이슈 목록</span>
+          <span class="sec-badge p3">Phase 3</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div class="filter-row">
+            <select class="fsel" id="f-qi-svc">
+              <option value="all">서비스 전체</option>
+              <!-- JS에서 COVERAGE.services 기반으로 동적 추가 -->
+            </select>
+            <select class="fsel" id="f-qi-type">
+              <option value="all">이슈 유형 전체</option>
+              <option value="ambiguous_test_step">Test Step 모호</option>
+              <option value="ambiguous_expected_result">기대결과 모호</option>
+              <option value="missing_precondition">사전조건 누락</option>
+              <option value="duplicated_step_expected">Step=Expected 중복</option>
+              <option value="multiple_purpose">복수 목적 혼재</option>
+              <option value="invalid_priority">Priority 이상값</option>
+              <option value="invalid_os">OS 이상값</option>
+              <option value="invalid_category">분류 누락/불일치</option>
+            </select>
+            <select class="fsel" id="f-qi-pri">
+              <option value="all">우선순위 전체</option>
+              <option value="P0">P0</option><option value="P1">P1</option>
+              <option value="P2">P2</option><option value="P3">P3</option>
+              <option value="P4">P4</option><option value="P5">P5</option>
+            </select>
+            <select class="fsel" id="f-qi-os">
+              <option value="all">OS 전체</option>
+              <option value="common">공통</option>
+              <option value="android">Android</option>
+              <option value="ios">iOS</option>
+            </select>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>서비스</th><th>행</th><th>이슈 유형</th>
+                  <th>탐지 근거</th><th>분류 경로</th><th>P</th><th>OS</th>
+                </tr>
+              </thead>
+              <tbody id="qi-tbody"></tbody>
+            </table>
+          </div>
+          <div id="qi-page-info" class="page-info"></div>
+          <div id="qi-pager" class="pager"></div>
+        </div>
+      </div>
+
+      <!-- ══════════════ TC 비교 뷰 ══════════════ -->
+
+      <div class="section-card" id="card-compare">
+        <div class="section-header">
+          <span class="sec-title">원본 TC vs AI 분석 결과</span>
+          <span class="sec-badge">Phase 1·2·3</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body" style="padding-top:0;padding-bottom:0">
+          <!-- 필터 -->
+          <div class="filter-row" style="padding:16px 0 12px">
+            <select class="fsel" id="cmp-svc">
+              <option value="all">서비스 전체</option>
+            </select>
+            <select class="fsel" id="cmp-issue">
+              <option value="all">이슈 필터 없음</option>
+              <option value="has_issue">이슈 있는 TC만</option>
+              <option value="ambiguous_test_step">Test Step 모호</option>
+              <option value="ambiguous_expected_result">기대결과 모호</option>
+              <option value="missing_precondition">사전조건 누락</option>
+              <option value="duplicated_step_expected">Step=Expected 중복</option>
+              <option value="multiple_purpose">복수 목적 혼재</option>
+              <option value="invalid_priority">Priority 이상값</option>
+              <option value="invalid_os">OS 이상값</option>
+              <option value="invalid_category">분류 누락</option>
+            </select>
+            <span id="cmp-count" class="cmp-count"></span>
+          </div>
+
+          <!-- 비교 테이블 헤더 (label | 원본 | AI) -->
+          <div class="cmp-header-row">
+            <div style="padding:10px 12px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(148,163,184,.4)">항목</div>
+            <div class="cmp-orig-head">원본 TC</div>
+            <div class="cmp-ai-head">AI 분석 결과</div>
+          </div>
+
+          <!-- 비교 테이블 바디 -->
+          <div id="cmp-body" class="cmp-body"></div>
+
+          <!-- 페이지네이션 -->
+          <div style="padding:12px 0;display:flex;align-items:center;justify-content:flex-end;gap:8px">
+            <span id="cmp-page-info" class="page-info" style="margin:0"></span>
+            <div id="cmp-pager" class="pager"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TC 전체 목록 -->
+      <div class="section-card" id="card-tc">
+        <div class="section-header">
+          <span class="sec-title">TC 목록 (551건 전체)</span>
+          <span class="sec-badge">Phase 1·2</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <div class="filter-row">
+            <select class="fsel" id="f-tc-pri">
+              <option value="all">우선순위 전체</option>
+              <option value="P0">P0</option><option value="P1">P1</option>
+              <option value="P2">P2</option><option value="P3">P3</option>
+              <option value="P4">P4</option><option value="P5">P5</option>
+            </select>
+            <select class="fsel" id="f-tc-os">
+              <option value="all">OS 전체</option>
+              <option value="common">공통</option>
+              <option value="android">Android</option>
+              <option value="ios">iOS</option>
+            </select>
+            <select class="fsel" id="f-tc-attr">
+              <option value="all">속성 전체</option>
+              <option value="ui_visibility">UI 노출 확인</option>
+              <option value="data_change">데이터 변경 확인</option>
+              <option value="function_behavior">기능 동작 확인</option>
+              <option value="permission_auth">권한/인증 확인</option>
+              <option value="exception_error">예외/에러 확인</option>
+              <option value="network_server">네트워크/서버 연동</option>
+              <option value="notification">알림/푸시 확인</option>
+              <option value="multi_device_os">멀티디바이스/OS 차이</option>
+              <option value="state_persistence">설정/상태 유지 확인</option>
+              <option value="content_media">콘텐츠/미디어 확인</option>
+              <option value="has_precondition">사전조건 있음</option>
+              <option value="automation_candidate">자동화 후보</option>
+              <option value="manual_required">수동 확인 필요</option>
+            </select>
+          </div>
+          <div class="tbl-wrap tbl-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>서비스</th><th>행</th><th>카테고리1</th>
+                  <th>카테고리2</th><th>P</th><th>OS</th><th>속성 태그</th>
+                </tr>
+              </thead>
+              <tbody id="tc-tbody"></tbody>
+            </table>
+          </div>
+          <div id="tc-page-info" class="page-info"></div>
+          <div id="tc-pager" class="pager"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

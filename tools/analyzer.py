@@ -1,0 +1,1266 @@
+#!/usr/bin/env python3
+"""
+QA Regression TestCase Analyzer - Prototype (3 sheets only)
+수행: 정량 집계만. LLM 의미 분석 없음.
+
+대상 시트: 1.가입, 2.친구, 3.프로필
+
+컬럼 매핑 (3개 시트 공통):
+  col 0  = 분류1
+  col 1  = 분류2
+  col 2  = 분류3
+  col 3  = 분류4 (기능)
+  col 4  = 사전 조건
+  col 5  = Test Step (체크할 항목)
+  col 6  = 기대결과
+  col 7  = Android 16 버전 체크
+  col 8  = iOS 18 버전 체크
+  col 9-26 = 기타 버전 체크 컬럼 (대부분 비어있음)
+  col 27 = Priority (P)  → P0~P5 / '-' / 기타
+  col 28 = OS Category (C)  → A=Android, I/iOS=iOS, app=공통
+  col 29 = Version (V)  → 버전 문자열
+
+TC 판별 규칙 (analyzer.md TC 영역 판별 규칙 반영):
+  Step 1 — 통계 영역 경계 감지
+    "행 추가시..." 문자열이 분류1(col0)에 나타나는 행을 경계로 삼는다.
+    경계 행 및 이후 모든 행은 통계/집계 영역으로 간주해 분석에서 제외한다.
+
+  Step 2 — 경계 이전 행을 개별 판별 (is_tc_row)
+    TC 조건: Priority(col27) 정수 0~5  AND  기대결과(col6) 비어있지 않음
+    제외 사유별 분류:
+      STAT_BOUNDARY : 경계 행 이후 (통계/집계 영역)
+      EMPTY_ROW     : 모든 핵심 컬럼이 비어있는 완전 공백 행
+      NO_PRIORITY   : Priority 비어있거나 '-'
+      INVALID_PRIORITY : Priority가 비정수 또는 0~5 범위 밖
+      NO_EXPECTED   : Priority OK, 기대결과 공란 (설명·메모 행)
+
+데이터 시작: 행 인덱스 4 (Excel 5행, 4개 헤더 행 제외)
+"""
+
+import difflib
+import openpyxl
+import csv
+import json
+import os
+import re
+from collections import defaultdict
+
+# ── 경로 설정 ──────────────────────────────────────────────────────────────────
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+INPUT_FILE = os.path.join(BASE_DIR, 'input', 'Regression TestCase.xlsx')
+OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
+
+TARGET_SHEETS = [
+    '1.가입', '2.친구', '3.프로필',
+    '4.채팅목록', '5.일반채팅', '6.비밀채팅',
+    '7.팀채팅_채팅방', '8.팀채팅_홈상세', '9.숏폼',
+    '10.통화', '11.톡뮤직', '12.이모티콘플러스(+키보드)',
+    '13.검색', '14.이모티콘스토어', '15. 알림센터',
+    '16.톡클라우드_연락처', '17.지갑', '18.톡캘린더',
+    '19.톡클라우드_백복(로직)', '20.톡클라우드_인물분류',
+    '21.톡클라우드_버티컬(무료)', '22.톡클라우드_버티컬(유료)',
+    '23.죠르디', '24. 더보기', '25. 설정', '26.기타', '27.카나나템플릿',
+]
+
+# ── 컬럼 인덱스 상수 ────────────────────────────────────────────────────────────
+COL_CAT1     = 0
+COL_CAT2     = 1
+COL_CAT3     = 2
+COL_CAT4     = 3
+COL_PRECOND  = 4
+COL_STEP     = 5
+COL_EXPECTED = 6
+COL_PRIORITY = 27
+COL_OS       = 28
+COL_VERSION  = 29
+
+HEADER_ROWS = 4   # 상위 4행은 헤더, 데이터는 5행부터
+
+# Phase 2 속성 키 목록 (service_summary · attribute_summary · coverage.json 공통)
+ATTR_KEYS = [
+    'ui_visibility', 'data_change', 'function_behavior',
+    'permission_auth', 'exception_error', 'network_server',
+    'notification', 'multi_device_os', 'state_persistence', 'content_media',
+    'has_precondition', 'automation_candidate', 'manual_required',
+]
+
+# 검증 대상 속성만 (복합 속성 조합 대상)
+ATTR_KEYS_VERIFICATION = [
+    'ui_visibility', 'data_change', 'function_behavior',
+    'permission_auth', 'exception_error', 'network_server',
+    'notification', 'multi_device_os', 'state_persistence', 'content_media',
+]
+
+# 속성 한글 레이블 (compound_attribute 값에 사용)
+ATTR_LABEL_KO = {
+    'ui_visibility':    'UI노출확인',
+    'data_change':      '데이터변경확인',
+    'function_behavior':'기능동작확인',
+    'permission_auth':  '권한인증확인',
+    'exception_error':  '예외에러확인',
+    'network_server':   '네트워크서버연동',
+    'notification':     '알림푸시확인',
+    'multi_device_os':  '멀티디바이스OS',
+    'state_persistence':'설정상태유지',
+    'content_media':    '콘텐츠미디어확인',
+}
+
+# 속성별 키워드 규칙 (step + expected_result 대상)
+_ATTR_RULES = {
+    'ui_visibility': [
+        '노출됨', '노출된다', '노출됩니다', '표시됨', '표시된다', '표시됩니다',
+        '보임', '화면 진입', '화면이 표시', '화면으로 이동', '문구가 표시',
+        '문구 표시', '아이콘 표시', '아이콘이 표시', '배너가 표시',
+        '리스트에 표시', '화면 구성', '화면이 노출',
+    ],
+    'data_change': [
+        '변경됨', '변경된다', '변경됩니다', '저장됨', '저장된다', '저장됩니다',
+        '추가됨', '추가된다', '추가됩니다', '삭제됨', '삭제된다', '삭제됩니다',
+        '수정됨', '수정된다', '반영됨', '반영된다', '반영됩니다',
+        '업데이트됨', '업데이트된다', '생성됨', '생성된다', '해제됨', '해제된다',
+    ],
+    'function_behavior': [
+        '이동됨', '이동된다', '이동됩니다', '실행됨', '실행된다',
+        '전송됨', '전송된다', '호출됨', '검색됨', '선택됨',
+        '진입됨', '진입된다', '열림', '전환됩니다', '전환된다', '전환됨',
+        '랜딩됩니다', '랜딩된다', '랜딩됨',
+    ],
+    'permission_auth': [
+        '권한', '허용', '거부', '로그인', '인증', '약관', '동의', '접근권한',
+    ],
+    'exception_error': [
+        '실패', '오류', '에러', '불가', '제한', '미지원', '차단',
+        '팝업이 표시', '팝업이 발생', '초과했습니다', '제한됩니다',
+        '초과됩니다', '제한되어', '불가능', '안내',
+    ],
+    'network_server': [
+        '서버', 'api', '네트워크', '동기화', '폴링', '응답', '재시도', '로딩', 'tms',
+    ],
+    'notification': [
+        '푸시', '알림', '배지', '토스트', '팝업', 'n뱃지', '빨간점', '모달',
+    ],
+    'multi_device_os': [
+        'android', 'ios', '기기', '디바이스', '서브디바이스', '멀티 디바이스',
+    ],
+    'state_persistence': [
+        '유지', '재실행', '백그라운드', '복귀', '캐시', '이전 상태', '저장 상태',
+    ],
+    'content_media': [
+        '이미지', '사진', '동영상', '파일', '썸네일', '이모티콘', '미디어', 'gif', '영상',
+    ],
+}
+
+# 자동화 후보 판단 시그널
+_AUTO_CLEAR = [
+    '이동됩니다', '이동된다', '표시됩니다', '표시된다',
+    '활성화됩니다', '활성화된다', '비활성화됩니다', '비활성화된다',
+    '전환됩니다', '전환된다', '추가됩니다', '추가된다',
+    '삭제됩니다', '삭제된다', '변경됩니다', '변경된다',
+    '완료됩니다', '완료된다', '진행된다', '진행됩니다',
+]
+_AUTO_VAGUE = ['자연스럽게', '버벅임', '깨지지', '이상 없음', '느낌', '확인 필요']
+
+# 수동 확인 필요 시그널
+_MANUAL_SIGNALS = ['시각적', '자연스럽게', '버벅임', '깨지지', '음성 확인', '카메라', '직접 확인']
+
+# ── Phase 3: 품질 점검 상수 ────────────────────────────────────────────────────
+
+# 이슈 타입 키 (coverage.json 구조와 1:1 대응)
+ISSUE_TYPES = [
+    'ambiguous_test_step',
+    'ambiguous_expected_result',
+    'missing_precondition',
+    'duplicated_step_expected',
+    'multiple_purpose',
+    'invalid_priority',
+    'invalid_os',
+    'invalid_category',
+]
+
+# 1. Test Step 모호 표현
+#
+# 판단 기준:
+#   A. 단독 동사형 (완전 일치) — 목적어 없이 동사 하나로만 구성된 경우
+#      예) "확인한다" (O)  vs  "국가 리스트를 확인한다" (X, 목적어 있음)
+#   B. 구문형 부분 포함 — 자체로 의미가 모호한 표현
+#      예) "정상 동작 확인", "정상 동작 여부 확인" 등
+#
+# 핵심 원칙: 목적어(명사)가 앞에 붙으면 구체적 검증 행위이므로 모호하지 않다.
+
+# A. 단독 동사 — step 전체에서 구두점·번호·공백 제거 후 완전 일치해야 모호로 판정
+_VAGUE_STEP_SOLO = [
+    '확인한다', '확인', '수행한다', '진입한다', '실행한다',
+    '테스트한다', '점검한다', '검증한다',
+]
+
+# B. 구문형 — 부분 포함만으로 모호 판정 (목적어 결합과 무관하게 그 자체로 모호)
+_VAGUE_STEP_PHRASES = [
+    '정상 동작 확인', '정상동작 확인', '정상 여부 확인',
+    '정상적으로 동작하는지 확인한다',
+]
+
+# 2. 기대결과 모호 표현
+_VAGUE_EXPECTED_WORDS = [
+    '정상 노출', '정상 동작', '정상적으로 동작', '이상 없음', '이상없음',
+    '확인', '정상', '동작함', '노출됨',
+]
+
+# 3. 사전조건 없이도 문맥상 필요로 보이는 TC 판단 시그널
+_PRECOND_REQUIRED_STEP = [
+    '로그인 후', '로그인된 상태', '가입 완료 후', '친구 추가 후',
+    '설정 변경 후', '기존 데이터', '이미 존재', '이전에 등록',
+    '앞서', '사전에',
+]
+_PRECOND_REQUIRED_EXPECTED = [
+    '이전 상태 유지', '기존 값', '기존 설정', '이전 프로필',
+]
+
+# 3-B. 기대결과 내 조건 분기 패턴
+# "- 기존 설정이 '...'인 경우\n  ㄴ ..." 형태는 사전 상태에 따라 결과가 달라지는 TC.
+# 사전조건 컬럼이 비어있으면 사전 상태가 명시되지 않은 것으로 판단한다.
+_PRECOND_IN_EXPECTED = re.compile(
+    r'(?:'
+    r'기존\s*설정이'          # "기존 설정이 ~ 인 경우"
+    r'|인\s*경우\s*[\n\r]'   # "~ 인 경우\n"
+    r'|경우\s*[\n\r]\s*ㄴ'   # "경우\n  ㄴ"
+    r')',
+    re.MULTILINE
+)
+
+def _extract_precond_from_text(step: str, expected: str) -> str:
+    """
+    기대결과 또는 Test Step 텍스트에서 사전조건을 추출한다.
+
+    추출 대상 패턴:
+      A. "- 기존 설정이 '...'인 경우" 처럼 조건 분기 줄 → 조건 줄들을 연결
+      B. "사전조건:", "전제:" 로 시작하는 줄
+
+    반환값: 추출된 사전조건 문자열 (없으면 빈 문자열)
+    """
+    for text in [expected, step]:
+        if not text:
+            continue
+
+        lines = text.splitlines()
+        cond_lines = []
+
+        for line in lines:
+            stripped = line.strip()
+            # 패턴 A: "~ 인 경우" 로 끝나는 줄 (조건 헤더)
+            if re.search(r'인\s*경우\s*$', stripped):
+                cond_lines.append(stripped)
+            # 패턴 B: "사전조건:" / "전제:" 시작
+            elif re.match(r'^(사전조건|전제)\s*[:：]', stripped):
+                cond_lines.append(re.sub(r'^(사전조건|전제)\s*[:：]\s*', '', stripped))
+
+        if cond_lines:
+            return ' / '.join(cond_lines)
+
+    return ''
+
+
+# 5. 복수 목적 TC 판단: Step에 독립적인 기대결과 구분자가 여러 개
+_MULTI_PURPOSE_STEP_MIN_NUMBERED = 4   # "1. ..." 형태 단계가 4개 이상이면 복수 목적 의심
+
+# 7. OS 유효값
+_VALID_OS_NORMS = {'android', 'ios', 'common', 'web', 'pc'}
+
+
+# ── 헬퍼 ───────────────────────────────────────────────────────────────────────
+
+def cell(row, idx):
+    """안전하게 row[idx] 를 str로 반환. None 또는 범위 초과 시 빈 문자열."""
+    if idx >= len(row) or row[idx] is None:
+        return ''
+    return str(row[idx]).strip()
+
+
+# 기대결과 컬럼(col6)에 이 값이 있으면 통계표 행으로 판단
+_STAT_KEYWORDS_IN_EXPECTED = {
+    'os / browser', 'iteration', '환경 (테스트 수행)', '환경(테스트 수행)',
+    'priority', '범위 지정', 'pass rate', 'total', '비율',
+    '_x0008_coverage', 'coverage',
+}
+# 기대결과 컬럼에 단독으로 이 값만 있으면 통계 집계 행
+_STAT_SINGLE_CHARS = {'p', 'f', 'b', 'n', 'nr'}
+
+
+def classify_row(row):
+    """
+    단일 행의 TC 해당 여부를 판별하고 제외 사유를 반환한다.
+
+    반환값:
+      'TC'               — 유효한 테스트 케이스
+      'EMPTY_ROW'        — 핵심 컬럼이 모두 비어있는 행
+      'NO_PRIORITY'      — Priority 없음 또는 '-'
+      'INVALID_PRIORITY' — Priority 비정수 또는 0~5 범위 밖
+      'NO_EXPECTED'      — 기대결과 공란
+      'NO_CONTENT'       — Step·분류 모두 없음 (Priority만 있는 행)
+      'STAT_ROW'         — 통계표 키워드 행 (경계 이전에도 존재할 수 있음)
+
+    ※ STAT_BOUNDARY 이후 행은 load_sheet()에서 이미 제거됨.
+    """
+    # ── 1. 완전 공백 행 ────────────────────────────────────────────────────────
+    key_cols = [COL_CAT1, COL_STEP, COL_EXPECTED, COL_PRIORITY]
+    if all(not cell(row, c) for c in key_cols):
+        return 'EMPTY_ROW'
+
+    # ── 2. 기대결과 컬럼 기반 통계표 감지 (경계 마커 이전에도 등장 가능) ─────
+    expected_val = cell(row, COL_EXPECTED).lower().strip()
+    if expected_val in _STAT_KEYWORDS_IN_EXPECTED:
+        return 'STAT_ROW'
+    if expected_val in _STAT_SINGLE_CHARS:
+        return 'STAT_ROW'
+
+    # ── 3. Priority 판별 ────────────────────────────────────────────────────
+    p_str = cell(row, COL_PRIORITY)
+    if not p_str or p_str in ('-', 'n/a', 'N/A'):
+        return 'NO_PRIORITY'
+    try:
+        f = float(p_str)
+        if not (0.0 <= f <= 5.0 and f == int(f)):
+            return 'INVALID_PRIORITY'
+    except ValueError:
+        return 'INVALID_PRIORITY'
+
+    # ── 4. 기대결과 비어있음 ────────────────────────────────────────────────
+    if not expected_val:
+        return 'NO_EXPECTED'
+
+    # ── 5. Step 또는 분류 정보 중 하나 이상 존재해야 TC ─────────────────────
+    has_step = bool(cell(row, COL_STEP))
+    has_cat  = any(cell(row, c) for c in [COL_CAT1, COL_CAT2, COL_CAT3, COL_CAT4])
+    if not has_step and not has_cat:
+        return 'NO_CONTENT'
+
+    return 'TC'
+
+
+def is_tc_row(row):
+    """하위 호환용 래퍼. classify_row() 기반."""
+    return classify_row(row) == 'TC'
+
+
+def normalize_priority(raw_str):
+    """'1.0' → 'P1', '0' → 'P0', 기타 → 'empty'/'other'."""
+    s = raw_str.strip()
+    if s in ('', '-', 'n/a', 'N/A'):
+        return 'empty'
+    try:
+        f = float(s)
+        if 0.0 <= f <= 5.0 and f == int(f):
+            return f'P{int(f)}'
+        return 'other'
+    except ValueError:
+        return 'other'
+
+
+def normalize_os(raw_str):
+    """'A'→'android', 'I'/'iOS'→'ios', 'app'→'common', '-'→'empty', 기타→'other'."""
+    s = raw_str.strip()
+    if s in ('', '-'):
+        return 'empty'
+    sl = s.lower()
+    if sl in ('a', 'android'):
+        return 'android'
+    if sl in ('i', 'ios'):
+        return 'ios'
+    if sl == 'app':
+        return 'common'
+    if sl == 'web':
+        return 'web'
+    if sl == 'pc':
+        return 'pc'
+    return 'other'
+
+
+def classify_attributes(precond, step, expected):
+    """
+    precond / step / expected 텍스트를 기반으로 ATTR_KEYS 각 속성의
+    True/False 딕셔너리를 반환한다.
+    """
+    text = ' '.join([precond, step, expected]).lower()
+
+    result = {}
+
+    # A. 검증 대상 속성 (키워드 매칭)
+    for attr, keywords in _ATTR_RULES.items():
+        result[attr] = any(kw.lower() in text for kw in keywords)
+
+    # B-1. 사전조건 있음: precond 컬럼에 의미 있는 내용
+    result['has_precondition'] = bool(precond.strip())
+
+    # B-2. 자동화 후보: 기대결과가 명확한 키워드 포함 + 모호 표현 없음
+    has_clear = any(kw in expected for kw in _AUTO_CLEAR)
+    has_vague = any(kw in text for kw in _AUTO_VAGUE)
+    result['automation_candidate'] = has_clear and not has_vague
+
+    # B-3. 수동 확인 필요: 수동 시그널 포함, 또는 이미지/동영상 포함 & 기대결과 모호
+    result['manual_required'] = any(kw in text for kw in _MANUAL_SIGNALS)
+
+    return result
+
+
+def detect_quality_issues(tc):
+    """
+    Phase 3: 단일 TC 딕셔너리를 받아 품질 이슈 목록을 반환한다.
+    반환값: list of (issue_type: str, issue_reason: str)
+    tc 키: service_name, row_number, category_1~4, precondition,
+            test_step, expected_result, priority, os
+    """
+    issues = []
+    step     = tc['test_step']
+    expected = tc['expected_result']
+    precond  = tc['precondition']
+    cat1     = tc['category_1']
+    cat2     = tc['category_2']
+    priority = tc['priority']
+    os_norm  = tc['os']
+
+    step_l     = step.strip().lower()
+    expected_l = expected.strip().lower()
+
+    # ── 1. Test Step 모호 ────────────────────────────────────────────────────
+    if not step.strip():
+        issues.append(('ambiguous_test_step', 'Test Step이 비어 있음'))
+    else:
+        # A. 단독 동사 완전 일치: 번호·구두점·공백을 제거한 뒤 비교
+        #    "1. 확인한다." → "확인한다"  /  "국가 리스트를 확인한다" → 제거 후 길어서 불일치
+        step_stripped = re.sub(r'^\s*\d+\s*[.)]\s*', '', step.strip())  # 앞 번호 제거
+        step_core = re.sub(r'[\s.,。]+$', '', step_stripped).strip()    # 뒤 구두점 제거
+        solo_hit = step_core.lower() in _VAGUE_STEP_SOLO
+
+        # B. 구문형 부분 포함
+        phrase_hit = any(p in step_l for p in _VAGUE_STEP_PHRASES)
+
+        if solo_hit:
+            issues.append(('ambiguous_test_step',
+                            f'목적어 없이 동사만으로 구성된 Test Step: "{step_core}"'))
+        elif phrase_hit:
+            issues.append(('ambiguous_test_step',
+                            f'모호한 Test Step 표현 포함: "{step[:60]}"'))
+
+    # ── 2. 기대결과 모호 ────────────────────────────────────────────────────
+    if not expected.strip():
+        issues.append(('ambiguous_expected_result', '기대결과가 비어 있음'))
+    elif any(w in expected_l for w in _VAGUE_EXPECTED_WORDS):
+        # "정상 노출됨" 처럼 단독으로만 있을 때만 모호로 판단
+        # (다른 구체적 설명이 함께 있으면 제외)
+        cleaned = re.sub(r'[.\s]', '', expected_l)
+        vague_only = any(
+            re.sub(r'[.\s]', '', w) == cleaned
+            for w in _VAGUE_EXPECTED_WORDS
+        )
+        if vague_only:
+            issues.append(('ambiguous_expected_result',
+                            f'기대결과가 모호한 단어만으로 구성: "{expected[:60]}"'))
+
+    # ── 3. 사전조건 없음 (문맥상 필요) ─────────────────────────────────────
+    if not precond.strip():
+        # 3-B 우선: 기대결과 내 조건 분기 패턴
+        #   "기존 설정이 '...'인 경우\n  ㄴ ..." 처럼
+        #   사전 상태에 따라 결과가 달라지는 구조 → 기대결과 안에 사전조건이 내재됨
+        has_cond_in_expected = bool(_PRECOND_IN_EXPECTED.search(expected))
+
+        if has_cond_in_expected:
+            cond_line = next(
+                (l.strip() for l in expected.splitlines() if '인 경우' in l),
+                ''
+            )
+            issues.append(('missing_precondition',
+                            f'기대결과 내 조건 분기 포함 — 사전조건 컬럼 분리 필요'
+                            f' (예: "{cond_line[:60]}")'))
+        else:
+            # 3-A. Step/기대결과 키워드 기반 시그널
+            needs_keyword = (
+                any(w in step_l for w in _PRECOND_REQUIRED_STEP) or
+                any(w in expected_l for w in _PRECOND_REQUIRED_EXPECTED)
+            )
+            if needs_keyword:
+                issues.append(('missing_precondition',
+                                'Step/기대결과에 사전 상태 언급이 있으나 사전조건 비어 있음'))
+
+    # ── 4. Step ≈ Expected (중복) ─────────────────────────────────────────
+    if step.strip() and expected.strip():
+        ratio = difflib.SequenceMatcher(
+            None,
+            re.sub(r'\s+', '', step_l),
+            re.sub(r'\s+', '', expected_l)
+        ).ratio()
+        if ratio >= 0.85:
+            issues.append(('duplicated_step_expected',
+                            f'Test Step과 기대결과 유사도 {ratio:.0%}'))
+
+    # ── 5. 복수 목적 TC ─────────────────────────────────────────────────────
+    # 판단 기준:
+    #   A. compound_attribute 있음 → 목적이 속성으로 명확히 분류됨 → 이슈 아님
+    #   B. 경계값 테스트 패턴 → 같은 대상을 다른 값으로 순차 검증 → 이슈 아님
+    #      (기대결과의 모든 줄에 공통 핵심 단어가 있거나,
+    #       기대결과가 동일 상태의 반복 패턴 - 활성화/비활성화 교차 등)
+    #   C. 위 두 조건 모두 해당 없음 → 목적 불명확 혼재 → 이슈
+    numbered_steps    = re.findall(r'(?:^|\n)\s*\d+\s*[.)]\s+\S', step)
+    numbered_expected = re.findall(r'(?:^|\n)\s*\d+\s*[.)]\s+\S', expected)
+    compound_attr = tc.get('compound_attribute', '').strip()
+
+    if (len(numbered_steps) >= _MULTI_PURPOSE_STEP_MIN_NUMBERED and
+            len(numbered_expected) >= _MULTI_PURPOSE_STEP_MIN_NUMBERED):
+
+        if compound_attr:
+            pass  # A. 목적 명확 → 이슈 없음
+        else:
+            # B. 경계값 테스트 패턴 감지
+            #    step 줄들의 과반수 이상에서 같은 의미 단어(2자↑)가 2개 이상 공통
+            #    → 같은 대상을 다른 값으로 반복 검증하는 단일 목적 테스트
+            step_lines = [l.strip() for l in re.split(r'\n\s*\d+\s*[.)]', step) if l.strip()]
+            if len(step_lines) >= 2:
+                word_sets = [set(re.findall(r'[가-힣a-zA-Z]{2,}', l)) for l in step_lines]
+                # 과반수 이상 줄에 등장하는 단어 집합
+                from collections import Counter as _C
+                word_freq = _C(w for ws in word_sets for w in ws)
+                majority_threshold = max(2, len(step_lines) // 2)
+                majority_words = {w for w, cnt in word_freq.items() if cnt >= majority_threshold}
+                is_boundary_test = len(majority_words) >= 2
+            else:
+                is_boundary_test = False
+
+            if not is_boundary_test:
+                issues.append(('multiple_purpose',
+                                f'Step {len(numbered_steps)}단계 / 기대결과 {len(numbered_expected)}단계: '
+                                '복합 속성으로 분류 불가 — 목적 불명확'))
+
+    # ── 6. Priority 이상값 ───────────────────────────────────────────────────
+    # is_tc_row()를 통과한 행이므로 여기서는 'empty'/'other' 만 점검
+    if priority in ('empty', 'other'):
+        issues.append(('invalid_priority',
+                        f'Priority 값이 유효하지 않음: "{tc.get("priority_raw","")}"'))
+
+    # ── 7. OS 이상값 ─────────────────────────────────────────────────────────
+    if os_norm not in _VALID_OS_NORMS:
+        issues.append(('invalid_os',
+                        f'OS 값이 유효하지 않음: "{tc.get("os_raw","")}"'))
+
+    # ── 8. 분류 비어 있음 ────────────────────────────────────────────────────
+    if not cat1.strip() or not cat2.strip():
+        issues.append(('invalid_category',
+                        f'분류1="{cat1}" / 분류2="{cat2}" — 주요 분류가 비어 있음'))
+
+    return issues
+
+
+def forward_fill(rows, col_indices):
+    """지정 컬럼들에 대해 위→아래 방향으로 빈 셀을 직전 비어있지 않은 값으로 채운다."""
+    last = {c: None for c in col_indices}
+    filled = []
+    for row in rows:
+        row = list(row)
+        # 행 길이 보장
+        while len(row) <= max(col_indices):
+            row.append(None)
+        for c in col_indices:
+            v = row[c]
+            if v is not None and str(v).strip() != '':
+                last[c] = str(v).strip()
+                # 원본값 유지 (str로 통일)
+                row[c] = last[c]
+            else:
+                row[c] = last[c]   # None 이면 None 그대로 (아직 채울 값 없음)
+        filled.append(row)
+    return filled
+
+
+def load_sheet(wb, sheet_name):
+    """
+    시트를 읽어 TC 분석 대상 행만 반환한다.
+
+    처리 순서:
+      1. 헤더 4행 제거
+      2. 통계 영역 경계("행 추가시...") 감지 → 경계 이전 행만 유지
+      3. Forward Fill 적용 (분류 컬럼 계단식 복원)
+
+    반환값: (tc_candidate_rows, exclusion_stats)
+      tc_candidate_rows : Forward Fill 적용된 경계 이전 행 리스트
+      exclusion_stats   : dict { 'STAT_BOUNDARY': n, 'EMPTY_ROW': n, ... }
+    """
+    ws = wb[sheet_name]
+    all_rows = list(ws.iter_rows(values_only=True))
+    data_rows = all_rows[HEADER_ROWS:]
+    total_data = len(data_rows)
+
+    # ── Step 1: 통계 영역 경계 감지 ───────────────────────────────────────────
+    boundary_idx = None
+    for i, row in enumerate(data_rows):
+        cat1_val = str(row[COL_CAT1] or '').strip()
+        if '행 추가시' in cat1_val:
+            boundary_idx = i
+            break
+
+    stat_boundary_count = 0
+    if boundary_idx is not None:
+        stat_boundary_count = total_data - boundary_idx  # 경계 행 포함 이후 전체
+        data_rows = data_rows[:boundary_idx]             # 경계 이전만 유지
+
+    # ── Step 2: Forward Fill (분류 컬럼 계단식 복원) ─────────────────────────
+    data_rows = forward_fill(data_rows, [COL_CAT1, COL_CAT2, COL_CAT3, COL_CAT4])
+
+    # ── Step 3: 개별 행 제외 사유 집계 ────────────────────────────────────────
+    exclusion_stats = {
+        'STAT_BOUNDARY'    : stat_boundary_count,
+        'STAT_ROW'         : 0,
+        'EMPTY_ROW'        : 0,
+        'NO_PRIORITY'      : 0,
+        'INVALID_PRIORITY' : 0,
+        'NO_EXPECTED'      : 0,
+        'NO_CONTENT'       : 0,
+    }
+    for row in data_rows:
+        reason = classify_row(row)
+        if reason != 'TC':
+            exclusion_stats[reason] += 1
+
+    return data_rows, exclusion_stats
+
+
+# ── 메인 분석 루프 ──────────────────────────────────────────────────────────────
+
+def main():
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    print(f"Input  : {INPUT_FILE}")
+    print(f"Output : {OUTPUT_DIR}")
+    print()
+
+    wb = openpyxl.load_workbook(INPUT_FILE, read_only=True, data_only=True)
+
+    # 결과 저장용
+    tc_master_rows = []
+    service_stats  = {}
+    category_counts = defaultdict(int)
+    # 전체 제외 통계 (시트 합산)
+    total_read       = 0
+    total_exclusions = defaultdict(int)
+
+    # ── 시트별 처리 ────────────────────────────────────────────────────────────
+    for sheet_name in TARGET_SHEETS:
+        if sheet_name not in wb.sheetnames:
+            print(f"[WARN] 시트 '{sheet_name}' 없음, 건너뜀.")
+            continue
+
+        print(f"처리 중: {sheet_name}")
+        data_rows, excl = load_sheet(wb, sheet_name)
+
+        # 이 시트에서 읽은 전체 원본 데이터 행 수 = TC후보 + 통계경계 이후
+        sheet_read = len(data_rows) + excl['STAT_BOUNDARY']
+        total_read += sheet_read
+        for k, v in excl.items():
+            total_exclusions[k] += v
+        sheet_tc = sum(1 for r in data_rows if is_tc_row(r))
+        print(f"  원본 데이터 행: {sheet_read}  |  TC 판정: {sheet_tc}  |  제외: {sheet_read - sheet_tc}")
+
+        stats = {
+            'service_name': sheet_name,
+            'total_tc': 0,
+            'priority': defaultdict(int),
+            'os': defaultdict(int),
+            'attributes': defaultdict(int),       # Phase 2 단일 속성
+            'compound_attributes': defaultdict(int),  # Phase 2 복합 속성 조합
+        }
+
+        # Excel 행 번호는 헤더 4행 + 1-based
+        for rel_idx, row in enumerate(data_rows):
+            excel_row = HEADER_ROWS + rel_idx + 1  # 1-based Excel 행 번호
+
+            if not is_tc_row(row):
+                continue
+
+            # ── 필드 추출 ──────────────────────────────────────────────────────
+            cat1    = cell(row, COL_CAT1) or ''
+            cat2    = cell(row, COL_CAT2) or ''
+            cat3    = cell(row, COL_CAT3) or ''
+            cat4    = cell(row, COL_CAT4) or ''
+            precond = cell(row, COL_PRECOND)
+            step    = cell(row, COL_STEP)
+            expected = cell(row, COL_EXPECTED)
+            p_raw   = cell(row, COL_PRIORITY)
+            os_raw  = cell(row, COL_OS)
+            version = cell(row, COL_VERSION)
+
+            p_norm  = normalize_priority(p_raw)
+            os_norm = normalize_os(os_raw)
+
+            # 사전조건 자동 추출 (precond 비어있을 때 step/expected에서 추출)
+            resolved_precond = precond if precond.strip() else (
+                _extract_precond_from_text(step, expected) or precond
+            )
+
+            # Phase 2: 속성 분류 (추출된 사전조건 기준)
+            attrs = classify_attributes(resolved_precond, step, expected)
+
+            # 복합 속성 계산: multiple_purpose 여부와 무관하게
+            # 검증 대상 속성 중 활성화된 것이 2개 이상이면 복합 속성 조합을 기록
+            active_verif = [k for k in ATTR_KEYS_VERIFICATION if attrs.get(k)]
+            compound_attr = (
+                '+'.join(ATTR_LABEL_KO[k] for k in active_verif)
+                if len(active_verif) >= 2 else ''
+            )
+
+            # ── 집계 ───────────────────────────────────────────────────────────
+            stats['total_tc'] += 1
+            stats['priority'][p_norm] += 1
+            stats['os'][os_norm] += 1
+            for k, v in attrs.items():
+                if v:
+                    stats['attributes'][k] += 1
+            if compound_attr:
+                stats['compound_attributes'][compound_attr] += 1
+
+            cat_key = (sheet_name, cat1, cat2, cat3, cat4)
+            category_counts[cat_key] += 1
+
+            row_dict = {
+                'service_name'    : sheet_name,
+                'row_number'      : excel_row,
+                'category_1'      : cat1,
+                'category_2'      : cat2,
+                'category_3'      : cat3,
+                'category_4'      : cat4,
+                'precondition'    : resolved_precond,
+                'test_step'       : step,
+                'expected_result' : expected,
+                'priority'        : p_norm,
+                'priority_raw'    : p_raw,
+                'os'              : os_norm,
+                'os_raw'          : os_raw,
+                'version'         : version,
+                'compound_attribute': compound_attr,
+            }
+            # Phase 2: tc_master에 속성 플래그 추가 (1/0)
+            for k in ATTR_KEYS:
+                row_dict[k] = 1 if attrs.get(k) else 0
+            tc_master_rows.append(row_dict)
+
+        service_stats[sheet_name] = stats
+        print(f"  → TC {stats['total_tc']}건  "
+              f"P분포: {dict(stats['priority'])}  "
+              f"OS분포: {dict(stats['os'])}")
+
+    # ── 출력 파일 1: tc_master.csv ─────────────────────────────────────────────
+    tc_master_path = os.path.join(OUTPUT_DIR, 'tc_master.csv')
+    tc_fields = [
+        'service_name', 'row_number',
+        'category_1', 'category_2', 'category_3', 'category_4',
+        'precondition', 'test_step', 'expected_result',
+        'priority', 'priority_raw', 'os', 'os_raw', 'version',
+        'compound_attribute',   # 복합 속성 조합 (빈 문자열이면 단일 목적)
+    ] + ATTR_KEYS  # Phase 2: 속성 플래그 컬럼
+    with open(tc_master_path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=tc_fields)
+        writer.writeheader()
+        writer.writerows(tc_master_rows)
+    print(f"\n[OK] tc_master.csv  → {len(tc_master_rows)}행")
+
+    # ── 출력 파일 2: service_summary.csv ──────────────────────────────────────
+    svc_path = os.path.join(OUTPUT_DIR, 'service_summary.csv')
+    svc_fields = (
+        ['service_name', 'total_tc',
+         'p0_count', 'p1_count', 'p2_count', 'p3_count',
+         'p4_count', 'p5_count',
+         'priority_empty_count', 'priority_other_count',
+         'android_count', 'ios_count', 'common_count',
+         'web_count', 'pc_count',
+         'os_empty_count', 'os_other_count']
+        + [f'{k}_count' for k in ATTR_KEYS]  # Phase 2
+    )
+    with open(svc_path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=svc_fields)
+        writer.writeheader()
+        for sname in TARGET_SHEETS:
+            if sname not in service_stats:
+                continue
+            s = service_stats[sname]
+            p = s['priority']
+            o = s['os']
+            a = s['attributes']
+            row = {
+                'service_name'         : sname,
+                'total_tc'             : s['total_tc'],
+                'p0_count'             : p.get('P0', 0),
+                'p1_count'             : p.get('P1', 0),
+                'p2_count'             : p.get('P2', 0),
+                'p3_count'             : p.get('P3', 0),
+                'p4_count'             : p.get('P4', 0),
+                'p5_count'             : p.get('P5', 0),
+                'priority_empty_count' : p.get('empty', 0),
+                'priority_other_count' : p.get('other', 0),
+                'android_count'        : o.get('android', 0),
+                'ios_count'            : o.get('ios', 0),
+                'common_count'         : o.get('common', 0),
+                'web_count'            : o.get('web', 0),
+                'pc_count'             : o.get('pc', 0),
+                'os_empty_count'       : o.get('empty', 0),
+                'os_other_count'       : o.get('other', 0),
+            }
+            for k in ATTR_KEYS:
+                row[f'{k}_count'] = a.get(k, 0)
+            writer.writerow(row)
+    print(f"[OK] service_summary.csv  → {len(service_stats)}행")
+
+    # ── 출력 파일 3: category_summary.csv ─────────────────────────────────────
+    cat_path = os.path.join(OUTPUT_DIR, 'category_summary.csv')
+    with open(cat_path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            'service_name', 'category_1', 'category_2',
+            'category_3', 'category_4', 'tc_count',
+        ])
+        writer.writeheader()
+        for (sname, c1, c2, c3, c4), cnt in sorted(category_counts.items()):
+            writer.writerow({
+                'service_name': sname,
+                'category_1'  : c1,
+                'category_2'  : c2,
+                'category_3'  : c3,
+                'category_4'  : c4,
+                'tc_count'    : cnt,
+            })
+    print(f"[OK] category_summary.csv  → {len(category_counts)}행")
+
+    # ── 출력 파일 4: coverage.json ─────────────────────────────────────────────
+    total_tc = sum(s['total_tc'] for s in service_stats.values())
+    coverage = {
+        'total_tc' : total_tc,
+        'services' : [],
+    }
+    for sname in TARGET_SHEETS:
+        if sname not in service_stats:
+            continue
+        s = service_stats[sname]
+        p = s['priority']
+        o = s['os']
+        a  = s['attributes']
+        ca = s['compound_attributes']
+        coverage['services'].append({
+            'service_name': sname,
+            'total_tc'    : s['total_tc'],
+            'priority': {
+                'P0': p.get('P0', 0), 'P1': p.get('P1', 0),
+                'P2': p.get('P2', 0), 'P3': p.get('P3', 0),
+                'P4': p.get('P4', 0), 'P5': p.get('P5', 0),
+                'empty': p.get('empty', 0), 'other': p.get('other', 0),
+            },
+            'os': {
+                'android': o.get('android', 0), 'ios': o.get('ios', 0),
+                'common' : o.get('common',  0), 'web': o.get('web',  0),
+                'pc'     : o.get('pc',      0), 'empty': o.get('empty', 0),
+                'other'  : o.get('other',   0),
+            },
+            'attributes': {k: a.get(k, 0) for k in ATTR_KEYS},  # Phase 2 단일
+            'compound_attributes': dict(sorted(         # Phase 2 복합
+                ca.items(), key=lambda x: -x[1]
+            )),
+        })
+
+    cov_path = os.path.join(OUTPUT_DIR, 'coverage.json')
+    with open(cov_path, 'w', encoding='utf-8') as f:
+        json.dump(coverage, f, ensure_ascii=False, indent=2)
+    print(f"[OK] coverage.json")
+
+    # ── 출력 파일 5: attribute_summary.csv (Phase 2) ──────────────────────────
+    _write_attribute_summary(service_stats)
+
+    # ── Phase 3: 품질 점검 ─────────────────────────────────────────────────────
+    quality_issues, quality_stats = _run_quality_check(tc_master_rows)
+
+    # ── 출력 파일 6 (Phase 3): quality_issues.csv ──────────────────────────────
+    _write_quality_issues(quality_issues)
+
+    # coverage.json에 quality 블록 추가 후 재저장
+    _patch_coverage_quality(cov_path, quality_stats, service_stats)
+
+    # 제외 통계 dict 구성 → summary.md 전달용
+    excl_report = dict(total_exclusions)
+    excl_report['total_read'] = total_read
+    excl_report['total_tc']   = total_tc
+
+    # ── 출력 파일 7: summary.md ────────────────────────────────────────────────
+    _write_summary(service_stats, total_tc, quality_stats, excl_report)
+
+    total_excluded = total_read - total_tc
+    print(f"\n{'='*55}")
+    print(f"분석 완료")
+    print(f"  전체 읽은 행 수  : {total_read}")
+    print(f"  TC 판정 행 수    : {total_tc}")
+    print(f"  제외 행 수       : {total_excluded}")
+    print(f"  ┌ 통계 영역 경계 이후 : {total_exclusions['STAT_BOUNDARY']}")
+    print(f"  ├ 통계표 키워드 행    : {total_exclusions['STAT_ROW']}")
+    print(f"  ├ Priority 없음       : {total_exclusions['NO_PRIORITY']}")
+    print(f"  ├ Priority 비허용값   : {total_exclusions['INVALID_PRIORITY']}")
+    print(f"  ├ 기대결과 공란       : {total_exclusions['NO_EXPECTED']}")
+    print(f"  ├ Step·분류 모두 없음 : {total_exclusions['NO_CONTENT']}")
+    print(f"  └ 완전 공백 행        : {total_exclusions['EMPTY_ROW']}")
+    print(f"")
+    print(f"  서비스별 TC")
+    for sname in TARGET_SHEETS:
+        if sname in service_stats:
+            print(f"    {sname:20s}: {service_stats[sname]['total_tc']} TC")
+    print(f"")
+    print(f"  Phase 3 품질 이슈: {quality_stats['total_issues']}건  "
+          f"(영향 TC: {quality_stats['affected_tc_count']}건)")
+    for itype, cnt in quality_stats['issue_type_counts'].items():
+        if cnt:
+            print(f"    {itype}: {cnt}")
+    print(f"{'='*55}")
+
+
+def _write_attribute_summary(service_stats):
+    """
+    Phase 2: attribute_summary.csv 생성.
+    단일 속성 행 + 복합 속성 조합 행을 함께 기록한다.
+    attribute_name 형식:
+      단일: 'ui_visibility' (ATTR_KEY 그대로)
+      복합: 'compound:UI노출확인+기능동작확인' (compound: 접두사)
+    """
+    attr_path = os.path.join(OUTPUT_DIR, 'attribute_summary.csv')
+    fields = ['service_name', 'attribute_name', 'tc_count', 'ratio']
+    total_rows = 0
+    with open(attr_path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for sname in TARGET_SHEETS:
+            if sname not in service_stats:
+                continue
+            s = service_stats[sname]
+            total = s['total_tc']
+
+            # 단일 속성
+            a = s['attributes']
+            for k in ATTR_KEYS:
+                cnt = a.get(k, 0)
+                ratio = round(cnt / total, 4) if total else 0.0
+                writer.writerow({
+                    'service_name'  : sname,
+                    'attribute_name': k,
+                    'tc_count'      : cnt,
+                    'ratio'         : ratio,
+                })
+                total_rows += 1
+
+            # 복합 속성 조합 (2개 이상 활성 속성을 가진 TC)
+            ca = s['compound_attributes']
+            for combo, cnt in sorted(ca.items(), key=lambda x: -x[1]):
+                ratio = round(cnt / total, 4) if total else 0.0
+                writer.writerow({
+                    'service_name'  : sname,
+                    'attribute_name': f'compound:{combo}',
+                    'tc_count'      : cnt,
+                    'ratio'         : ratio,
+                })
+                total_rows += 1
+
+    print(f"[OK] attribute_summary.csv  → {total_rows}행")
+
+
+def _run_quality_check(tc_master_rows):
+    """
+    Phase 3: tc_master_rows 전체를 순회해 품질 이슈를 탐지한다.
+    반환값:
+      quality_issues : list of dict (quality_issues.csv 행)
+      quality_stats  : dict (coverage.json quality 블록용)
+    """
+    quality_issues   = []
+    svc_issue_counts = defaultdict(int)
+    svc_affected_tcs = defaultdict(set)
+    svc_type_counts  = defaultdict(lambda: defaultdict(int))  # [svc][itype]
+    type_counts      = defaultdict(int)
+    affected_rows    = set()
+
+    for tc in tc_master_rows:
+        svc    = tc['service_name']
+        rownum = tc['row_number']
+        cat_path = ' > '.join(filter(None, [
+            tc.get('category_1',''), tc.get('category_2',''),
+            tc.get('category_3',''), tc.get('category_4',''),
+        ]))
+
+        found = detect_quality_issues(tc)
+        for itype, reason in found:
+            quality_issues.append({
+                'service_name'   : svc,
+                'row_number'     : rownum,
+                'issue_type'     : itype,
+                'issue_reason'   : reason,
+                'priority'       : tc['priority'],
+                'os'             : tc['os'],
+                'category_path'  : cat_path,
+                'test_step'      : tc['test_step'][:200],
+                'expected_result': tc['expected_result'][:200],
+            })
+            svc_issue_counts[svc]      += 1
+            svc_type_counts[svc][itype] += 1
+            type_counts[itype]         += 1
+            svc_affected_tcs[svc].add((svc, rownum))
+            affected_rows.add((svc, rownum))
+
+    top_itype = max(type_counts, key=type_counts.get) if type_counts else ''
+    top_svc   = max(svc_issue_counts, key=svc_issue_counts.get) if svc_issue_counts else ''
+
+    quality_stats = {
+        'total_issues'       : len(quality_issues),
+        'affected_tc_count'  : len(affected_rows),
+        'issue_type_counts'  : {k: type_counts.get(k, 0) for k in ISSUE_TYPES},
+        'service_issue_counts': dict(svc_issue_counts),
+        'service_affected_tc_counts': {
+            svc: len(rows) for svc, rows in svc_affected_tcs.items()
+        },
+        'svc_type_counts'    : {svc: dict(d) for svc, d in svc_type_counts.items()},
+        'top_issue_type'     : top_itype,
+        'top_issue_service'  : top_svc,
+    }
+    return quality_issues, quality_stats
+
+
+def _write_quality_issues(quality_issues):
+    """Phase 3: quality_issues.csv 생성."""
+    fields = [
+        'service_name', 'row_number', 'issue_type', 'issue_reason',
+        'priority', 'os', 'category_path', 'test_step', 'expected_result',
+    ]
+    path = os.path.join(OUTPUT_DIR, 'quality_issues.csv')
+    with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(quality_issues)
+    print(f"[OK] quality_issues.csv  → {len(quality_issues)}행")
+
+
+def _patch_coverage_quality(cov_path, quality_stats, service_stats):
+    """Phase 3: coverage.json을 읽어 quality 블록을 추가/갱신 후 재저장."""
+    with open(cov_path, encoding='utf-8') as f:
+        coverage = json.load(f)
+
+    # 최상위 quality 블록
+    coverage['quality'] = {
+        'total_issues'      : quality_stats['total_issues'],
+        'affected_tc_count' : quality_stats['affected_tc_count'],
+        'issue_type_counts' : quality_stats['issue_type_counts'],
+        'service_issue_counts': {
+            sname: quality_stats['service_issue_counts'].get(sname, 0)
+            for sname in TARGET_SHEETS
+        },
+        'top_issue_type'    : quality_stats['top_issue_type'],
+        'top_issue_service' : quality_stats['top_issue_service'],
+    }
+
+    # 각 service 객체에 quality 추가 (issue_type_counts 포함)
+    svc_affected   = quality_stats.get('service_affected_tc_counts', {})
+    svc_type_dict  = quality_stats.get('svc_type_counts', {})
+
+    for svc_obj in coverage['services']:
+        sname = svc_obj['service_name']
+        svc_obj['quality'] = {
+            'issue_count'      : quality_stats['service_issue_counts'].get(sname, 0),
+            'affected_tc_count': svc_affected.get(sname, 0),
+            'issue_type_counts': {k: svc_type_dict.get(sname, {}).get(k, 0)
+                                  for k in ISSUE_TYPES},
+        }
+
+    with open(cov_path, 'w', encoding='utf-8') as f:
+        json.dump(coverage, f, ensure_ascii=False, indent=2)
+    print(f"[OK] coverage.json  (quality 블록 추가)")
+
+
+def _write_summary(service_stats, total_tc, quality_stats=None, excl_report=None):
+    lines = [
+        '# QA Regression TestCase 분석 요약 — Phase 3',
+        '',
+        f'**분석 대상**: {", ".join(TARGET_SHEETS)}',
+        f'**전체 TC 수**: {total_tc}',
+        '',
+        '---',
+        '',
+        '## 서비스별 TC 수',
+        '',
+        '| 서비스 | 전체 TC |',
+        '|--------|---------|',
+    ]
+    for sname in TARGET_SHEETS:
+        if sname in service_stats:
+            lines.append(f'| {sname} | {service_stats[sname]["total_tc"]} |')
+
+    lines += ['', '## Priority 분포', '']
+    p_labels = ['P0', 'P1', 'P2', 'P3', 'P4', 'P5', 'empty', 'other']
+    header_row = '| 서비스 | ' + ' | '.join(p_labels) + ' |'
+    sep_row    = '|--------|' + '|'.join(['-----'] * len(p_labels)) + '|'
+    lines += [header_row, sep_row]
+    for sname in TARGET_SHEETS:
+        if sname not in service_stats:
+            continue
+        p = service_stats[sname]['priority']
+        vals = ' | '.join(str(p.get(lbl, 0)) for lbl in p_labels)
+        lines.append(f'| {sname} | {vals} |')
+
+    lines += ['', '## OS 분포', '']
+    os_labels = ['android', 'ios', 'common', 'web', 'pc', 'empty', 'other']
+    header_row = '| 서비스 | ' + ' | '.join(os_labels) + ' |'
+    sep_row    = '|--------|' + '|'.join(['-----'] * len(os_labels)) + '|'
+    lines += [header_row, sep_row]
+    for sname in TARGET_SHEETS:
+        if sname not in service_stats:
+            continue
+        o = service_stats[sname]['os']
+        vals = ' | '.join(str(o.get(lbl, 0)) for lbl in os_labels)
+        lines.append(f'| {sname} | {vals} |')
+
+    attr_labels = {
+        'ui_visibility'     : 'UI 노출 확인',
+        'data_change'       : '데이터 변경 확인',
+        'function_behavior' : '기능 동작 확인',
+        'permission_auth'   : '권한/인증 확인',
+        'exception_error'   : '예외/에러 확인',
+        'network_server'    : '네트워크/서버 연동',
+        'notification'      : '알림/푸시 확인',
+        'multi_device_os'   : '멀티디바이스/OS 차이',
+        'state_persistence' : '설정/상태 유지 확인',
+        'content_media'     : '콘텐츠/미디어 확인',
+        'has_precondition'  : '사전조건 있음',
+        'automation_candidate': '자동화 후보',
+        'manual_required'   : '수동 확인 필요',
+    }
+    lines += ['', '## TC 속성 분포 (Phase 2)', '']
+    # 헤더
+    attr_header = '| 속성 | ' + ' | '.join(TARGET_SHEETS) + ' |'
+    attr_sep    = '|------' + ('|------' * len(TARGET_SHEETS)) + '|'
+    lines += [attr_header, attr_sep]
+    for k in ATTR_KEYS:
+        row_vals = []
+        for sname in TARGET_SHEETS:
+            if sname not in service_stats:
+                row_vals.append('-')
+                continue
+            a = service_stats[sname]['attributes']
+            t = service_stats[sname]['total_tc']
+            cnt = a.get(k, 0)
+            pct = f'{cnt/t*100:.0f}%' if t else '0%'
+            row_vals.append(f'{cnt} ({pct})')
+        lines.append(f'| {attr_labels[k]} | ' + ' | '.join(row_vals) + ' |')
+
+    lines += [
+        '',
+        '## 컬럼 매핑 (3개 시트 공통)',
+        '',
+        '| 컬럼 인덱스 | 헤더명 | 비고 |',
+        '|------------|--------|------|',
+        '| 0 | 분류1 | Forward Fill 적용 |',
+        '| 1 | 분류2 | Forward Fill 적용 |',
+        '| 2 | 분류3 | Forward Fill 적용 |',
+        '| 3 | 분류4 (기능) | Forward Fill 적용 |',
+        '| 4 | 사전 조건 | |',
+        '| 5 | Test Step (체크할 항목) | |',
+        '| 6 | 기대결과 | |',
+        '| 27 | Priority (P) | 0~5 정수, `-`=비어있음, 기타=집계행 |',
+        '| 28 | OS Category (C) | A=Android, I/iOS=iOS, app=공통 |',
+        '| 29 | Version (V) | 버전 문자열 |',
+        '',
+        '## TC 식별 기준',
+        '',
+        '- Priority(col27) 값이 float로 파싱 가능하고 정수값 0~5 범위인 행 → TC',
+        '- `-` / 문자열 / 소수값 / 5 초과 숫자 → 섹션 헤더 또는 집계 행으로 제외',
+        '',
+        '---',
+        '',
+        '*생성 파일: tc_master.csv / service_summary.csv / category_summary.csv / coverage.json / attribute_summary.csv / quality_issues.csv / summary.md*',
+    ]
+
+    # ── TC 판별 통계 섹션 ──────────────────────────────────────────────────────
+    if excl_report:
+        tr  = excl_report.get('total_read', 0)
+        ttc = excl_report.get('total_tc', 0)
+        tex = tr - ttc
+        lines += [
+            '',
+            '## TC 판별 통계',
+            '',
+            f'| 항목 | 행 수 |',
+            f'|------|-------|',
+            f'| 전체 읽은 행 수 | {tr} |',
+            f'| **TC 판정 행 수** | **{ttc}** |',
+            f'| 제외 행 수 (합계) | {tex} |',
+            f'| ┌ 통계 영역 경계(행 추가시…) 이후 | {excl_report.get("STAT_BOUNDARY", 0)} |',
+            f'| ├ 통계표 키워드 행 (OS/Browser, Pass Rate 등) | {excl_report.get("STAT_ROW", 0)} |',
+            f'| ├ Priority 없음 / `-` | {excl_report.get("NO_PRIORITY", 0)} |',
+            f'| ├ Priority 비허용값 | {excl_report.get("INVALID_PRIORITY", 0)} |',
+            f'| ├ 기대결과 공란 (설명·메모 행) | {excl_report.get("NO_EXPECTED", 0)} |',
+            f'| ├ Step·분류 모두 없음 | {excl_report.get("NO_CONTENT", 0)} |',
+            f'| └ 완전 공백 행 | {excl_report.get("EMPTY_ROW", 0)} |',
+            '',
+            '> **TC 판별 기준**: Priority(col27) 정수 0~5 AND 기대결과(col6) 비어있지 않음',
+            '> 통계 영역 경계("행 추가시…") 이후 행은 모두 분석 제외',
+        ]
+
+    # ── Phase 3: 품질 이슈 섹션 ────────────────────────────────────────────────
+    if quality_stats:
+        issue_label = {
+            'ambiguous_test_step'       : 'Test Step 모호',
+            'ambiguous_expected_result' : '기대결과 모호',
+            'missing_precondition'      : '사전조건 누락',
+            'duplicated_step_expected'  : 'Step=Expected 중복',
+            'multiple_purpose'          : '복수 목적 혼재',
+            'invalid_priority'          : 'Priority 이상값',
+            'invalid_os'                : 'OS 이상값',
+            'invalid_category'          : '분류 누락/불일치',
+        }
+        lines += [
+            '',
+            '## 품질 점검 결과 (Phase 3)',
+            '',
+            f'- **총 이슈 수**: {quality_stats["total_issues"]}건',
+            f'- **영향 TC 수**: {quality_stats["affected_tc_count"]}건 '
+            f'(전체 {total_tc}건의 '
+            f'{quality_stats["affected_tc_count"]/total_tc*100:.1f}%)',
+            f'- **최다 이슈 유형**: {quality_stats["top_issue_type"]}',
+            f'- **최다 이슈 서비스**: {quality_stats["top_issue_service"]}',
+            '',
+            '### 이슈 유형별 건수',
+            '',
+            '| 이슈 유형 | 건수 |',
+            '|-----------|------|',
+        ]
+        for k in ISSUE_TYPES:
+            cnt = quality_stats['issue_type_counts'].get(k, 0)
+            lines.append(f'| {issue_label[k]} | {cnt} |')
+
+        lines += [
+            '',
+            '### 서비스별 품질 이슈 건수',
+            '',
+            '| 서비스 | 이슈 건수 | 영향 TC 수 |',
+            '|--------|-----------|------------|',
+        ]
+        svc_affected = quality_stats.get('service_affected_tc_counts', {})
+        for sname in TARGET_SHEETS:
+            ic  = quality_stats['service_issue_counts'].get(sname, 0)
+            atc = svc_affected.get(sname, 0)
+            lines.append(f'| {sname} | {ic} | {atc} |')
+
+        lines += [
+            '',
+            '### quality_issues.csv 컬럼 구조',
+            '',
+            '| 컬럼명 | 설명 |',
+            '|--------|------|',
+            '| service_name | 서비스명 |',
+            '| row_number | Excel 행 번호 |',
+            '| issue_type | 이슈 유형 키 |',
+            '| issue_reason | 탐지 근거 메시지 |',
+            '| priority | 정규화된 Priority |',
+            '| os | 정규화된 OS |',
+            '| category_path | 분류1 > 2 > 3 > 4 경로 |',
+            '| test_step | Test Step 텍스트 (최대 200자) |',
+            '| expected_result | 기대결과 텍스트 (최대 200자) |',
+        ]
+
+    summary_path = os.path.join(OUTPUT_DIR, 'summary.md')
+    with open(summary_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines) + '\n')
+    print(f"[OK] summary.md")
+
+
+if __name__ == '__main__':
+    main()
