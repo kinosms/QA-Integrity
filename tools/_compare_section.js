@@ -219,12 +219,38 @@ function buildTCBlock(tc, isSplit) {
   var rawCat3 = orig ? orig[2] : tc[4];
   var rawCat4 = orig ? orig[3] : tc[5];
 
+  // Phase 4: 사전조건 추론 상세 (PRECOND_DETAIL 에서 조회)
+  var precondInferences = (typeof PRECOND_DETAIL !== 'undefined')
+    ? (PRECOND_DETAIL[key] || []) : [];
+
+  // 추론 결과 HTML (AI 사전조건 셀 하단에 표시)
+  var precondInferHtml = '';
+  if (precondInferences.length > 0) {
+    var inferItems = precondInferences.map(function(inf) {
+      var confBadge = inf.conf === 'high'
+        ? '<span class="pc-conf conf-high">high</span>'
+        : '<span class="pc-conf conf-med">mid</span>';
+      return '<div class="pc-infer-item">' +
+        '<span class="pc-label">' + hesc(inf.label) + '</span>' +
+        confBadge +
+        '<div class="pc-evidence">근거: ' + hesc(inf.ev) + '</div>' +
+        '<div class="pc-reason">' + hesc(inf.reason) + '</div>' +
+      '</div>';
+    }).join('');
+    precondInferHtml =
+      '<div class="pc-infer-wrap">' +
+        '<div class="pc-infer-title">AI 추론 사전조건</div>' +
+        inferItems +
+      '</div>';
+  }
+
   var fields = [
     { label: '분류1',    orig: rawCat1,     ai: tc[2],  fname: 'cat1' },
     { label: '분류2',    orig: rawCat2,     ai: tc[3],  fname: 'cat2' },
     { label: '분류3',    orig: rawCat3,     ai: tc[4],  fname: 'cat3' },
     { label: '화면전개', orig: rawCat4,     ai: tc[5],  fname: 'cat4' },
-    { label: '사전조건', orig: rawPrecond,  ai: tc[6],  fname: 'precond' },
+    { label: '사전조건', orig: rawPrecond,  ai: tc[6],  fname: 'precond',
+      extraAi: precondInferHtml },  // Phase 4 추론 결과 추가
     { label: 'Test Step',orig: rawStep,     ai: tc[7],  fname: 'step' },
     { label: '기대결과', orig: rawExpected, ai: tc[8],  fname: 'expected' },
     { label: 'Priority', orig: rawPrioRaw,  ai: tc[9],  fname: 'priority', isPriority: true },
@@ -299,7 +325,10 @@ function buildTCBlock(tc, isSplit) {
         '<div class="cmp-field-row">' +
           '<div class="cmp-label">' + f.label + '</div>' +
           '<div class="cmp-orig-cell">' + origHtml + '</div>' +
-          '<div class="cmp-ai-cell-wrap"><div class="cmp-ai-cell">' + aiHtml + '</div></div>' +
+          '<div class="cmp-ai-cell-wrap"><div class="cmp-ai-cell">' +
+            aiHtml +
+            (f.extraAi || '') +
+          '</div></div>' +
         '</div>';
     });
 

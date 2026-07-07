@@ -40,11 +40,11 @@
             <span class="sec-badge">Phase 1</span>
             <span class="toggle-icon">▾</span>
           </div>
-          <div class="section-body flex-row">
+          <div class="section-body dist-body">
             <div class="donut-wrap">
-              <canvas id="donut-service" width="180" height="180"></canvas>
+              <canvas id="donut-service" width="160" height="160"></canvas>
             </div>
-            <div id="legend-service" class="legend"></div>
+            <div id="legend-service" class="legend legend-grid"></div>
           </div>
         </div>
 
@@ -54,14 +54,11 @@
             <span class="sec-badge">Phase 1</span>
             <span class="toggle-icon">▾</span>
           </div>
-          <div class="section-body flex-row">
+          <div class="section-body dist-body">
             <div class="donut-wrap">
-              <canvas id="donut-priority" width="180" height="180"></canvas>
+              <canvas id="donut-priority" width="160" height="160"></canvas>
             </div>
-            <div style="flex:1;min-width:0;padding-top:4px">
-              <div id="legend-priority" class="legend" style="margin-bottom:12px"></div>
-              <div id="priority-bars"></div>
-            </div>
+            <div id="legend-priority" class="legend legend-grid"></div>
           </div>
         </div>
 
@@ -102,6 +99,23 @@
         </div>
         <div class="section-body" style="overflow-x:auto;padding-top:0">
           <div id="heatmap-wrap"></div>
+        </div>
+      </div>
+
+      <!-- 사전조건 속성 분포 (Phase 4) -->
+      <div class="section-card" id="card-precond">
+        <div class="section-header">
+          <span class="sec-title">사전조건 속성 분포</span>
+          <span class="sec-badge p4">Phase 4</span>
+          <span class="toggle-icon">▾</span>
+        </div>
+        <div class="section-body">
+          <!-- 전체 분포 막대 -->
+          <div class="sub-title" style="margin-bottom:10px">전체 카테고리 분포</div>
+          <div id="precond-bars"></div>
+          <!-- 서비스별 히트맵 -->
+          <div class="sub-title" style="margin-top:20px;margin-bottom:10px">서비스별 분포 (상위 5 카테고리)</div>
+          <div id="precond-svc-heatmap" style="overflow-x:auto"></div>
         </div>
       </div>
 
