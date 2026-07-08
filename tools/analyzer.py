@@ -74,18 +74,7 @@ COL_PRIORITY = 27
 COL_OS       = 28
 COL_VERSION  = 29
 
-HEADER_ROWS = 4   # 상위 4행은 헤더, 데이터는 5행부터
-
-# ── 시트별 수행 Priority 범위 ────────────────────────────────────────────────
-# 헤더에 명시된 수행 범위 기준. None이면 0~5 전체 허용.
-SHEET_PRIORITY_RANGE = {
-    '4.채팅목록':               {1, 2},
-    '9.숏폼':                  {1},
-    '13.검색':                 {1},
-    '15. 알림센터':             {1},
-    '17.지갑':                 {1, 2, 3},   # 헤더 기재값 220 — 자동집계 불일치, 현행 유지
-    '20.톡클라우드_인물분류':    {1},
-}
+HEADER_ROWS = 4   # 상위 4행은 헤더, 데이터는 5행부터 (기본값, 동적 탐지로 덮어씀)
 
 # Phase 2 속성 키 목록 (service_summary · attribute_summary · coverage.json 공통)
 ATTR_KEYS = [
@@ -537,7 +526,7 @@ _STAT_KEYWORDS_IN_EXPECTED = {
 _STAT_SINGLE_CHARS = {'p', 'f', 'b', 'n', 'nr'}
 
 
-def classify_row(row, allowed_priority=None):
+def classify_row(row):
     """
     단일 행의 TC 해당 여부를 판별하고 제외 사유를 반환한다.
 
@@ -546,13 +535,11 @@ def classify_row(row, allowed_priority=None):
       'EMPTY_ROW'        — 핵심 컬럼이 모두 비어있는 행
       'NO_PRIORITY'      — Priority 없음 또는 '-'
       'INVALID_PRIORITY' — Priority 비정수 또는 0~5 범위 밖
-      'OUT_OF_RANGE'     — 시트 수행 범위 밖 Priority
       'NO_EXPECTED'      — 기대결과 공란 (col3/분류4도 없는 경우)
       'NO_CONTENT'       — Step·분류 모두 없음 (Priority만 있는 행)
       'STAT_ROW'         — 통계표 키워드 행 (경계 이전에도 존재할 수 있음)
 
     ※ STAT_BOUNDARY 이후 행은 load_sheet()에서 이미 제거됨.
-    ※ allowed_priority: 허용할 Priority 정수 집합. None이면 0~5 전체.
     """
     # ── 1. 완전 공백 행 ────────────────────────────────────────────────────────
     key_cols = [COL_CAT1, COL_STEP, COL_EXPECTED, COL_PRIORITY]
@@ -577,10 +564,6 @@ def classify_row(row, allowed_priority=None):
     except ValueError:
         return 'INVALID_PRIORITY'
 
-    # ── 3-1. 시트별 수행 Priority 범위 체크 ─────────────────────────────────
-    if allowed_priority is not None and int(f) not in allowed_priority:
-        return 'OUT_OF_RANGE'
-
     # ── 4. 기대결과 비어있음 — col3(분류4)에 내용 있으면 TC 인정 ──────────
     if not expected_val:
         if not cell(row, COL_CAT4):
@@ -595,9 +578,9 @@ def classify_row(row, allowed_priority=None):
     return 'TC'
 
 
-def is_tc_row(row, allowed_priority=None):
+def is_tc_row(row):
     """하위 호환용 래퍼. classify_row() 기반."""
-    return classify_row(row, allowed_priority) == 'TC'
+    return classify_row(row) == 'TC'
 
 
 def normalize_priority(raw_str):
@@ -947,28 +930,44 @@ def load_sheet(wb, sheet_name):
     시트를 읽어 TC 분석 대상 행만 반환한다.
 
     처리 순서:
-      1. 헤더 4행 제거
-      2. 통계 영역 경계("행 추가시...") 감지 → 경계 이전 행만 유지
+      1. 헤더 행 동적 탐지 ('분류1' 셀이 있는 행)
+      2. 통계 영역 경계 감지:
+         - '행 추가시...' 마커 우선 사용
+         - 마커 없으면 통계 키워드 행 연속 등장 시점으로 판단
       3. Forward Fill 적용 (분류 컬럼 계단식 복원)
 
     반환값: (tc_candidate_rows, exclusion_stats, first_excel_row, last_excel_row)
-      tc_candidate_rows : Forward Fill 적용된 경계 이전 행 리스트
-      exclusion_stats   : dict { 'STAT_BOUNDARY': n, 'EMPTY_ROW': n, ... }
-      first_excel_row   : 데이터 시작 Excel 행 번호 (1-based)
-      last_excel_row    : 데이터 끝 Excel 행 번호 (경계 이전 마지막 비공백 행)
     """
     ws = wb[sheet_name]
     all_rows = list(ws.iter_rows(values_only=True))
-    data_rows = all_rows[HEADER_ROWS:]
+
+    # ── Step 1: 헤더 행 동적 탐지 ─────────────────────────────────────────────
+    header_idx = HEADER_ROWS - 1  # 기본값 (0-based)
+    for i, row in enumerate(all_rows[:10]):
+        vals = [str(v or '').strip() for v in row[:5]]
+        if '분류1' in vals:
+            header_idx = i
+            break
+
+    data_rows = all_rows[header_idx + 1:]
     total_data = len(data_rows)
 
-    # ── Step 1: 통계 영역 경계 감지 ───────────────────────────────────────────
+    # ── Step 2: 통계 영역 경계 감지 ───────────────────────────────────────────
     boundary_idx = None
+
+    # 2-a: '행 추가시' 마커
     for i, row in enumerate(data_rows):
-        cat1_val = str(row[COL_CAT1] or '').strip()
-        if '행 추가시' in cat1_val:
+        if '행 추가시' in str(row[COL_CAT1] or '').strip():
             boundary_idx = i
             break
+
+    # 2-b: 마커 없으면 통계 키워드 행이 첫 등장하는 시점
+    if boundary_idx is None:
+        for i, row in enumerate(data_rows):
+            exp_l = str(row[COL_EXPECTED] or '').strip().lower()
+            if exp_l in _STAT_SINGLE_CHARS:
+                boundary_idx = i
+                break
 
     stat_boundary_count = 0
     if boundary_idx is not None:
@@ -976,31 +975,28 @@ def load_sheet(wb, sheet_name):
         data_rows = data_rows[:boundary_idx]
 
     # 데이터 행 범위 (Excel 행 번호, 1-based)
-    first_excel_row = HEADER_ROWS + 1  # 항상 5행
-    # 마지막 비공백 행 탐색
-    last_excel_row = first_excel_row
+    first_excel_row = header_idx + 2   # 헤더 다음 줄
+    last_excel_row  = first_excel_row
     for i in range(len(data_rows) - 1, -1, -1):
         if any(c for c in data_rows[i] if c is not None and str(c).strip()):
-            last_excel_row = HEADER_ROWS + i + 1
+            last_excel_row = header_idx + 1 + i + 1
             break
 
-    # ── Step 2: Forward Fill (분류 컬럼 계단식 복원) ─────────────────────────
+    # ── Step 3: Forward Fill (분류 컬럼 계단식 복원) ─────────────────────────
     data_rows = forward_fill(data_rows, [COL_CAT1, COL_CAT2, COL_CAT3, COL_CAT4])
 
-    # ── Step 3: 개별 행 제외 사유 집계 ────────────────────────────────────────
-    allowed_priority = SHEET_PRIORITY_RANGE.get(sheet_name)
+    # ── Step 4: 개별 행 제외 사유 집계 ────────────────────────────────────────
     exclusion_stats = {
         'STAT_BOUNDARY'    : stat_boundary_count,
         'STAT_ROW'         : 0,
         'EMPTY_ROW'        : 0,
         'NO_PRIORITY'      : 0,
         'INVALID_PRIORITY' : 0,
-        'OUT_OF_RANGE'     : 0,
         'NO_EXPECTED'      : 0,
         'NO_CONTENT'       : 0,
     }
     for row in data_rows:
-        reason = classify_row(row, allowed_priority)
+        reason = classify_row(row)
         if reason != 'TC':
             exclusion_stats[reason] += 1
 
@@ -1033,14 +1029,13 @@ def main():
 
         print(f"처리 중: {sheet_name}")
         data_rows, excl, first_row, last_row = load_sheet(wb, sheet_name)
-        allowed_priority = SHEET_PRIORITY_RANGE.get(sheet_name)
 
         # 이 시트에서 읽은 전체 원본 데이터 행 수 = TC후보 + 통계경계 이후
         sheet_read = len(data_rows) + excl['STAT_BOUNDARY']
         total_read += sheet_read
         for k, v in excl.items():
             total_exclusions[k] += v
-        sheet_tc = sum(1 for r in data_rows if is_tc_row(r, allowed_priority))
+        sheet_tc = sum(1 for r in data_rows if is_tc_row(r))
         print(f"  행범위: {first_row}~{last_row}  |  원본 데이터 행: {sheet_read}  |  TC 판정: {sheet_tc}  |  제외: {sheet_read - sheet_tc}")
 
         stats = {
@@ -1059,7 +1054,7 @@ def main():
         for rel_idx, row in enumerate(data_rows):
             excel_row = HEADER_ROWS + rel_idx + 1  # 1-based Excel 행 번호
 
-            if not is_tc_row(row, allowed_priority):
+            if not is_tc_row(row):
                 continue
 
             # ── 필드 추출 ──────────────────────────────────────────────────────
