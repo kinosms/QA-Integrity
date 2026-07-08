@@ -1,9 +1,11 @@
 {
-  "total_tc": 7002,
+  "total_tc": 7194,
   "services": [
     {
       "service_name": "1.가입",
       "total_tc": 296,
+      "first_row": 5,
+      "last_row": 662,
       "priority": {
         "P0": 0,
         "P1": 102,
@@ -116,6 +118,8 @@
     {
       "service_name": "2.친구",
       "total_tc": 112,
+      "first_row": 5,
+      "last_row": 186,
       "priority": {
         "P0": 0,
         "P1": 31,
@@ -223,6 +227,8 @@
     {
       "service_name": "3.프로필",
       "total_tc": 114,
+      "first_row": 5,
+      "last_row": 168,
       "priority": {
         "P0": 0,
         "P1": 114,
@@ -303,12 +309,14 @@
     },
     {
       "service_name": "4.채팅목록",
-      "total_tc": 74,
+      "total_tc": 64,
+      "first_row": 5,
+      "last_row": 136,
       "priority": {
         "P0": 0,
         "P1": 63,
         "P2": 1,
-        "P3": 10,
+        "P3": 0,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -317,37 +325,37 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 74,
+        "common": 64,
         "web": 0,
         "pc": 0,
         "empty": 0,
         "other": 0
       },
       "attributes": {
-        "ui_visibility": 44,
+        "ui_visibility": 42,
         "data_change": 9,
         "function_behavior": 9,
         "permission_auth": 1,
-        "exception_error": 6,
+        "exception_error": 5,
         "network_server": 1,
-        "notification": 32,
-        "multi_device_os": 21,
+        "notification": 26,
+        "multi_device_os": 14,
         "state_persistence": 3,
         "content_media": 12,
-        "has_precondition": 40,
+        "has_precondition": 32,
         "automation_candidate": 0,
         "manual_required": 0
       },
       "compound_attributes": {
-        "알림푸시확인+멀티디바이스OS": 7,
         "UI노출확인+알림푸시확인": 5,
-        "UI노출확인+알림푸시확인+멀티디바이스OS": 4,
         "UI노출확인+알림푸시확인+콘텐츠미디어확인": 3,
         "UI노출확인+기능동작확인": 3,
+        "알림푸시확인+멀티디바이스OS": 3,
         "UI노출확인+기능동작확인+알림푸시확인": 3,
         "예외에러확인+콘텐츠미디어확인": 2,
         "UI노출확인+데이터변경확인": 2,
         "알림푸시확인+콘텐츠미디어확인": 2,
+        "UI노출확인+알림푸시확인+멀티디바이스OS": 2,
         "UI노출확인+멀티디바이스OS": 2,
         "UI노출확인+데이터변경확인+멀티디바이스OS+콘텐츠미디어확인": 1,
         "UI노출확인+데이터변경확인+권한인증확인+알림푸시확인": 1,
@@ -362,7 +370,7 @@
         "UI노출확인+데이터변경확인+예외에러확인+알림푸시확인": 1
       },
       "precond_distribution": {
-        "채팅방_존재": 67,
+        "채팅방_존재": 57,
         "사진_존재": 8,
         "설정_변경": 3,
         "로그인": 1,
@@ -389,6 +397,8 @@
     {
       "service_name": "5.일반채팅",
       "total_tc": 594,
+      "first_row": 5,
+      "last_row": 947,
       "priority": {
         "P0": 0,
         "P1": 470,
@@ -554,6 +564,8 @@
     {
       "service_name": "6.비밀채팅",
       "total_tc": 76,
+      "first_row": 5,
+      "last_row": 131,
       "priority": {
         "P0": 0,
         "P1": 74,
@@ -631,12 +643,14 @@
     },
     {
       "service_name": "7.팀채팅_채팅방",
-      "total_tc": 470,
+      "total_tc": 479,
+      "first_row": 5,
+      "last_row": 704,
       "priority": {
         "P0": 0,
         "P1": 258,
         "P2": 1,
-        "P3": 211,
+        "P3": 220,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -645,7 +659,7 @@
       "os": {
         "android": 0,
         "ios": 1,
-        "common": 469,
+        "common": 478,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -746,14 +760,14 @@
         "멀티디바이스OS+설정상태유지": 1
       },
       "precond_distribution": {
-        "채팅방_존재": 402,
-        "백업_존재": 177,
+        "채팅방_존재": 410,
+        "백업_존재": 180,
         "사진_존재": 67,
         "설정_변경": 65,
-        "채팅내역_존재": 48,
+        "채팅내역_존재": 52,
         "동영상_존재": 38,
-        "구독_상태": 28,
-        "네트워크_연결": 18,
+        "구독_상태": 29,
+        "네트워크_연결": 20,
         "기타": 12,
         "관리자_권한": 11,
         "친구_존재": 9,
@@ -765,11 +779,11 @@
         "파일_존재": 1
       },
       "quality": {
-        "issue_count": 6,
-        "affected_tc_count": 6,
+        "issue_count": 22,
+        "affected_tc_count": 15,
         "issue_type_counts": {
-          "ambiguous_test_step": 2,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 9,
+          "ambiguous_expected_result": 9,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
@@ -782,6 +796,8 @@
     {
       "service_name": "8.팀채팅_홈상세",
       "total_tc": 141,
+      "first_row": 5,
+      "last_row": 152,
       "priority": {
         "P0": 0,
         "P1": 53,
@@ -875,12 +891,14 @@
     },
     {
       "service_name": "9.숏폼",
-      "total_tc": 80,
+      "total_tc": 73,
+      "first_row": 5,
+      "last_row": 120,
       "priority": {
         "P0": 0,
         "P1": 73,
-        "P2": 6,
-        "P3": 1,
+        "P2": 0,
+        "P3": 0,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -889,7 +907,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 80,
+        "common": 73,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -902,31 +920,30 @@
         "permission_auth": 0,
         "exception_error": 1,
         "network_server": 0,
-        "notification": 7,
+        "notification": 6,
         "multi_device_os": 1,
-        "state_persistence": 2,
-        "content_media": 17,
-        "has_precondition": 17,
+        "state_persistence": 1,
+        "content_media": 16,
+        "has_precondition": 13,
         "automation_candidate": 0,
         "manual_required": 0
       },
       "compound_attributes": {
         "UI노출확인+알림푸시확인": 2,
-        "설정상태유지+콘텐츠미디어확인": 1,
         "알림푸시확인+설정상태유지+콘텐츠미디어확인": 1,
         "UI노출확인+알림푸시확인+콘텐츠미디어확인": 1,
         "알림푸시확인+콘텐츠미디어확인": 1,
         "멀티디바이스OS+콘텐츠미디어확인": 1
       },
       "precond_distribution": {
-        "기타": 9,
+        "기타": 8,
         "검색결과_존재": 7,
-        "채팅방_존재": 6,
-        "구독_상태": 6,
+        "채팅방_존재": 5,
         "사진_존재": 5,
         "동영상_존재": 4,
-        "친구_존재": 2,
         "설정_변경": 1,
+        "구독_상태": 1,
+        "친구_존재": 1,
         "멀티디바이스": 1
       },
       "quality": {
@@ -947,6 +964,8 @@
     {
       "service_name": "10.통화",
       "total_tc": 117,
+      "first_row": 5,
+      "last_row": 229,
       "priority": {
         "P0": 0,
         "P1": 106,
@@ -1044,12 +1063,14 @@
     },
     {
       "service_name": "11.톡뮤직",
-      "total_tc": 80,
+      "total_tc": 83,
+      "first_row": 5,
+      "last_row": 320,
       "priority": {
         "P0": 0,
-        "P1": 45,
-        "P2": 35,
-        "P3": 0,
+        "P1": 46,
+        "P2": 36,
+        "P3": 1,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1062,7 +1083,7 @@
         "web": 0,
         "pc": 0,
         "empty": 0,
-        "other": 0
+        "other": 3
       },
       "attributes": {
         "ui_visibility": 2,
@@ -1114,28 +1135,30 @@
         "검색결과_존재": 1
       },
       "quality": {
-        "issue_count": 2,
-        "affected_tc_count": 2,
+        "issue_count": 11,
+        "affected_tc_count": 5,
         "issue_type_counts": {
-          "ambiguous_test_step": 0,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 3,
+          "ambiguous_expected_result": 3,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
           "invalid_priority": 0,
-          "invalid_os": 0,
+          "invalid_os": 3,
           "invalid_category": 2
         }
       }
     },
     {
       "service_name": "12.이모티콘플러스(+키보드)",
-      "total_tc": 477,
+      "total_tc": 490,
+      "first_row": 5,
+      "last_row": 733,
       "priority": {
         "P0": 0,
         "P1": 256,
         "P2": 27,
-        "P3": 194,
+        "P3": 207,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1144,7 +1167,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 475,
+        "common": 488,
         "web": 0,
         "pc": 0,
         "empty": 2,
@@ -1156,12 +1179,12 @@
         "function_behavior": 27,
         "permission_auth": 0,
         "exception_error": 20,
-        "network_server": 27,
+        "network_server": 28,
         "notification": 19,
-        "multi_device_os": 26,
+        "multi_device_os": 28,
         "state_persistence": 28,
-        "content_media": 281,
-        "has_precondition": 210,
+        "content_media": 282,
+        "has_precondition": 211,
         "automation_candidate": 130,
         "manual_required": 0
       },
@@ -1195,7 +1218,7 @@
         "예외에러확인+알림푸시확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1
       },
       "precond_distribution": {
-        "기타": 143,
+        "기타": 144,
         "채팅방_존재": 67,
         "검색결과_존재": 41,
         "구독_상태": 40,
@@ -1207,11 +1230,11 @@
         "설정_변경": 1
       },
       "quality": {
-        "issue_count": 15,
-        "affected_tc_count": 15,
+        "issue_count": 37,
+        "affected_tc_count": 28,
         "issue_type_counts": {
-          "ambiguous_test_step": 12,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 21,
+          "ambiguous_expected_result": 13,
           "missing_precondition": 0,
           "duplicated_step_expected": 1,
           "multiple_purpose": 0,
@@ -1223,11 +1246,13 @@
     },
     {
       "service_name": "13.검색",
-      "total_tc": 138,
+      "total_tc": 133,
+      "first_row": 5,
+      "last_row": 208,
       "priority": {
         "P0": 0,
         "P1": 133,
-        "P2": 5,
+        "P2": 0,
         "P3": 0,
         "P4": 0,
         "P5": 0,
@@ -1237,7 +1262,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 138,
+        "common": 133,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -1272,7 +1297,7 @@
         "데이터변경확인+권한인증확인": 1
       },
       "precond_distribution": {
-        "검색결과_존재": 64,
+        "검색결과_존재": 59,
         "채팅방_존재": 40,
         "기타": 6,
         "친구_존재": 5,
@@ -1299,21 +1324,23 @@
     },
     {
       "service_name": "14.이모티콘스토어",
-      "total_tc": 921,
+      "total_tc": 945,
+      "first_row": 5,
+      "last_row": 1460,
       "priority": {
         "P0": 0,
         "P1": 166,
         "P2": 0,
         "P3": 0,
         "P4": 0,
-        "P5": 755,
+        "P5": 779,
         "empty": 0,
         "other": 0
       },
       "os": {
         "android": 0,
         "ios": 1,
-        "common": 919,
+        "common": 943,
         "web": 0,
         "pc": 0,
         "empty": 1,
@@ -1325,12 +1352,12 @@
         "function_behavior": 38,
         "permission_auth": 28,
         "exception_error": 53,
-        "network_server": 59,
+        "network_server": 60,
         "notification": 74,
-        "multi_device_os": 30,
+        "multi_device_os": 31,
         "state_persistence": 31,
-        "content_media": 294,
-        "has_precondition": 435,
+        "content_media": 297,
+        "has_precondition": 437,
         "automation_candidate": 105,
         "manual_required": 0
       },
@@ -1343,7 +1370,7 @@
         "권한인증확인+예외에러확인": 9,
         "기능동작확인+콘텐츠미디어확인": 7,
         "예외에러확인+알림푸시확인+콘텐츠미디어확인": 7,
-        "멀티디바이스OS+콘텐츠미디어확인": 6,
+        "멀티디바이스OS+콘텐츠미디어확인": 7,
         "예외에러확인+콘텐츠미디어확인": 6,
         "UI노출확인+예외에러확인+알림푸시확인+콘텐츠미디어확인": 6,
         "UI노출확인+기능동작확인+네트워크서버연동+콘텐츠미디어확인": 5,
@@ -1379,23 +1406,23 @@
         "예외에러확인+네트워크서버연동": 1
       },
       "precond_distribution": {
-        "기타": 306,
+        "기타": 308,
         "구독_상태": 95,
         "사진_존재": 63,
         "관리자_권한": 24,
         "검색결과_존재": 20,
         "친구_존재": 9,
-        "채팅방_존재": 7,
+        "채팅방_존재": 9,
         "특정_OS": 6,
         "로그인": 5,
         "네트워크_연결": 1
       },
       "quality": {
-        "issue_count": 25,
-        "affected_tc_count": 25,
+        "issue_count": 66,
+        "affected_tc_count": 49,
         "issue_type_counts": {
-          "ambiguous_test_step": 17,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 34,
+          "ambiguous_expected_result": 24,
           "missing_precondition": 0,
           "duplicated_step_expected": 6,
           "multiple_purpose": 1,
@@ -1407,12 +1434,14 @@
     },
     {
       "service_name": "15. 알림센터",
-      "total_tc": 32,
+      "total_tc": 28,
+      "first_row": 5,
+      "last_row": 65,
       "priority": {
         "P0": 0,
         "P1": 28,
         "P2": 0,
-        "P3": 4,
+        "P3": 0,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1421,33 +1450,33 @@
       "os": {
         "android": 0,
         "ios": 1,
-        "common": 31,
+        "common": 27,
         "web": 0,
         "pc": 0,
         "empty": 0,
         "other": 0
       },
       "attributes": {
-        "ui_visibility": 18,
+        "ui_visibility": 14,
         "data_change": 7,
-        "function_behavior": 7,
+        "function_behavior": 4,
         "permission_auth": 0,
         "exception_error": 4,
         "network_server": 1,
-        "notification": 32,
+        "notification": 28,
         "multi_device_os": 4,
         "state_persistence": 3,
-        "content_media": 17,
-        "has_precondition": 24,
+        "content_media": 13,
+        "has_precondition": 20,
         "automation_candidate": 0,
         "manual_required": 0
       },
       "compound_attributes": {
-        "UI노출확인+기능동작확인+알림푸시확인+콘텐츠미디어확인": 6,
         "데이터변경확인+알림푸시확인": 5,
         "UI노출확인+알림푸시확인+멀티디바이스OS+콘텐츠미디어확인": 4,
-        "UI노출확인+알림푸시확인+콘텐츠미디어확인": 4,
         "UI노출확인+알림푸시확인": 3,
+        "UI노출확인+기능동작확인+알림푸시확인+콘텐츠미디어확인": 3,
+        "UI노출확인+알림푸시확인+콘텐츠미디어확인": 3,
         "데이터변경확인+예외에러확인+알림푸시확인+설정상태유지": 2,
         "네트워크서버연동+알림푸시확인+콘텐츠미디어확인": 1,
         "알림푸시확인+설정상태유지+콘텐츠미디어확인": 1,
@@ -1456,8 +1485,8 @@
         "UI노출확인+예외에러확인+알림푸시확인": 1
       },
       "precond_distribution": {
-        "사진_존재": 14,
         "기타": 10,
+        "사진_존재": 10,
         "알림_허용": 7,
         "설정_변경": 4,
         "네트워크_연결": 1
@@ -1479,12 +1508,14 @@
     },
     {
       "service_name": "16.톡클라우드_연락처",
-      "total_tc": 234,
+      "total_tc": 316,
+      "first_row": 5,
+      "last_row": 446,
       "priority": {
         "P0": 0,
         "P1": 77,
         "P2": 0,
-        "P3": 157,
+        "P3": 239,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1493,7 +1524,7 @@
       "os": {
         "android": 2,
         "ios": 6,
-        "common": 163,
+        "common": 245,
         "web": 0,
         "pc": 0,
         "empty": 63,
@@ -1510,7 +1541,7 @@
         "multi_device_os": 51,
         "state_persistence": 8,
         "content_media": 11,
-        "has_precondition": 70,
+        "has_precondition": 151,
         "automation_candidate": 54,
         "manual_required": 0
       },
@@ -1541,21 +1572,21 @@
         "데이터변경확인+예외에러확인+콘텐츠미디어확인": 1
       },
       "precond_distribution": {
+        "기타": 107,
         "백업_존재": 78,
-        "기타": 32,
+        "특정_OS": 15,
         "사진_존재": 11,
         "권한_허용": 9,
-        "특정_OS": 9,
         "특정_계정": 3,
         "설정_변경": 2,
         "네트워크_연결": 1
       },
       "quality": {
-        "issue_count": 70,
-        "affected_tc_count": 70,
+        "issue_count": 234,
+        "affected_tc_count": 152,
         "issue_type_counts": {
-          "ambiguous_test_step": 7,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 89,
+          "ambiguous_expected_result": 82,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
@@ -1567,12 +1598,14 @@
     },
     {
       "service_name": "17.지갑",
-      "total_tc": 279,
+      "total_tc": 280,
+      "first_row": 5,
+      "last_row": 420,
       "priority": {
         "P0": 0,
         "P1": 111,
         "P2": 50,
-        "P3": 118,
+        "P3": 119,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1581,7 +1614,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 277,
+        "common": 278,
         "web": 0,
         "pc": 0,
         "empty": 2,
@@ -1686,11 +1719,11 @@
         "특정_계정": 1
       },
       "quality": {
-        "issue_count": 4,
-        "affected_tc_count": 4,
+        "issue_count": 6,
+        "affected_tc_count": 5,
         "issue_type_counts": {
-          "ambiguous_test_step": 2,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 3,
+          "ambiguous_expected_result": 1,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
@@ -1703,6 +1736,8 @@
     {
       "service_name": "18.톡캘린더",
       "total_tc": 274,
+      "first_row": 5,
+      "last_row": 514,
       "priority": {
         "P0": 0,
         "P1": 140,
@@ -1798,12 +1833,14 @@
     },
     {
       "service_name": "19.톡클라우드_백복(로직)",
-      "total_tc": 112,
+      "total_tc": 210,
+      "first_row": 5,
+      "last_row": 333,
       "priority": {
         "P0": 0,
-        "P1": 70,
+        "P1": 103,
         "P2": 0,
-        "P3": 42,
+        "P3": 107,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -1812,7 +1849,7 @@
       "os": {
         "android": 0,
         "ios": 1,
-        "common": 111,
+        "common": 209,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -1869,8 +1906,8 @@
         "UI노출확인+기능동작확인+권한인증확인+멀티디바이스OS": 1
       },
       "precond_distribution": {
-        "채팅방_존재": 84,
-        "백업_존재": 83,
+        "채팅방_존재": 182,
+        "백업_존재": 116,
         "로그인": 31,
         "사진_존재": 30,
         "동영상_존재": 26,
@@ -1881,11 +1918,11 @@
         "권한_허용": 1
       },
       "quality": {
-        "issue_count": 1,
-        "affected_tc_count": 1,
+        "issue_count": 197,
+        "affected_tc_count": 99,
         "issue_type_counts": {
-          "ambiguous_test_step": 1,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 99,
+          "ambiguous_expected_result": 98,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
@@ -1897,13 +1934,15 @@
     },
     {
       "service_name": "20.톡클라우드_인물분류",
-      "total_tc": 161,
+      "total_tc": 126,
+      "first_row": 5,
+      "last_row": 267,
       "priority": {
         "P0": 0,
         "P1": 126,
         "P2": 0,
-        "P3": 3,
-        "P4": 32,
+        "P3": 0,
+        "P4": 0,
         "P5": 0,
         "empty": 0,
         "other": 0
@@ -1911,60 +1950,50 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 161,
+        "common": 126,
         "web": 0,
         "pc": 0,
         "empty": 0,
         "other": 0
       },
       "attributes": {
-        "ui_visibility": 77,
+        "ui_visibility": 58,
         "data_change": 9,
-        "function_behavior": 42,
+        "function_behavior": 36,
         "permission_auth": 1,
-        "exception_error": 12,
-        "network_server": 6,
-        "notification": 52,
-        "multi_device_os": 17,
-        "state_persistence": 26,
-        "content_media": 91,
-        "has_precondition": 120,
-        "automation_candidate": 60,
+        "exception_error": 4,
+        "network_server": 3,
+        "notification": 41,
+        "multi_device_os": 14,
+        "state_persistence": 16,
+        "content_media": 77,
+        "has_precondition": 95,
+        "automation_candidate": 45,
         "manual_required": 0
       },
       "compound_attributes": {
         "기능동작확인+알림푸시확인+콘텐츠미디어확인": 15,
-        "UI노출확인+콘텐츠미디어확인": 13,
-        "기능동작확인+콘텐츠미디어확인": 10,
-        "UI노출확인+기능동작확인+콘텐츠미디어확인": 10,
-        "UI노출확인+알림푸시확인": 8,
+        "UI노출확인+콘텐츠미디어확인": 10,
+        "기능동작확인+콘텐츠미디어확인": 9,
+        "UI노출확인+기능동작확인+콘텐츠미디어확인": 8,
         "UI노출확인+데이터변경확인+콘텐츠미디어확인": 7,
-        "UI노출확인+설정상태유지+콘텐츠미디어확인": 3,
-        "UI노출확인+네트워크서버연동": 3,
+        "UI노출확인+알림푸시확인": 6,
         "UI노출확인+알림푸시확인+설정상태유지+콘텐츠미디어확인": 3,
-        "알림푸시확인+콘텐츠미디어확인": 3,
         "UI노출확인+예외에러확인+알림푸시확인+콘텐츠미디어확인": 2,
-        "UI노출확인+기능동작확인+알림푸시확인": 2,
-        "UI노출확인+기능동작확인+알림푸시확인+설정상태유지": 2,
         "UI노출확인+네트워크서버연동+콘텐츠미디어확인": 2,
         "멀티디바이스OS+설정상태유지": 2,
-        "예외에러확인+설정상태유지": 2,
-        "예외에러확인+알림푸시확인": 2,
+        "알림푸시확인+콘텐츠미디어확인": 2,
         "UI노출확인+알림푸시확인+콘텐츠미디어확인": 1,
-        "예외에러확인+멀티디바이스OS": 1,
+        "UI노출확인+기능동작확인+알림푸시확인": 1,
         "UI노출확인+네트워크서버연동+알림푸시확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1,
         "알림푸시확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1,
         "알림푸시확인+멀티디바이스OS+설정상태유지": 1,
         "UI노출확인+알림푸시확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1,
         "UI노출확인+알림푸시확인+멀티디바이스OS+설정상태유지": 1,
-        "알림푸시확인+설정상태유지+콘텐츠미디어확인": 1,
-        "예외에러확인+알림푸시확인+콘텐츠미디어확인": 1,
-        "예외에러확인+알림푸시확인+멀티디바이스OS": 1,
         "UI노출확인+알림푸시확인+멀티디바이스OS": 1,
         "UI노출확인+예외에러확인": 1,
         "UI노출확인+데이터변경확인+멀티디바이스OS+설정상태유지": 1,
-        "UI노출확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1,
-        "UI노출확인+예외에러확인+콘텐츠미디어확인": 1,
+        "UI노출확인+설정상태유지+콘텐츠미디어확인": 1,
         "UI노출확인+설정상태유지": 1,
         "UI노출확인+데이터변경확인+알림푸시확인+설정상태유지": 1,
         "UI노출확인+알림푸시확인+설정상태유지": 1,
@@ -1973,14 +2002,14 @@
         "UI노출확인+기능동작확인+권한인증확인+예외에러확인": 1
       },
       "precond_distribution": {
-        "사진_존재": 80,
-        "기타": 43,
-        "채팅방_존재": 37,
-        "백업_존재": 22,
-        "친구_존재": 15,
-        "파일_존재": 2,
+        "사진_존재": 71,
+        "채팅방_존재": 33,
+        "기타": 31,
+        "백업_존재": 18,
+        "친구_존재": 5,
         "알림_허용": 2,
         "설정_변경": 2,
+        "파일_존재": 1,
         "동영상_존재": 1,
         "구독_상태": 1
       },
@@ -2002,6 +2031,8 @@
     {
       "service_name": "21.톡클라우드_버티컬(무료)",
       "total_tc": 102,
+      "first_row": 5,
+      "last_row": 135,
       "priority": {
         "P0": 0,
         "P1": 11,
@@ -2089,13 +2120,15 @@
     },
     {
       "service_name": "22.톡클라우드_버티컬(유료)",
-      "total_tc": 1296,
+      "total_tc": 1304,
+      "first_row": 5,
+      "last_row": 1594,
       "priority": {
         "P0": 0,
-        "P1": 147,
+        "P1": 148,
         "P2": 140,
         "P3": 230,
-        "P4": 777,
+        "P4": 784,
         "P5": 2,
         "empty": 0,
         "other": 0
@@ -2103,7 +2136,7 @@
       "os": {
         "android": 9,
         "ios": 17,
-        "common": 1263,
+        "common": 1271,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -2114,13 +2147,13 @@
         "data_change": 92,
         "function_behavior": 140,
         "permission_auth": 19,
-        "exception_error": 239,
+        "exception_error": 240,
         "network_server": 46,
         "notification": 226,
         "multi_device_os": 166,
         "state_persistence": 73,
-        "content_media": 852,
-        "has_precondition": 933,
+        "content_media": 854,
+        "has_precondition": 935,
         "automation_candidate": 361,
         "manual_required": 0
       },
@@ -2234,12 +2267,12 @@
         "데이터변경확인+알림푸시확인+멀티디바이스OS+설정상태유지+콘텐츠미디어확인": 1
       },
       "precond_distribution": {
-        "기타": 380,
+        "기타": 382,
         "사진_존재": 317,
-        "채팅방_존재": 290,
-        "백업_존재": 283,
+        "채팅방_존재": 292,
+        "백업_존재": 284,
         "동영상_존재": 202,
-        "로그인": 45,
+        "로그인": 46,
         "구독_상태": 41,
         "파일_존재": 34,
         "친구_존재": 28,
@@ -2253,11 +2286,11 @@
         "권한_허용": 1
       },
       "quality": {
-        "issue_count": 11,
-        "affected_tc_count": 11,
+        "issue_count": 23,
+        "affected_tc_count": 19,
         "issue_type_counts": {
-          "ambiguous_test_step": 2,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 6,
+          "ambiguous_expected_result": 8,
           "missing_precondition": 0,
           "duplicated_step_expected": 2,
           "multiple_purpose": 0,
@@ -2269,12 +2302,14 @@
     },
     {
       "service_name": "23.죠르디",
-      "total_tc": 200,
+      "total_tc": 206,
+      "first_row": 5,
+      "last_row": 459,
       "priority": {
         "P0": 0,
         "P1": 149,
         "P2": 32,
-        "P3": 19,
+        "P3": 25,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -2283,7 +2318,7 @@
       "os": {
         "android": 1,
         "ios": 0,
-        "common": 199,
+        "common": 205,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -2341,11 +2376,11 @@
         "알림_허용": 1
       },
       "quality": {
-        "issue_count": 4,
-        "affected_tc_count": 4,
+        "issue_count": 16,
+        "affected_tc_count": 10,
         "issue_type_counts": {
-          "ambiguous_test_step": 1,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 7,
+          "ambiguous_expected_result": 6,
           "missing_precondition": 1,
           "duplicated_step_expected": 0,
           "multiple_purpose": 2,
@@ -2358,6 +2393,8 @@
     {
       "service_name": "24. 더보기",
       "total_tc": 27,
+      "first_row": 5,
+      "last_row": 44,
       "priority": {
         "P0": 0,
         "P1": 21,
@@ -2427,36 +2464,38 @@
     },
     {
       "service_name": "25. 설정",
-      "total_tc": 411,
+      "total_tc": 418,
+      "first_row": 5,
+      "last_row": 524,
       "priority": {
         "P0": 0,
-        "P1": 317,
+        "P1": 321,
         "P2": 90,
-        "P3": 4,
+        "P3": 7,
         "P4": 0,
         "P5": 0,
         "empty": 0,
         "other": 0
       },
       "os": {
-        "android": 72,
-        "ios": 34,
-        "common": 305,
+        "android": 73,
+        "ios": 36,
+        "common": 309,
         "web": 0,
         "pc": 0,
         "empty": 0,
         "other": 0
       },
       "attributes": {
-        "ui_visibility": 135,
+        "ui_visibility": 137,
         "data_change": 31,
         "function_behavior": 25,
-        "permission_auth": 68,
-        "exception_error": 69,
+        "permission_auth": 71,
+        "exception_error": 70,
         "network_server": 23,
         "notification": 135,
-        "multi_device_os": 105,
-        "state_persistence": 16,
+        "multi_device_os": 107,
+        "state_persistence": 17,
         "content_media": 89,
         "has_precondition": 132,
         "automation_candidate": 30,
@@ -2468,8 +2507,8 @@
         "알림푸시확인+멀티디바이스OS": 10,
         "예외에러확인+알림푸시확인+멀티디바이스OS": 10,
         "UI노출확인+네트워크서버연동+멀티디바이스OS+콘텐츠미디어확인": 9,
+        "UI노출확인+권한인증확인+멀티디바이스OS": 7,
         "권한인증확인+알림푸시확인+멀티디바이스OS": 7,
-        "UI노출확인+권한인증확인+멀티디바이스OS": 6,
         "UI노출확인+알림푸시확인+멀티디바이스OS": 6,
         "UI노출확인+멀티디바이스OS": 6,
         "멀티디바이스OS+콘텐츠미디어확인": 6,
@@ -2536,14 +2575,15 @@
         "권한인증확인+콘텐츠미디어확인": 1,
         "UI노출확인+데이터변경확인+설정상태유지": 1,
         "UI노출확인+예외에러확인+멀티디바이스OS": 1,
-        "기능동작확인+멀티디바이스OS": 1
+        "기능동작확인+멀티디바이스OS": 1,
+        "UI노출확인+권한인증확인+예외에러확인+멀티디바이스OS+설정상태유지": 1
       },
       "precond_distribution": {
         "채팅방_존재": 101,
         "백업_존재": 79,
         "알림_허용": 67,
-        "로그인": 46,
-        "설정_변경": 36,
+        "로그인": 50,
+        "설정_변경": 37,
         "멀티디바이스": 30,
         "사진_존재": 28,
         "구독_상태": 25,
@@ -2558,11 +2598,11 @@
         "관리자_권한": 1
       },
       "quality": {
-        "issue_count": 11,
-        "affected_tc_count": 11,
+        "issue_count": 18,
+        "affected_tc_count": 18,
         "issue_type_counts": {
           "ambiguous_test_step": 1,
-          "ambiguous_expected_result": 0,
+          "ambiguous_expected_result": 7,
           "missing_precondition": 3,
           "duplicated_step_expected": 1,
           "multiple_purpose": 0,
@@ -2574,12 +2614,14 @@
     },
     {
       "service_name": "26.기타",
-      "total_tc": 39,
+      "total_tc": 40,
+      "first_row": 5,
+      "last_row": 81,
       "priority": {
         "P0": 0,
         "P1": 39,
         "P2": 0,
-        "P3": 0,
+        "P3": 1,
         "P4": 0,
         "P5": 0,
         "empty": 0,
@@ -2588,7 +2630,7 @@
       "os": {
         "android": 7,
         "ios": 21,
-        "common": 11,
+        "common": 12,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -2627,11 +2669,11 @@
         "사진_존재": 1
       },
       "quality": {
-        "issue_count": 1,
-        "affected_tc_count": 1,
+        "issue_count": 2,
+        "affected_tc_count": 2,
         "issue_type_counts": {
           "ambiguous_test_step": 0,
-          "ambiguous_expected_result": 0,
+          "ambiguous_expected_result": 1,
           "missing_precondition": 0,
           "duplicated_step_expected": 1,
           "multiple_purpose": 0,
@@ -2643,11 +2685,13 @@
     },
     {
       "service_name": "27.카나나템플릿",
-      "total_tc": 145,
+      "total_tc": 146,
+      "first_row": 5,
+      "last_row": 272,
       "priority": {
         "P0": 0,
         "P1": 112,
-        "P2": 33,
+        "P2": 34,
         "P3": 0,
         "P4": 0,
         "P5": 0,
@@ -2657,7 +2701,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 145,
+        "common": 146,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -2706,11 +2750,11 @@
         "네트워크_연결": 3
       },
       "quality": {
-        "issue_count": 5,
-        "affected_tc_count": 5,
+        "issue_count": 7,
+        "affected_tc_count": 6,
         "issue_type_counts": {
-          "ambiguous_test_step": 5,
-          "ambiguous_expected_result": 0,
+          "ambiguous_test_step": 6,
+          "ambiguous_expected_result": 1,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
           "multiple_purpose": 0,
@@ -2722,16 +2766,16 @@
     }
   ],
   "quality": {
-    "total_issues": 174,
-    "affected_tc_count": 174,
+    "total_issues": 658,
+    "affected_tc_count": 427,
     "issue_type_counts": {
-      "ambiguous_test_step": 55,
-      "ambiguous_expected_result": 1,
+      "ambiguous_test_step": 283,
+      "ambiguous_expected_result": 254,
       "missing_precondition": 6,
       "duplicated_step_expected": 13,
       "multiple_purpose": 7,
       "invalid_priority": 0,
-      "invalid_os": 75,
+      "invalid_os": 78,
       "invalid_category": 17
     },
     "service_issue_counts": {
@@ -2741,29 +2785,29 @@
       "4.채팅목록": 0,
       "5.일반채팅": 1,
       "6.비밀채팅": 1,
-      "7.팀채팅_채팅방": 6,
+      "7.팀채팅_채팅방": 22,
       "8.팀채팅_홈상세": 2,
       "9.숏폼": 1,
       "10.통화": 2,
-      "11.톡뮤직": 2,
-      "12.이모티콘플러스(+키보드)": 15,
+      "11.톡뮤직": 11,
+      "12.이모티콘플러스(+키보드)": 37,
       "13.검색": 0,
-      "14.이모티콘스토어": 25,
+      "14.이모티콘스토어": 66,
       "15. 알림센터": 3,
-      "16.톡클라우드_연락처": 70,
-      "17.지갑": 4,
+      "16.톡클라우드_연락처": 234,
+      "17.지갑": 6,
       "18.톡캘린더": 5,
-      "19.톡클라우드_백복(로직)": 1,
+      "19.톡클라우드_백복(로직)": 197,
       "20.톡클라우드_인물분류": 0,
       "21.톡클라우드_버티컬(무료)": 0,
-      "22.톡클라우드_버티컬(유료)": 11,
-      "23.죠르디": 4,
+      "22.톡클라우드_버티컬(유료)": 23,
+      "23.죠르디": 16,
       "24. 더보기": 0,
-      "25. 설정": 11,
-      "26.기타": 1,
-      "27.카나나템플릿": 5
+      "25. 설정": 18,
+      "26.기타": 2,
+      "27.카나나템플릿": 7
     },
-    "top_issue_type": "invalid_os",
+    "top_issue_type": "ambiguous_test_step",
     "top_issue_service": "16.톡클라우드_연락처"
   }
 }

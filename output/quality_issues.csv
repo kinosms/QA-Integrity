@@ -114,10 +114,43 @@ My비밀번호를 입력해 주세요.
 My비밀번호 입력
 
 2. 챗로그가 복원된다."
+7.팀채팅_채팅방,41,ambiguous_test_step,Test Step이 비어 있음,P3,common,"톡클라우드 상태 별 팀채팅방 개설 시도 > 개설 가능 개수 제한
+(1000개) > 팀 데이터 설정없이 개설 
+ - 무료 > 개설 완료",,
+7.팀채팅_채팅방,41,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"톡클라우드 상태 별 팀채팅방 개설 시도 > 개설 가능 개수 제한
+(1000개) > 팀 데이터 설정없이 개설 
+ - 무료 > 개설 완료",,
+7.팀채팅_채팅방,60,ambiguous_expected_result,기대결과가 비어 있음,P3,common,채팅방 다시 만들기 > 톡클라우드 유료 사용자 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,"1. 팀채팅방 > 채팅방 사이드 > 채팅방 다시 만들기 > 팀채팅 탭 
+2. 그룹채팅방 정보 설정 > [확인]",
+7.팀채팅_채팅방,69,ambiguous_test_step,Test Step이 비어 있음,P3,common,안내 배너 > 톡클라우드 미가입자 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,,
+7.팀채팅_채팅방,69,ambiguous_expected_result,기대결과가 비어 있음,P3,common,안내 배너 > 톡클라우드 미가입자 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,,
+7.팀채팅_채팅방,70,ambiguous_expected_result,기대결과가 비어 있음,P3,common,안내 배너 > 안내배너 노출 우선순위 확인 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,* 채팅방 공지 < 스팸뷰 < 라이브톡 배너 순,
+7.팀채팅_채팅방,71,ambiguous_test_step,Test Step이 비어 있음,P3,common,개설 불가 > 안내배너 노출 우선순위 확인 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,,
+7.팀채팅_채팅방,71,ambiguous_expected_result,기대결과가 비어 있음,P3,common,개설 불가 > 안내배너 노출 우선순위 확인 > 팀채팅 > 팀채팅 > 이전 대화상대 유지 메뉴 미노출 확인,,
+7.팀채팅_채팅방,396,ambiguous_test_step,Test Step이 비어 있음,P3,common,"거절하기 > 거절 요청 예외케이스 > TMS 수신 
+ - 팀채팅 채널 > 멤버 
+: 방장 거절",,
+7.팀채팅_채팅방,396,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"거절하기 > 거절 요청 예외케이스 > TMS 수신 
+ - 팀채팅 채널 > 멤버 
+: 방장 거절",,
+7.팀채팅_채팅방,404,ambiguous_test_step,Test Step이 비어 있음,P3,common,"거절하기 > 자동 거절 처리 시, 방장 동작 > 알 수 없는 오류 > 클라 공통 오류 
+(네트워크 에러)",,
+7.팀채팅_채팅방,404,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"거절하기 > 자동 거절 처리 시, 방장 동작 > 알 수 없는 오류 > 클라 공통 오류 
+(네트워크 에러)",,
+7.팀채팅_채팅방,422,ambiguous_test_step,Test Step이 비어 있음,P3,common,"수락하기 > 수락 요청 예외케이스 > TMS 수신 
+ - 팀채팅 채널 > [팀채팅방 가기] 랜딩",,
+7.팀채팅_채팅방,422,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"수락하기 > 수락 요청 예외케이스 > TMS 수신 
+ - 팀채팅 채널 > [팀채팅방 가기] 랜딩",,
 7.팀채팅_채팅방,502,ambiguous_test_step,Test Step이 비어 있음,P3,common,"톡클라우드 미사용자 (무료) > 멤버 권한 관리 > 챗봇 추가/제거 권한 > TMS 수신 
  - 팀채팅 채널",,*간단히 기본 기능 확인
 7.팀채팅_채팅방,503,ambiguous_test_step,Test Step이 비어 있음,P3,common,"톡클라우드 미사용자 (무료) > 멤버 권한 관리 > 캘린더 설정 > TMS 수신 
  - 팀채팅 채널",,*간단히 기본 기능 확인
+7.팀채팅_채팅방,554,ambiguous_test_step,Test Step이 비어 있음,P3,common,"채팅방 검색
+: 키워드 검색 > 검색화면
+: 이동 버튼 클릭 시 유실구간 확인 > 복원 실패 > 네트워크 얼럿",,
+7.팀채팅_채팅방,554,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"채팅방 검색
+: 키워드 검색 > 검색화면
+: 이동 버튼 클릭 시 유실구간 확인 > 복원 실패 > 네트워크 얼럿",,
 8.팀채팅_홈상세,6,invalid_category,"분류1=""생성 및 초대"" / 분류2="""" — 주요 분류가 비어 있음",P1,common,생성 및 초대,"1. (방장) 채팅 목록 > 팀채팅방 생성 및 멤버 초대 
 2. (멤버) 초대받은 팀채팅방 진입","개설 완료 시, 팀채팅방으로 이동
  - 채팅방 목록에 팀채팅방 아이콘 표시 
@@ -164,6 +197,28 @@ My비밀번호 입력
 11.톡뮤직,8,invalid_category,"분류1=""Notification Player (Android Only)"" / 분류2="""" — 주요 분류가 비어 있음",P1,android,Notification Player (Android Only),Notification Player의 동작 확인,"음악 재생 시 알림바에 자동 노출
 톡종료or톡내에서 플레이어 종료 시 자동으로 사라짐
 UI 표시와 기능이 정상 동작 함"
+11.톡뮤직,317,ambiguous_test_step,Test Step이 비어 있음,P1,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,317,ambiguous_expected_result,기대결과가 비어 있음,P1,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,317,invalid_os,"OS 값이 유효하지 않음: ""0.5625""",P1,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,318,ambiguous_test_step,Test Step이 비어 있음,P2,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,318,ambiguous_expected_result,기대결과가 비어 있음,P2,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,318,invalid_os,"OS 값이 유효하지 않음: ""0.4375""",P2,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,319,ambiguous_test_step,Test Step이 비어 있음,P3,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,319,ambiguous_expected_result,기대결과가 비어 있음,P3,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+11.톡뮤직,319,invalid_os,"OS 값이 유효하지 않음: ""0""",P3,other,예외사항 > 디바이스 관련 > 일반전화 > 받는 사람 (OS 공통),,
+12.이모티콘플러스(+키보드),109,ambiguous_expected_result,기대결과가 비어 있음,P3,common,이모티콘 검색 > 검색 모드 진입 > 취소 > 최대 표시개수(4개) 스펙 확인,"닫기 액션 스펙 참고
+* iOS - 취소
+* Android - 좌상단 뒤로가기 화살표 or 물리 백버튼
+* 공통 - 딤드영역 터치 시 닫기 처리",
+12.이모티콘플러스(+키보드),159,ambiguous_expected_result,기대결과가 비어 있음,P3,common,이모티콘 검색 > 검색 모드 진입 > 취소 > 최대 표시개수(4개) 스펙 확인,"닫기 액션 스펙 참고
+* iOS - 취소
+* Android - 좌상단 뒤로가기 화살표 or 물리 백버튼
+* 공통 - 딤드영역 터치 시 닫기 처리",
+12.이모티콘플러스(+키보드),247,ambiguous_test_step,Test Step이 비어 있음,P3,common,"검색 결과화면 > 취향 버블 결과화면 > 취향 영역 안내 문구 > 추검배너 우선순위 확인
+- 최상위 레이어 유지 확인",,
+12.이모티콘플러스(+키보드),247,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"검색 결과화면 > 취향 버블 결과화면 > 취향 영역 안내 문구 > 추검배너 우선순위 확인
+- 최상위 레이어 유지 확인",,
+12.이모티콘플러스(+키보드),250,ambiguous_expected_result,기대결과가 비어 있음,P3,common,검색 결과화면 > 추천검색 캐싱 체크 > 취향 영역 안내 문구 > 안내 문구 미노출 확인,* 동일 추천검색 키워드 입력시 60분간 캐싱하므로 search_keyword api 미호출 여부 체크,
 12.이모티콘플러스(+키보드),262,ambiguous_test_step,Test Step이 비어 있음,P1,common,이모트 상태 별 따라하기 결과화면 확인 > Y > N > -,,"아이템 섹션이 표시된다.
 
 작가 페이지 진입점 표시된다.
@@ -228,6 +283,23 @@ UI 표시와 기능이 정상 동작 함"
 
 무제한 단품상품
 ㄴ 유지된다."
+12.이모티콘플러스(+키보드),416,ambiguous_expected_result,기대결과가 비어 있음,P3,common,미니스토어 카드 > 타이틀 > 사운드 아이콘 표시 > X,1. 이모티콘 타이틀 확인,
+12.이모티콘플러스(+키보드),427,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 커스텀 프로필 > X,,
+12.이모티콘플러스(+키보드),427,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 커스텀 프로필 > X,,
+12.이모티콘플러스(+키보드),428,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 펑 > X,,
+12.이모티콘플러스(+키보드),428,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 펑 > X,,
+12.이모티콘플러스(+키보드),429,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 게시판 > X,,
+12.이모티콘플러스(+키보드),429,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 게시판 > X,,
+12.이모티콘플러스(+키보드),430,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 게시판 댓글 > X,,
+12.이모티콘플러스(+키보드),430,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 게시판 댓글 > X,,
+12.이모티콘플러스(+키보드),431,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 플친 댓글 > X,,
+12.이모티콘플러스(+키보드),431,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 플친 댓글 > X,,
+12.이모티콘플러스(+키보드),432,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 예약 메시지 > X,,
+12.이모티콘플러스(+키보드),432,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 예약 메시지 > X,,
+12.이모티콘플러스(+키보드),433,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 페이스톡 > X,,
+12.이모티콘플러스(+키보드),433,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 페이스톡 > X,,
+12.이모티콘플러스(+키보드),434,ambiguous_test_step,Test Step이 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 보이스톡 > X,,
+12.이모티콘플러스(+키보드),434,ambiguous_expected_result,기대결과가 비어 있음,P3,common,스토어 뱃지 관리 설정 별 스토어 버튼 노출 확인 > 영역별 확인 > 보이스톡 > X,,
 12.이모티콘플러스(+키보드),580,duplicated_step_expected,Test Step과 기대결과 유사도 100%,P1,common,카드형 정책 확인 > 카드형 썸네일 노출 > 아이템 노출 > 순서 랜덤 노출 확인,미니 이모티콘 탭 반복 진입 > 아이템 랜덤 노출 확인,미니 이모티콘 탭 반복 진입 > 아이템 랜덤 노출 확인
 14.이모티콘스토어,48,invalid_os,"OS 값이 유효하지 않음: """"",P1,empty,검색 엔트리 이동 확인 > 노출 위치 확인 > 스크롤 발생한 경우,1. 검색창 카드 노출 확인,1. 와이드배너 카드 하단 노출
 14.이모티콘스토어,69,duplicated_step_expected,Test Step과 기대결과 유사도 100%,P1,common,배너 노출 > 배너 오픈 > IP ID > 앱스킴,"설정된 배너 노출 (1440*184)
@@ -251,6 +323,16 @@ UI 표시와 기능이 정상 동작 함"
 14.이모티콘스토어,242,duplicated_step_expected,Test Step과 기대결과 유사도 86%,P5,common,MD추천 목록 리스트 > 썸네일 이미지 > MD 추천 이모티콘 > 썸네일 2설정 이미지 노출 확인,어드민에 설정된 썸네일 노출 확인,어드민에 설정된 썸네일 2로 노출
 14.이모티콘스토어,488,ambiguous_test_step,Test Step이 비어 있음,P5,common,현금영수증 /거래확인증 > 현금 영수증 노출 조건 확인 > 환불 > 만료 표시 확인,,"*현금성
 - 페이머니, 상품권 등 -> 이외 미노출"
+14.이모티콘스토어,514,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 움스(Type:20),,
+14.이모티콘스토어,514,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 움스(Type:20),,
+14.이모티콘스토어,515,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 스티커(Type:12),,
+14.이모티콘스토어,515,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 스티커(Type:12),,
+14.이모티콘스토어,516,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,516,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,517,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 움직이는 미니,,
+14.이모티콘스토어,517,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 움직이는 미니,,
+14.이모티콘스토어,518,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 멈춰있는 미니,,
+14.이모티콘스토어,518,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 카드 > 섬네일 확인 > 타입별 확인 > 멈춰있는 미니,,
 14.이모티콘스토어,556,ambiguous_test_step,Test Step이 비어 있음,P5,common,빈페이지 확인 > 쿠폰 구성요소 확인 > 할인율 / 할인명 / 할인 종료일 > 멈춰있는 미니,,"1.안내 문구 표시
 --
 새소식을 준비중입니다. 
@@ -267,6 +349,8 @@ UI 표시와 기능이 정상 동작 함"
 14.이모티콘스토어,579,ambiguous_test_step,Test Step이 비어 있음,P5,common,전송 방법 별 확인 > 나에게 보내기 > 검증 flow 확인 > 동일 이모티콘 보유 여부,,"1. 얼럿 표시
 --
 이미 보유한 이모티콘입니다."
+14.이모티콘스토어,647,ambiguous_expected_result,기대결과가 비어 있음,P5,common,최근 검색어 > 마케팅 운영 구좌 > 랜딩 확인 > 복수아이템 하이라이팅확인,"* 타겟링크는 검색창의 검색버튼 탭시 동작하는 기능 - 오픈시에는 구현X
+* 테스트시 추천아이템 링크로 동작하는지 체크",
 14.이모티콘스토어,649,ambiguous_test_step,Test Step이 비어 있음,P5,common,최근 검색어 > 마케팅 운영 구좌 > 랜딩 확인 > 복수아이템 하이라이팅확인,,1. 설정한 그룹페이지로 랜딩
 14.이모티콘스토어,650,ambiguous_test_step,Test Step이 비어 있음,P5,common,최근 검색어 > 마케팅 운영 구좌 > 랜딩 확인 > 복수아이템 하이라이팅확인,,1. 설정한 작가페이지로 이동(전체)
 14.이모티콘스토어,651,ambiguous_test_step,Test Step이 비어 있음,P5,common,최근 검색어 > 마케팅 운영 구좌 > 랜딩 확인 > 복수아이템 하이라이팅확인,,1. 설정한 작가페이지로 이동(IP ID)
@@ -277,6 +361,20 @@ UI 표시와 기능이 정상 동작 함"
 14.이모티콘스토어,687,ambiguous_test_step,Test Step이 비어 있음,P5,common,검색 배너 > 랜딩 확인 > 추가 시 리스트 갱신 > 복수아이템 하이라이팅확인,,1. 설정한 작가페이지로 이동(IP ID)
 14.이모티콘스토어,688,ambiguous_test_step,Test Step이 비어 있음,P5,common,검색 배너 > 랜딩 확인 > 추가 시 리스트 갱신 > 복수아이템 하이라이팅확인,,1. 설정한 내부 페이지로 랜딩
 14.이모티콘스토어,689,ambiguous_test_step,Test Step이 비어 있음,P5,common,검색 배너 > 랜딩 확인 > 추가 시 리스트 갱신 > 복수아이템 하이라이팅확인,,1. 설정한 내부 페이지로 랜딩
+14.이모티콘스토어,702,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 움스(Type:20),,
+14.이모티콘스토어,702,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 움스(Type:20),,
+14.이모티콘스토어,703,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,703,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,704,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 움직이는 미니,,
+14.이모티콘스토어,704,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 움직이는 리소스 재생 확인 > 진입/클릭 시 재생 확인 > 움직이는 미니,,
+14.이모티콘스토어,714,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > MOTION,,
+14.이모티콘스토어,714,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > MOTION,,
+14.이모티콘스토어,715,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > KEYWORD RANKING,,
+14.이모티콘스토어,715,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > KEYWORD RANKING,,
+14.이모티콘스토어,716,ambiguous_test_step,Test Step이 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > MD PICK,,
+14.이모티콘스토어,716,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 내부 홈카드 타입 별 확인 > MD PICK,,
+14.이모티콘스토어,719,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 외부 진입 점 확인 > 이모티콘 보러가기,1. 채팅방 내 이모트 롱탭 > 이모티콘 보러가기,
+14.이모티콘스토어,720,ambiguous_expected_result,기대결과가 비어 있음,P5,common,아이템 타이틀 / 아이콘 > 트리거 이모트 인덱스 > 스토어 외부 진입 점 확인 > 원탭 바로 가기,1. 채팅방 내 이모트 원탭 > 하단 화살표 아이콘 탭,
 14.이모티콘스토어,837,multiple_purpose,Step 4단계 / 기대결과 4단계: 복합 속성으로 분류 불가 — 목적 불명확,P1,common,페이징 > 페이징 확인 > 멈미니 > N뱃지 표시조건 확인,"1. 최초 페이징 확인
 
 2. > 버튼 탭
@@ -293,6 +391,30 @@ UI 표시와 기능이 정상 동작 함"
 
 4. 이전페이지로 이동된다.
 - 현재 페이지 N > N-1로 감소"
+14.이모티콘스토어,1087,ambiguous_expected_result,기대결과가 비어 있음,P5,common,넛지 타입 별 확인 > 타이틀 문구 > 이모티콘 롱탭 후 [이모티콘 보러가기] 로 진입 > 미니 표시,"* 넛지 타입에 따라 문구 분기하여 표시
+- 서버제어",
+14.이모티콘스토어,1120,ambiguous_test_step,Test Step이 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 움스(Type:20),,
+14.이모티콘스토어,1120,ambiguous_expected_result,기대결과가 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 움스(Type:20),,
+14.이모티콘스토어,1121,ambiguous_test_step,Test Step이 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 스티커(Type:12),,
+14.이모티콘스토어,1121,ambiguous_expected_result,기대결과가 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 스티커(Type:12),,
+14.이모티콘스토어,1122,ambiguous_test_step,Test Step이 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,1122,ambiguous_expected_result,기대결과가 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 큰이모티콘(Type:25),,
+14.이모티콘스토어,1123,ambiguous_test_step,Test Step이 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 움직이는 미니,,
+14.이모티콘스토어,1123,ambiguous_expected_result,기대결과가 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 움직이는 미니,,
+14.이모티콘스토어,1124,ambiguous_test_step,Test Step이 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 멈춰있는 미니,,
+14.이모티콘스토어,1124,ambiguous_expected_result,기대결과가 비어 있음,P5,common,선물 메시지 화면 상세(앱) > 카드 > 타입별 확인 > 멈춰있는 미니,,
+14.이모티콘스토어,1314,ambiguous_test_step,Test Step이 비어 있음,P5,common,보유 넛지 노출 조건 정책 확인 > ( adhoc) IP 버블 직랜딩 시 보유 넛지 노출 확인 > 플러스 미등록 아이템 보유 > 놓친시리즈,,
+14.이모티콘스토어,1314,ambiguous_expected_result,기대결과가 비어 있음,P5,common,보유 넛지 노출 조건 정책 확인 > ( adhoc) IP 버블 직랜딩 시 보유 넛지 노출 확인 > 플러스 미등록 아이템 보유 > 놓친시리즈,,
+14.이모티콘스토어,1333,ambiguous_expected_result,기대결과가 비어 있음,P5,common,보유 넛지 구성요소 확인 > 서브타이틀 > 미보유 아이템 개수 & 가격 표시 > 놓친시리즈,"이모티콘 N개, {$}원
+
+예) 이모티콘 12개, 6,900원
+
+-- $
+- iOS : 6,900원
+- Android : 5,700원
+- Web : 3,900원",
+14.이모티콘스토어,1339,ambiguous_expected_result,기대결과가 비어 있음,P5,common,보유 넛지 구성요소 확인 > 전부 쓰기 버튼 > 매대 스펙 체크 > 이모트 노출 확인,매대 내 표시되는 이모티콘 선택 영역 확인,
+14.이모티콘스토어,1373,ambiguous_expected_result,기대결과가 비어 있음,P5,common,조회 넛지 구성요소 확인 > 서브타이틀 > 섬네일 롤링 확인 > 이모트 노출 확인,같은 시리즈 모두 쓸 수 있어요,
 15. 알림센터,6,invalid_category,"분류1=""apns/fcm 푸시"" / 분류2="""" — 주요 분류가 비어 있음",P1,common,apns/fcm 푸시,"1. 앱 종료, 네트워크 on -> off -> on 상태로 변경
 2. 내 멘션 포함한 메시지 수신","푸시 수신
 
@@ -447,15 +569,181 @@ UI 표시와 기능이 정상 동작 함"
 병합후 추가되지 않음."
 16.톡클라우드_연락처,316,invalid_os,"OS 값이 유효하지 않음: """"",P3,empty,복수필드 머지 정책 확인 > 주소 > 1개 > 없음,디바이스에 정보가 없는 상태에서 복원 시도,"병합된다.
 병합 후 새로운 필드로 추가저장된다."
+16.톡클라우드_연락처,322,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 핸드폰 > Y > Y,,
+16.톡클라우드_연락처,322,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 핸드폰 > Y > Y,,
+16.톡클라우드_연락처,323,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 회사 > Y > Y,,
+16.톡클라우드_연락처,323,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 회사 > Y > Y,,
+16.톡클라우드_연락처,324,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 팩스_회사 > Y > Y,,
+16.톡클라우드_연락처,324,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 팩스_회사 > Y > Y,,
+16.톡클라우드_연락처,325,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 팩스_집 > Y > Y,,
+16.톡클라우드_연락처,325,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 팩스_집 > Y > Y,,
+16.톡클라우드_연락처,326,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 호출기 > Y > Y,,
+16.톡클라우드_연락처,326,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 호출기 > Y > Y,,
+16.톡클라우드_연락처,327,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 기타 > Y > Y,,
+16.톡클라우드_연락처,327,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 기타 > Y > Y,,
+16.톡클라우드_연락처,328,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 대표 > Y > Y,,
+16.톡클라우드_연락처,328,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 대표 > Y > Y,,
+16.톡클라우드_연락처,329,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 아이폰 > Y > Y,,
+16.톡클라우드_연락처,329,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 아이폰 > Y > Y,,
+16.톡클라우드_연락처,330,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 학교 > Y > Y,,
+16.톡클라우드_연락처,330,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 학교 > Y > Y,,
+16.톡클라우드_연락처,331,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 답신전화 > Y > Y,,
+16.톡클라우드_연락처,331,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 답신전화 > Y > Y,,
+16.톡클라우드_연락처,332,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 차 > Y > Y,,
+16.톡클라우드_연락처,332,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 차 > Y > Y,,
+16.톡클라우드_연락처,333,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 회사메인 > Y > Y,,
+16.톡클라우드_연락처,333,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 회사메인 > Y > Y,,
+16.톡클라우드_연락처,334,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > ISDN > Y > Y,,
+16.톡클라우드_연락처,334,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > ISDN > Y > Y,,
+16.톡클라우드_연락처,335,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 팩스_기타 > Y > Y,,
+16.톡클라우드_연락처,335,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 팩스_기타 > Y > Y,,
+16.톡클라우드_연락처,336,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 무전기 > Y > Y,,
+16.톡클라우드_연락처,336,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 무전기 > Y > Y,,
+16.톡클라우드_연락처,337,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > TELEX > Y > Y,,
+16.톡클라우드_연락처,337,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > TELEX > Y > Y,,
+16.톡클라우드_연락처,338,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > TTY_TDD > Y > Y,,
+16.톡클라우드_연락처,338,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > TTY_TDD > Y > Y,,
+16.톡클라우드_연락처,339,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 회사_핸드폰 > Y > Y,,
+16.톡클라우드_연락처,339,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 회사_핸드폰 > Y > Y,,
+16.톡클라우드_연락처,340,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 회사_호출기 > Y > Y,,
+16.톡클라우드_연락처,340,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 회사_호출기 > Y > Y,,
+16.톡클라우드_연락처,341,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > 보조전화 > Y > Y,,
+16.톡클라우드_연락처,341,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > 보조전화 > Y > Y,,
+16.톡클라우드_연락처,342,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > MMS > Y > Y,,
+16.톡클라우드_연락처,342,ambiguous_expected_result,기대결과가 비어 있음,P3,common,phones > MMS > Y > Y,,
 16.톡클라우드_연락처,343,ambiguous_test_step,Test Step이 비어 있음,P3,common,phones > Custom(사용자지정) > Y > Y,,사용자편집(커스텀)항목으로 복원된다.
+16.톡클라우드_연락처,347,ambiguous_test_step,Test Step이 비어 있음,P3,common,emails > 회사 > Y > Y,,
+16.톡클라우드_연락처,347,ambiguous_expected_result,기대결과가 비어 있음,P3,common,emails > 회사 > Y > Y,,
+16.톡클라우드_연락처,348,ambiguous_test_step,Test Step이 비어 있음,P3,common,emails > 기타 > Y > Y,,
+16.톡클라우드_연락처,348,ambiguous_expected_result,기대결과가 비어 있음,P3,common,emails > 기타 > Y > Y,,
+16.톡클라우드_연락처,349,ambiguous_test_step,Test Step이 비어 있음,P3,common,emails > 모바일 > Y > Y,,
+16.톡클라우드_연락처,349,ambiguous_expected_result,기대결과가 비어 있음,P3,common,emails > 모바일 > Y > Y,,
+16.톡클라우드_연락처,350,ambiguous_test_step,Test Step이 비어 있음,P3,common,emails > 학교 > Y > Y,,
+16.톡클라우드_연락처,350,ambiguous_expected_result,기대결과가 비어 있음,P3,common,emails > 학교 > Y > Y,,
+16.톡클라우드_연락처,351,ambiguous_test_step,Test Step이 비어 있음,P3,common,emails > iCloud > Y > Y,,
+16.톡클라우드_연락처,351,ambiguous_expected_result,기대결과가 비어 있음,P3,common,emails > iCloud > Y > Y,,
+16.톡클라우드_연락처,356,ambiguous_test_step,Test Step이 비어 있음,P3,common,address > 회사 > Y > Y,,
+16.톡클라우드_연락처,356,ambiguous_expected_result,기대결과가 비어 있음,P3,common,address > 회사 > Y > Y,,
+16.톡클라우드_연락처,357,ambiguous_test_step,Test Step이 비어 있음,P3,common,address > 기타 > Y > Y,,
+16.톡클라우드_연락처,357,ambiguous_expected_result,기대결과가 비어 있음,P3,common,address > 기타 > Y > Y,,
+16.톡클라우드_연락처,358,ambiguous_test_step,Test Step이 비어 있음,P3,common,address > 학교 > Y > Y,,
+16.톡클라우드_연락처,358,ambiguous_expected_result,기대결과가 비어 있음,P3,common,address > 학교 > Y > Y,,
+16.톡클라우드_연락처,359,ambiguous_test_step,Test Step이 비어 있음,P3,common,address > iCloud > Y > Y,,
+16.톡클라우드_연락처,359,ambiguous_expected_result,기대결과가 비어 있음,P3,common,address > iCloud > Y > Y,,
+16.톡클라우드_연락처,364,ambiguous_test_step,Test Step이 비어 있음,P3,common,events > 생일 > Y > Y,,
+16.톡클라우드_연락처,364,ambiguous_expected_result,기대결과가 비어 있음,P3,common,events > 생일 > Y > Y,,
+16.톡클라우드_연락처,365,ambiguous_test_step,Test Step이 비어 있음,P3,common,events > 기타 > Y > Y,,
+16.톡클라우드_연락처,365,ambiguous_expected_result,기대결과가 비어 있음,P3,common,events > 기타 > Y > Y,,
+16.톡클라우드_연락처,370,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > 홈 > Y > Y,,
+16.톡클라우드_연락처,370,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > 홈 > Y > Y,,
+16.톡클라우드_연락처,371,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > 회사 > Y > Y,,
+16.톡클라우드_연락처,371,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > 회사 > Y > Y,,
+16.톡클라우드_연락처,372,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > 기타 > Y > Y,,
+16.톡클라우드_연락처,372,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > 기타 > Y > Y,,
+16.톡클라우드_연락처,373,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > 블로그 > Y > Y,,
+16.톡클라우드_연락처,373,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > 블로그 > Y > Y,,
+16.톡클라우드_연락처,374,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > 프로필 > Y > Y,,
+16.톡클라우드_연락처,374,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > 프로필 > Y > Y,,
+16.톡클라우드_연락처,375,ambiguous_test_step,Test Step이 비어 있음,P3,common,websites > FTP > Y > Y,,
+16.톡클라우드_연락처,375,ambiguous_expected_result,기대결과가 비어 있음,P3,common,websites > FTP > Y > Y,,
+16.톡클라우드_연락처,380,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > Facebook > Android > Y,,
+16.톡클라우드_연락처,380,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > Facebook > Android > Y,,
+16.톡클라우드_연락처,381,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > Flickr > Android > Y,,
+16.톡클라우드_연락처,381,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > Flickr > Android > Y,,
+16.톡클라우드_연락처,382,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > LinkedIn > Android > Y,,
+16.톡클라우드_연락처,382,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > LinkedIn > Android > Y,,
+16.톡클라우드_연락처,383,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > MySpace > Android > Y,,
+16.톡클라우드_연락처,383,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > MySpace > Android > Y,,
+16.톡클라우드_연락처,384,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > SinaWeibo > Android > Y,,
+16.톡클라우드_연락처,384,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > SinaWeibo > Android > Y,,
+16.톡클라우드_연락처,385,ambiguous_test_step,Test Step이 비어 있음,P3,common,sns(iOS only) > Custom(사용자지정) > Android > Y,,
+16.톡클라우드_연락처,385,ambiguous_expected_result,기대결과가 비어 있음,P3,common,sns(iOS only) > Custom(사용자지정) > Android > Y,,
+16.톡클라우드_연락처,391,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > MSN > Y > Y,,
+16.톡클라우드_연락처,391,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > MSN > Y > Y,,
+16.톡클라우드_연락처,392,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > Yahoo > Y > Y,,
+16.톡클라우드_연락처,392,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > Yahoo > Y > Y,,
+16.톡클라우드_연락처,393,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > Skype > Y > Y,,
+16.톡클라우드_연락처,393,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > Skype > Y > Y,,
+16.톡클라우드_연락처,394,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > QQ > Y > Y,,
+16.톡클라우드_연락처,394,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > QQ > Y > Y,,
+16.톡클라우드_연락처,395,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > GoogleTalk > Y > Y,,
+16.톡클라우드_연락처,395,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > GoogleTalk > Y > Y,,
+16.톡클라우드_연락처,396,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > ICQ > Y > Y,,
+16.톡클라우드_연락처,396,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > ICQ > Y > Y,,
+16.톡클라우드_연락처,397,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > Jabber > Y > Y,,
+16.톡클라우드_연락처,397,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > Jabber > Y > Y,,
+16.톡클라우드_연락처,398,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > WhatsApp > Y > Y,,
+16.톡클라우드_연락처,398,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > WhatsApp > Y > Y,,
+16.톡클라우드_연락처,399,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > netmeeting > Y > Y,,
+16.톡클라우드_연락처,399,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > netmeeting > Y > Y,,
+16.톡클라우드_연락처,400,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > facebook > Y > Y,,
+16.톡클라우드_연락처,400,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > facebook > Y > Y,,
+16.톡클라우드_연락처,401,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > GaduGadu > Y > Y,,
+16.톡클라우드_연락처,401,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > GaduGadu > Y > Y,,
+16.톡클라우드_연락처,402,ambiguous_test_step,Test Step이 비어 있음,P3,common,im(메신저) > Custom(사용자지정) > Y > Y,,
+16.톡클라우드_연락처,402,ambiguous_expected_result,기대결과가 비어 있음,P3,common,im(메신저) > Custom(사용자지정) > Y > Y,,
+16.톡클라우드_연락처,406,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 형제 > Y > Y,,
+16.톡클라우드_연락처,406,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 형제 > Y > Y,,
+16.톡클라우드_연락처,407,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 자녀 > Y > Y,,
+16.톡클라우드_연락처,407,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 자녀 > Y > Y,,
+16.톡클라우드_연락처,408,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 아버지 > Y > Y,,
+16.톡클라우드_연락처,408,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 아버지 > Y > Y,,
+16.톡클라우드_연락처,409,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 친구 > Y > Y,,
+16.톡클라우드_연락처,409,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 친구 > Y > Y,,
+16.톡클라우드_연락처,410,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 매니저 > Y > Y,,
+16.톡클라우드_연락처,410,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 매니저 > Y > Y,,
+16.톡클라우드_연락처,411,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 어머니 > Y > Y,,
+16.톡클라우드_연락처,411,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 어머니 > Y > Y,,
+16.톡클라우드_연락처,412,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 부모님 > Y > Y,,
+16.톡클라우드_연락처,412,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 부모님 > Y > Y,,
+16.톡클라우드_연락처,413,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 파트너 > Y > Y,,
+16.톡클라우드_연락처,413,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 파트너 > Y > Y,,
+16.톡클라우드_연락처,414,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 자매 > Y > Y,,
+16.톡클라우드_연락처,414,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 자매 > Y > Y,,
+16.톡클라우드_연락처,415,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 배우자 > Y > Y,,
+16.톡클라우드_연락처,415,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 배우자 > Y > Y,,
+16.톡클라우드_연락처,416,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 추천인 > Y > Y,,
+16.톡클라우드_연락처,416,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 추천인 > Y > Y,,
+16.톡클라우드_연락처,417,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 친척 > Y > Y,,
+16.톡클라우드_연락처,417,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 친척 > Y > Y,,
+16.톡클라우드_연락처,418,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 국내파트너 > Y > Y,,
+16.톡클라우드_연락처,418,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 국내파트너 > Y > Y,,
+16.톡클라우드_연락처,419,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 아들 > Y > Y,,
+16.톡클라우드_연락처,419,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 아들 > Y > Y,,
+16.톡클라우드_연락처,420,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 딸 > Y > Y,,
+16.톡클라우드_연락처,420,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 딸 > Y > Y,,
+16.톡클라우드_연락처,421,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 동생 > Y > Y,,
+16.톡클라우드_연락처,421,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 동생 > Y > Y,,
+16.톡클라우드_연락처,422,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 누나|언니 > Y > Y,,
+16.톡클라우드_연락처,422,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 누나|언니 > Y > Y,,
+16.톡클라우드_연락처,423,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 형|오빠 > Y > Y,,
+16.톡클라우드_연락처,423,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 형|오빠 > Y > Y,,
+16.톡클라우드_연락처,424,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 아내 > Y > Y,,
+16.톡클라우드_연락처,424,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 아내 > Y > Y,,
+16.톡클라우드_연락처,425,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 남편 > Y > Y,,
+16.톡클라우드_연락처,425,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 남편 > Y > Y,,
+16.톡클라우드_연락처,426,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 여자친구 > Y > Y,,
+16.톡클라우드_연락처,426,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 여자친구 > Y > Y,,
+16.톡클라우드_연락처,427,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > 남자친구 > Y > Y,,
+16.톡클라우드_연락처,427,ambiguous_expected_result,기대결과가 비어 있음,P3,common,relations > 남자친구 > Y > Y,,
 16.톡클라우드_연락처,428,ambiguous_test_step,Test Step이 비어 있음,P3,common,relations > Custom(사용자지정) > Y > Y,,사용자편집(커스텀)항목으로 복원된다.
+16.톡클라우드_연락처,433,ambiguous_test_step,Test Step이 비어 있음,P3,common,groups > Friends > Y > iOS,,
+16.톡클라우드_연락처,433,ambiguous_expected_result,기대결과가 비어 있음,P3,common,groups > Friends > Y > iOS,,
+16.톡클라우드_연락처,434,ambiguous_test_step,Test Step이 비어 있음,P3,common,groups > Coworkers > Y > iOS,,
+16.톡클라우드_연락처,434,ambiguous_expected_result,기대결과가 비어 있음,P3,common,groups > Coworkers > Y > iOS,,
+16.톡클라우드_연락처,435,ambiguous_test_step,Test Step이 비어 있음,P3,common,groups > 즐겨찾기 > Y > iOS,,
+16.톡클라우드_연락처,435,ambiguous_expected_result,기대결과가 비어 있음,P3,common,groups > 즐겨찾기 > Y > iOS,,
 16.톡클라우드_연락처,436,ambiguous_test_step,Test Step이 비어 있음,P3,common,groups > Custom(사용자지정) > Y > iOS,,사용자편집(커스텀)항목으로 복원된다.
+16.톡클라우드_연락처,437,ambiguous_test_step,Test Step이 비어 있음,P3,common,"groups > previousFamilyName > 서랍 데이터 > 폰 연락처, 연락처 서비스 등(저장위치)",,
+16.톡클라우드_연락처,437,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"groups > previousFamilyName > 서랍 데이터 > 폰 연락처, 연락처 서비스 등(저장위치)",,
 17.지갑,13,invalid_os,"OS 값이 유효하지 않음: """"",P1,empty,서브칩 동작 > 카운팅 > 카운트 감소 > 전자 문서 읽음 처리,안 읽은 전자 문서 탭하여 확인,지갑 서브 칩 : -1 카운트 업데이트
 17.지갑,14,invalid_os,"OS 값이 유효하지 않음: """"",P1,empty,서브칩 동작 > 카운팅 > 카운트 감소 > 인증서 서명 이력 읽음 처리,인증서 상세 확인,지갑 서브 칩 : 인증서 카드의 카운트 모두 제거
 17.지갑,26,ambiguous_test_step,Test Step이 비어 있음,P2,common,문서 리스트 > 문서 노출 기준 > 전자 문서 수신 > 인증서 서명 이력 읽음 처리,,"- 안 읽은 문서 영역 노출
 - 해당 문서 1개 노출 됨"
 17.지갑,27,ambiguous_test_step,Test Step이 비어 있음,P2,common,문서 리스트 > 문서 노출 기준 > 전자 문서 수신 > 인증서 서명 이력 읽음 처리,,"해당 문서 2개 노출 됨
  - 최신 문서가 상단-후면 으로 노출 됨"
+17.지갑,328,ambiguous_test_step,Test Step이 비어 있음,P3,common,인증서 영역 > 시스템 점검 중 > v2 인증서 있음 > v2_level2 보유 중 만료,,
+17.지갑,328,ambiguous_expected_result,기대결과가 비어 있음,P3,common,인증서 영역 > 시스템 점검 중 > v2 인증서 있음 > v2_level2 보유 중 만료,,
 18.톡캘린더,197,duplicated_step_expected,Test Step과 기대결과 유사도 92%,P2,common,계정 생일 일정 편집 > 음력 > 업데이트 > 분류4,음력 on <-> off 변경,음력 on <-> off 변경 가능
 18.톡캘린더,421,ambiguous_test_step,Test Step이 비어 있음,P1,common,완료 /완료 해제 처리 > 완료 > 기한 있음 > 1회 할 일,,"완료 처리 및 완료한 일 상세로 화면 변경
  - ""완료했습니다."" 토스트 노출"
@@ -520,6 +808,6220 @@ UI 표시와 기능이 정상 동작 함"
 
 # 서랍 홈 화면 
  - 대화 버티컬 > 백업 데이터 > 채팅방 n개 / 대화내용 n개"
+19.톡클라우드_백복(로직),43,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),43,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),44,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),44,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),47,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 12. 스티커",,
+19.톡클라우드_백복(로직),47,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 12. 스티커",,
+19.톡클라우드_백복(로직),48,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 13. 일정",,
+19.톡클라우드_백복(로직),48,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 13. 일정",,
+19.톡클라우드_백복(로직),49,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 14. 투표",,
+19.톡클라우드_백복(로직),49,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 14. 투표",,
+19.톡클라우드_백복(로직),50,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 16. 위치정보",,
+19.톡클라우드_백복(로직),50,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 16. 위치정보",,
+19.톡클라우드_백복(로직),51,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 17. 프로필",,
+19.톡클라우드_백복(로직),51,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 17. 프로필",,
+19.톡클라우드_백복(로직),52,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),52,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),54,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 검색",,
+19.톡클라우드_백복(로직),54,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 검색",,
+19.톡클라우드_백복(로직),55,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),55,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),56,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),56,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),57,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),57,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),58,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),58,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),59,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),59,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),60,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),60,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),61,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),61,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),66,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),66,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),67,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),67,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),70,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 12. 스티커",,
+19.톡클라우드_백복(로직),70,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 12. 스티커",,
+19.톡클라우드_백복(로직),71,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 13. 일정",,
+19.톡클라우드_백복(로직),71,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 13. 일정",,
+19.톡클라우드_백복(로직),72,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 14. 투표",,
+19.톡클라우드_백복(로직),72,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 14. 투표",,
+19.톡클라우드_백복(로직),73,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 16. 위치정보",,
+19.톡클라우드_백복(로직),73,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 16. 위치정보",,
+19.톡클라우드_백복(로직),74,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 17. 프로필",,
+19.톡클라우드_백복(로직),74,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 17. 프로필",,
+19.톡클라우드_백복(로직),75,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),75,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),77,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 검색",,
+19.톡클라우드_백복(로직),77,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 검색",,
+19.톡클라우드_백복(로직),78,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),78,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),79,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),79,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),80,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),80,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),81,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),81,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),82,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),82,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),83,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),83,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),84,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),84,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),89,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),89,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),90,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),90,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),93,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 12. 스티커",,
+19.톡클라우드_백복(로직),93,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 12. 스티커",,
+19.톡클라우드_백복(로직),94,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 13. 일정",,
+19.톡클라우드_백복(로직),94,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 13. 일정",,
+19.톡클라우드_백복(로직),95,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 14. 투표",,
+19.톡클라우드_백복(로직),95,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 14. 투표",,
+19.톡클라우드_백복(로직),96,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 16. 위치정보",,
+19.톡클라우드_백복(로직),96,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 16. 위치정보",,
+19.톡클라우드_백복(로직),97,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 17. 프로필",,
+19.톡클라우드_백복(로직),97,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 17. 프로필",,
+19.톡클라우드_백복(로직),98,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),98,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),100,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),100,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),101,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),101,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),102,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),102,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),103,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),103,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),104,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),104,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),105,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),105,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),106,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),106,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),107,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),107,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방  
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),139,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),139,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),140,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 4. 연락처",,
+19.톡클라우드_백복(로직),140,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 4. 연락처",,
+19.톡클라우드_백복(로직),141,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),141,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),144,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 12. 스티커",,
+19.톡클라우드_백복(로직),144,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 12. 스티커",,
+19.톡클라우드_백복(로직),145,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 13. 일정",,
+19.톡클라우드_백복(로직),145,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 13. 일정",,
+19.톡클라우드_백복(로직),146,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 14. 투표",,
+19.톡클라우드_백복(로직),146,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 14. 투표",,
+19.톡클라우드_백복(로직),147,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 16. 위치정보",,
+19.톡클라우드_백복(로직),147,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 16. 위치정보",,
+19.톡클라우드_백복(로직),148,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 17. 프로필",,
+19.톡클라우드_백복(로직),148,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 17. 프로필",,
+19.톡클라우드_백복(로직),149,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),149,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),151,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),151,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),152,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),152,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),153,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),153,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),154,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),154,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),155,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),155,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),156,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),156,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),157,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),157,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),158,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),158,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 백업 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),163,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),163,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),164,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 4. 연락처",,
+19.톡클라우드_백복(로직),164,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 4. 연락처",,
+19.톡클라우드_백복(로직),165,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),165,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),168,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 12. 스티커",,
+19.톡클라우드_백복(로직),168,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 12. 스티커",,
+19.톡클라우드_백복(로직),169,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 13. 일정",,
+19.톡클라우드_백복(로직),169,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 13. 일정",,
+19.톡클라우드_백복(로직),170,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 14. 투표",,
+19.톡클라우드_백복(로직),170,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 14. 투표",,
+19.톡클라우드_백복(로직),171,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 16. 위치정보",,
+19.톡클라우드_백복(로직),171,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 16. 위치정보",,
+19.톡클라우드_백복(로직),172,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 17. 프로필",,
+19.톡클라우드_백복(로직),172,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 17. 프로필",,
+19.톡클라우드_백복(로직),173,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),173,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),175,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),175,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),176,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),176,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),177,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),177,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),178,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),178,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),179,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),179,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),180,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),180,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),181,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),181,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),182,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),182,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),187,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),187,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 1. 텍스트
+- 미니 이모티콘 포함",,
+19.톡클라우드_백복(로직),188,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),188,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 6. 이모티콘",,
+19.톡클라우드_백복(로직),191,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 12. 스티커",,
+19.톡클라우드_백복(로직),191,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 12. 스티커",,
+19.톡클라우드_백복(로직),192,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 13. 일정",,
+19.톡클라우드_백복(로직),192,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 13. 일정",,
+19.톡클라우드_백복(로직),193,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 14. 투표",,
+19.톡클라우드_백복(로직),193,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 14. 투표",,
+19.톡클라우드_백복(로직),194,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 16. 위치정보",,
+19.톡클라우드_백복(로직),194,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 16. 위치정보",,
+19.톡클라우드_백복(로직),195,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 17. 프로필",,
+19.톡클라우드_백복(로직),195,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 17. 프로필",,
+19.톡클라우드_백복(로직),196,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),196,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 20. 움직이는 스티커",,
+19.톡클라우드_백복(로직),198,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),198,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 23. 71. 검색",,
+19.톡클라우드_백복(로직),199,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),199,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 24. 톡모임
+- 공지/사진/동영상/파일 게시글 말풍선",,
+19.톡클라우드_백복(로직),200,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),200,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 25. 큰 이모티콘",,
+19.톡클라우드_백복(로직),201,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),201,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 26. 답장 말풍선",,
+19.톡클라우드_백복(로직),202,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),202,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 51. 보이스톡/페이스톡
+ - 보이스톡 : ""통화 녹음 시작""해서 파일 생성 후 확인",,
+19.톡클라우드_백복(로직),203,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),203,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 71. 레버리지 말풍선",,
+19.톡클라우드_백복(로직),204,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),204,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 72. 알림톡 말풍선",,
+19.톡클라우드_백복(로직),205,ambiguous_test_step,Test Step이 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 73. 채널 동영상 말풍선",,
+19.톡클라우드_백복(로직),205,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"- 챗로그 + 미디어 
+ㄴ 나와의 채팅방 
+ㄴ 일반채팅방 (1:1/그룹)
+ㄴ 팀채팅방 
+
+- 챗로그 
+ㄴ 플러스 친구 > 챗로그 타입 
+
+1. 텍스트
+4. 연락처
+6. 이모티콘
+9. 카카오링크
+11. 미니홈아바타
+12. 스티커
+13. 일정
+14. 투표
+16. 위치정보
+17. 프로필
+20. 움직이는 스티커
+22. 액션콘
+23. 검색
+24. 톡모임
+25. 큰 이모티콘
+26. 답장 말풍선
+51. 보이스톡/페이스톡
+52. 라이브톡
+71. 레버리지 말풍선
+72. 알림톡 말풍선
+73. 채널 동영상 말풍선
+93. 커스텀템플릿
+94. 통합API 템플릿
+95. 통합API(2) 템플릿 > 복원 후 > 73. 채널 동영상 말풍선",,
+22.톡클라우드_버티컬(유료),151,ambiguous_test_step,Test Step이 비어 있음,P4,common,상세 화면 진입 > 카카오톡 데이터 > 채팅방 저장소 (웹뷰) > 상세 뷰어 내 스와이프 확인,,
+22.톡클라우드_버티컬(유료),151,ambiguous_expected_result,기대결과가 비어 있음,P4,common,상세 화면 진입 > 카카오톡 데이터 > 채팅방 저장소 (웹뷰) > 상세 뷰어 내 스와이프 확인,,
 22.톡클라우드_버티컬(유료),221,invalid_os,"OS 값이 유효하지 않음: ""moWeb""",P4,other,채팅방 저장소 (웹뷰) > 채팅방 저장소 목록 > 빈화면 > 데이터 수동 다운로드 완료 후 노출 확인,1. 사이드 메뉴 > 채팅방 저장소 탭,"빈 화면으로 노출된다. 
 
 ----
@@ -588,9 +7090,15 @@ UI 표시와 기능이 정상 동작 함"
 22.톡클라우드_버티컬(유료),228,invalid_os,"OS 값이 유효하지 않음: ""moWeb""",P3,other,채팅방 저장소 (웹뷰) > 채팅방 데이터 상세 화면 > 랜딩 동작 확인 > 목록 삭제,1. 채팅방 저장소 목록 > 개별 데이터 목록 탭,"채팅방 데이터 상세 화면 챗로그 최상단으로 포커싱되어 이동된다. 
 
 *사진, 동영상은 미디어 상세 화면으로 전환됨"
+22.톡클라우드_버티컬(유료),462,ambiguous_test_step,Test Step이 비어 있음,P4,common,톡클라우드 상태에 따른 중요 미디어 유지 > 하단 옵션 메뉴 > 선택 가능한 최대 개수 초과 (공통 스펙) > 선택모드 > 복수,,
+22.톡클라우드_버티컬(유료),462,ambiguous_expected_result,기대결과가 비어 있음,P4,common,톡클라우드 상태에 따른 중요 미디어 유지 > 하단 옵션 메뉴 > 선택 가능한 최대 개수 초과 (공통 스펙) > 선택모드 > 복수,,
 22.톡클라우드_버티컬(유료),472,duplicated_step_expected,Test Step과 기대결과 유사도 100%,P4,common,"화면 구성 > 전체 UI > 진행률 안내
  - /backup/progress
  - 이미 업로드 된 데이터가 후처리가 완료되었는지 진행률 표시 > 선택모드 > 복수","1. 사진, 동영상 > 상단 진행률 안내 표시 확인","1. 사진, 동영상 > 상단 진행률 안내 표시 확인"
+22.톡클라우드_버티컬(유료),781,ambiguous_test_step,Test Step이 비어 있음,P4,common,채팅방 필터 > 노출 기준 > 나간 채팅방 > 외부 공유,,
+22.톡클라우드_버티컬(유료),781,ambiguous_expected_result,기대결과가 비어 있음,P4,common,채팅방 필터 > 노출 기준 > 나간 채팅방 > 외부 공유,,
+22.톡클라우드_버티컬(유료),794,ambiguous_test_step,Test Step이 비어 있음,P4,common,다중 선택 화면 > 통화 녹음 파일 재생 > My 비밀번호 재활용 정책 > 녹음파일 (STT+m4a) 모두 존재하는 경우,,
+22.톡클라우드_버티컬(유료),794,ambiguous_expected_result,기대결과가 비어 있음,P4,common,다중 선택 화면 > 통화 녹음 파일 재생 > My 비밀번호 재활용 정책 > 녹음파일 (STT+m4a) 모두 존재하는 경우,,
 22.톡클라우드_버티컬(유료),926,duplicated_step_expected,Test Step과 기대결과 유사도 100%,P4,common,사진/동영상 > 리스트 > 선택 모드 > 복수 삭제 > 휴지통 비우기 후 리스트 확인,1. 채팅방 서랍 > 사진/동영상 > 리스트 확인,1. 채팅방 서랍 > 사진/동영상 > 리스트 확인
 22.톡클라우드_버티컬(유료),1107,ambiguous_test_step,Test Step이 비어 있음,P4,common,"드라이브 업로드 메뉴 > 업로드 - 공통 > 에러/예외처리
 - 업로드 체크 > (S) 덮어쓰기",,"전송목록에 실패 문구가 표시된다.
@@ -599,6 +7107,15 @@ UI 표시와 기능이 정상 동작 함"
 22.톡클라우드_버티컬(유료),1108,ambiguous_test_step,Test Step이 비어 있음,P4,common,"드라이브 업로드 메뉴 > 업로드 - 공통 > 에러/예외처리
 - 업로드 체크 > (S) 덮어쓰기",,"전송 목록에 추가되며, 업로드 된다.
 - 업로드 완료 후 전송 완료된 파일이 드라이브 > 상세에 표시된다."
+22.톡클라우드_버티컬(유료),1208,ambiguous_expected_result,기대결과가 비어 있음,P4,common,홈 > 드라이브 상세 > 폴더/파일 리스트 > 사업자정보 > (iOS) 업로드 완료 항목 리스트 갱신 - 개별파일 전송 완료 시,"1. 업로드 중 파일이 저장될 대상 폴더로 이동하여 대기
+- 업로드 완료 후 리스트 갱신 여부 확인",
+22.톡클라우드_버티컬(유료),1210,ambiguous_expected_result,기대결과가 비어 있음,P4,common,홈 > 드라이브 상세 > 폴더/파일 리스트 > 사업자정보 > (iOS) 업로드 완료 항목 리스트 갱신 - 개별파일 전송 완료 시,"1. 업로드 중 파일이 저장될 대상 폴더로 이동하여 대기
+- 업로드 완료 후 리스트 갱신 여부 확인",
+22.톡클라우드_버티컬(유료),1490,ambiguous_expected_result,기대결과가 비어 있음,P4,common,"홈 > 드라이브 상세 > 선택모드
+- 전달하기 > 에러처리 > (S) 트랜스코딩 에러 팝업 우선순위","1순위. 트랜스코딩 미제공 케이스
+2순위. 트랜스코딩 실패 케이스
+3순위. 트랜스코딩 진행 중",
+22.톡클라우드_버티컬(유료),1584,ambiguous_expected_result,기대결과가 비어 있음,P1,common,홈 > 드라이브 상세 > 뷰어 > 동영상 > 뷰어 > 링크 > 삭제하기,(ADHOC) 링크 클릭시 인앱브라우저에서 링크 표시 확인,
 23.죠르디,45,multiple_purpose,Step 5단계 / 기대결과 5단계: 복합 속성으로 분류 불가 — 목적 불명확,P1,common,할 일 필터링 목록 > 기능 > 상세로 이동 > 수정,"브리핑 보드 > 할 일 탭 > 할 일 필터 선택 > 할 일 선택
 1. 내용 수정
 2. 기한 수정
@@ -630,6 +7147,18 @@ UI 표시와 기능이 정상 동작 함"
   [iOS]
     : 기한 없을 때
       ㄴ 아이콘 | 기한 설정 | on/off "
+23.죠르디,361,ambiguous_test_step,Test Step이 비어 있음,P3,common,기한 / 반복 갱신 CASE > 완료 해제 처리 > 변경 사항 있음 > 기한 없을 때,,
+23.죠르디,361,ambiguous_expected_result,기대결과가 비어 있음,P3,common,기한 / 반복 갱신 CASE > 완료 해제 처리 > 변경 사항 있음 > 기한 없을 때,,
+23.죠르디,363,ambiguous_test_step,Test Step이 비어 있음,P3,common,"기한 : 있음, 반복 : 없음 일 때 기한 / 완료 갱신 Case > 기한 > 반복 > 액션",,
+23.죠르디,363,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"기한 : 있음, 반복 : 없음 일 때 기한 / 완료 갱신 Case > 기한 > 반복 > 액션",,
+23.죠르디,365,ambiguous_test_step,Test Step이 비어 있음,P3,common,"기한 : 있음, 반복 : 있음 일 때 완료 처리에 의한 기한 / 반복 갱신 Case > 기한 만료 후 > 없음 > 기한 만료 후 완료 처리",,
+23.죠르디,365,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"기한 : 있음, 반복 : 있음 일 때 완료 처리에 의한 기한 / 반복 갱신 Case > 기한 만료 후 > 없음 > 기한 만료 후 완료 처리",,
+23.죠르디,367,ambiguous_test_step,Test Step이 비어 있음,P3,common,"기한 : 있음, 반복 : 있음 일 때 편집 (반복 설정 변경) 에 의한 기한 / 반복 갱신 Case > 기한 만료 후 > 매일 > 기한 만료 후 완료 처리",,
+23.죠르디,367,ambiguous_expected_result,기대결과가 비어 있음,P3,common,"기한 : 있음, 반복 : 있음 일 때 편집 (반복 설정 변경) 에 의한 기한 / 반복 갱신 Case > 기한 만료 후 > 매일 > 기한 만료 후 완료 처리",,
+23.죠르디,369,ambiguous_test_step,Test Step이 비어 있음,P3,common,할 일 삭제 > 기한 만료 전 > 매일 > 반복 : 매일 -> 매주로 변경,,
+23.죠르디,369,ambiguous_expected_result,기대결과가 비어 있음,P3,common,할 일 삭제 > 기한 만료 전 > 매일 > 반복 : 매일 -> 매주로 변경,,
+23.죠르디,370,ambiguous_test_step,Test Step이 비어 있음,P3,common,할 일 삭제 > 할 일 > 매일 > 반복 : 매일 -> 매주로 변경,,
+23.죠르디,370,ambiguous_expected_result,기대결과가 비어 있음,P3,common,할 일 삭제 > 할 일 > 매일 > 반복 : 매일 -> 매주로 변경,,
 25. 설정,8,invalid_category,"분류1=""더보기 탭"" / 분류2="""" — 주요 분류가 비어 있음",P1,common,더보기 탭 > 설정 버튼 > 빨간점 생성,우측 상단 [설정] 버튼 확인,[설정] 버튼에 빨간점이 표시됨
 25. 설정,9,invalid_category,"분류1=""더보기 탭"" / 분류2="""" — 주요 분류가 비어 있음",P1,common,더보기 탭 > 설정 버튼 > 빨간점 생성,[설정] 버튼 탭,"- 설정 화면으로 이동
 - 갱신된 하위 메뉴에 N뱃지가 표시됨"
@@ -663,6 +7192,38 @@ UI 표시와 기능이 정상 동작 함"
 25. 설정,149,missing_precondition,Step/기대결과에 사전 상태 언급이 있으나 사전조건 비어 있음,P1,common,친구 > 친구 이름 동기화 > 친구 이름 동기화 ON > 화면 잠금 사용 안함,PC 카톡 로그인 후 확인,친구 이름이 동기화된 이름으로 표시
 25. 설정,160,duplicated_step_expected,Test Step과 기대결과 유사도 92%,P2,common,친구 > 숨김 친구 관리 > 추천 미허용 시 미노출 확인 > 숨김 친구가 있는 경우,숨김 친구와 메시지 송/수신,숨김 친구와 메시지 송/수신 가능
 25. 설정,242,ambiguous_test_step,Test Step이 비어 있음,P2,android,알림 > 알림 설정 > 알림 커버 > 활성화 확인,,알림 커버에 날짜 및 시간 / 메시지 / 설정 / 카메라 등이 정상적으로 보여지는지 확인한다
+25. 설정,505,ambiguous_expected_result,기대결과가 비어 있음,P3,android,기타 > 웨어러블 디바이스 > Wear OS 설정 > 이전 설정값 유지,작성중,
+25. 설정,507,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 공유 제안 > 이전 설정값 유지,작성중,
+25. 설정,508,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 메시지 읽기/보내기 > 이전 설정값 유지,작성중,
+25. 설정,521,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 웹 브라우저를 통한 확인 > [iOS]
+정보수집 및 오류 보고 > 메뉴 확인","1. 데모 페이지 접속 (카톡 인앱브라우저 or safari/chrome)
+https://developers.kakao.com/tool/demo/login/login
+
+2. [카카오계정으로 로그인] 버튼 탭
+*주의 : iOS의 경우 랜더링되는 카카오톡앱을 복수 설치한 경우(sandbox~CBT) 테스트할 페이즈의 앱으로 이동 불가할 수 있음
+
+3. 동의창 ",
+25. 설정,522,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 샘플앱을 통한 확인 > [iOS]
+정보수집 및 오류 보고 > 메뉴 확인","- iOS 샘플 앱의 최상단 빌드 사용
+- android 샘플 앱의 최상단 빌드 사용
+  : android 샘플 앱 사용전, developers site에 Android Key Hash를 입력해야 함
+  : https://developers.kakao.com/user/profile (계정 설정 > 샘플앱 설정 > Android 키 해시에 아래 값을 추가)
+",
+25. 설정,523,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 카카오링크 확인 > [iOS]
+정보수집 및 오류 보고 > 메뉴 확인","1. 모바일 브라우저(크롬/사파리)에서 데모 사이트에 접근
+  : https://developers.kakao.com/tool/demo/message/kakaolink
+
+2. 카카오톡 아이콘 탭
+
+3. 친구 선택 후 공유
+
+4. 말풍선이 챗방에 잘 표시 되고, 각 버튼을 통해 샘플페이지로 잘 이동하는지 확인",
+25. 설정,524,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 주요 앱 로그인 확인 > [iOS]
+정보수집 및 오류 보고 > 메뉴 확인","아래 앱에서 카카오 로그인이 잘 되는지 확인
+⚠️톡 암호잠금 설정 ON 및 OFF 상태에서 모두 확인
+- 카카오웹툰
+- 프렌즈팝콘
+- 요기요",
 26.기타,12,duplicated_step_expected,Test Step과 기대결과 유사도 87%,P1,common,비즈보드 (일반) > 친구탭 > 네거티브 피드백 > 갱신 X,"[Android]
 친구탭 비즈보드 > 롱탭 시도
 
@@ -672,6 +7233,9 @@ UI 표시와 기능이 정상 동작 함"
 
 [iOS]
 친구탭 비즈보드 스와이프 불가"
+26.기타,37,ambiguous_expected_result,기대결과가 비어 있음,P3,common,비즈보드 (일반) > 채팅탭 > 네거티브 피드백 > 갱신 X,채팅탭 > 익스팬더블 소재 open 위젯 탭,
+27.카나나템플릿,71,ambiguous_test_step,Test Step이 비어 있음,P2,common,ㄴ 3-1. 템플릿 선택 ( = 템플릿 리스트 (숏폼 홈) > 템플릿 상세 진입) > 브이로그 템플릿 썸네일 영역 > 자동 재생 > 가로 360px 이상 * 세로 360px 미만,,
+27.카나나템플릿,71,ambiguous_expected_result,기대결과가 비어 있음,P2,common,ㄴ 3-1. 템플릿 선택 ( = 템플릿 리스트 (숏폼 홈) > 템플릿 상세 진입) > 브이로그 템플릿 썸네일 영역 > 자동 재생 > 가로 360px 이상 * 세로 360px 미만,,
 27.카나나템플릿,174,ambiguous_test_step,Test Step이 비어 있음,P1,common,카나나 생성완료 유니버셜 말풍선 (26/5차부터 진행) > 동영상 뷰어 > 영상 재생 > 자동 재생,,"Wi-Fi, 셀룰러 환경일때 모두 자동 재생 됨
  ㄴ 1회 재생 완료 후 일시 정지 됨"
 27.카나나템플릿,175,ambiguous_test_step,Test Step이 비어 있음,P1,common,카나나 생성완료 유니버셜 말풍선 (26/5차부터 진행) > 동영상 뷰어 > 영상 재생 > 자동 재생,,"- Wi-Fi : 자동 재생 됨
