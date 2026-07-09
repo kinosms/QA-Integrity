@@ -228,11 +228,14 @@ function loadAllReviews() {
 }
 
 // 저장 (upsert)
-function _rvSave(btn) {
-  var svc = btn.getAttribute('data-svc');
-  var row = parseInt(btn.getAttribute('data-row'));
-  saveReview(svc, row);
-}
+// rv-save-btn 이벤트 위임
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('rv-save-btn')) {
+    var svc = e.target.getAttribute('data-svc');
+    var row = parseInt(e.target.getAttribute('data-row'));
+    if (svc && !isNaN(row)) saveReview(svc, row);
+  }
+});
 
 function saveReview(svc, row) {
   // ID로 찾기 → 없으면 onclick 속성으로 fallback
@@ -1068,7 +1071,7 @@ function buildTCBlock(t) {
       '<textarea class="rv-note" rows="3" placeholder="의견을 입력하세요...">' + rvNote + '</textarea>' +
       '<div class="rv-footer">' +
         '<span class="rv-saved-at">' + (rvSaved.savedAt ? rvSaved.savedAt + ' 저장됨' : '') + '</span>' +
-        '<button class="rv-save-btn" data-svc="' + hesc(t[0]) + '" data-row="' + t[1] + '" onclick="_rvSave(this)">저장</button>' +
+        '<button class="rv-save-btn" data-svc="' + hesc(t[0]) + '" data-row="' + t[1] + '">저장</button>' +
       '</div>' +
     '</div>';
 
