@@ -233,14 +233,19 @@ document.addEventListener('click', function(e) {
   if (e.target && e.target.classList.contains('rv-save-btn')) {
     var svc = e.target.getAttribute('data-svc');
     var row = parseInt(e.target.getAttribute('data-row'));
+    console.log('[저장버튼 클릭] svc=', svc, 'row=', row);
     if (svc && !isNaN(row)) saveReview(svc, row);
+    else console.warn('[저장버튼] data-svc/row 없음', e.target);
   }
 });
 
 function saveReview(svc, row) {
-  // ID로 찾기 → 없으면 onclick 속성으로 fallback
+  console.log('[saveReview] 시작 svc=', svc, 'row=', row);
+  // ID로 찾기 → 없으면 data-attribute fallback
   var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
+  console.log('[saveReview] safeId=', safeId);
   var panel  = document.getElementById(safeId);
+  console.log('[saveReview] panel=', panel);
   if (!panel) {
     // data-svc + data-row 속성으로 찾기
     var btns = document.querySelectorAll('.rv-save-btn');
@@ -258,6 +263,7 @@ function saveReview(svc, row) {
 
   if (btn) { btn.textContent = '저장 중...'; btn.disabled = true; }
 
+  console.log('[saveReview] fetch 시작, note=', note);
   fetch(SUPA_URL + '/rest/v1/tc_reviews', {
     method: 'POST',
     headers: {
@@ -270,6 +276,7 @@ function saveReview(svc, row) {
                            updated_at: new Date().toISOString() })
   })
   .then(function(r) {
+    console.log('[saveReview] 응답 status=', r.status);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     var now = new Date().toLocaleString('ko-KR');
     reviewStore[svc + '|' + row] = { note: note, savedAt: now };
@@ -285,9 +292,11 @@ function saveReview(svc, row) {
     document.body.appendChild(toast);
     setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity .5s';
       setTimeout(function(){ document.body.removeChild(toast); }, 500); }, 2000);
+    console.log('[saveReview] 저장 성공');
   })
   .catch(function(e) {
-    console.error('저장 실패:', e);
+    console.error('[saveReview] 저장 실패:', e);
+    alert('저장 실패: ' + e.message + '\n콘솔(F12)에서 자세한 오류를 확인하세요.');
     if (btn) { btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
       btn.style.background = 'rgba(239,68,68,.3)'; }
   });
