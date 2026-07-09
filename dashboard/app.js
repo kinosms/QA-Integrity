@@ -294,13 +294,13 @@ function buildReviewPanelEl(svc, row) {
     var issueTypes  = Array.from(grp1.querySelectorAll('.rv-type-btn.active')).map(function(b){return b.textContent;});
     var targetFields= Array.from(grp2.querySelectorAll('.rv-field-btn.active')).map(function(b){return b.textContent;});
     btn.textContent = '저장 중...'; btn.disabled = true;
-    fetch(SUPA_URL + '/rest/v1/tc_reviews', {
+    fetch(SUPA_URL + '/rest/v1/tc_reviews?on_conflict=svc,row_number', {
       method: 'POST',
       headers: {
         'apikey': SUPA_KEY,
         'Authorization': 'Bearer ' + SUPA_KEY,
         'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates'
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
       },
       body: JSON.stringify({
         svc: svc, row_number: row, note: note,
