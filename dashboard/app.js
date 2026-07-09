@@ -196,7 +196,7 @@ var reviewStore = {};  // { 'svc|row': { note, savedAt } }
 
 // 전체 의견 불러오기 (페이지 로드 시 1회)
 function loadAllReviews() {
-  fetch(SUPA_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,updated_at', {
+  fetch(SUPA_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,issue_types,target_fields,updated_at', {
     headers: {
       'apikey': SUPA_KEY,
       'Authorization': 'Bearer ' + SUPA_KEY
@@ -208,6 +208,8 @@ function loadAllReviews() {
     rows.forEach(function(r) {
       reviewStore[r.svc + '|' + r.row_number] = {
         note: r.note || '',
+        issue_types: r.issue_types || [],
+        target_fields: r.target_fields || [],
         savedAt: r.updated_at ? new Date(r.updated_at).toLocaleString('ko-KR') : ''
       };
     });
@@ -228,27 +230,69 @@ function loadAllReviews() {
 // rv-save-btn 이벤트 위임 제거 — buildReviewPanel에서 직접 addEventListener 사용
 
 function buildReviewPanelEl(svc, row) {
-  var rvKey  = svc + '|' + row;
-  var saved  = reviewStore[rvKey] || {};
-  var div    = document.createElement('div');
+  var rvKey   = svc + '|' + row;
+  var saved   = reviewStore[rvKey] || {};
+  var selTypes  = saved.issue_types  || [];
+  var selFields = saved.target_fields || [];
+
+  var ISSUE_TYPES  = ['의미변경','문맥오판','잘못된정보추가','정보누락','용어표준화미흡','기타'];
+  var TARGET_FIELDS = ['분류1','분류2','분류3','화면전개','사전조건','Test Step','기대결과'];
+
+  // 패널 컨테이너
+  var div = document.createElement('div');
   div.className = 'sv-review-panel';
   div.setAttribute('data-rv-key', rvKey);
-  var title  = document.createElement('div');
+
+  // 제목
+  var title = document.createElement('div');
   title.className = 'sv-review-title'; title.textContent = '검수 의견';
-  var ta     = document.createElement('textarea');
+
+  // 이슈 유형 버블
+  var row1 = document.createElement('div'); row1.className = 'rv-row';
+  var lbl1 = document.createElement('span'); lbl1.className = 'rv-label'; lbl1.textContent = '이슈 유형';
+  var grp1 = document.createElement('div'); grp1.className = 'rv-type-group';
+  ISSUE_TYPES.forEach(function(t) {
+    var b = document.createElement('button');
+    b.className = 'rv-type-btn' + (selTypes.indexOf(t) >= 0 ? ' active' : '');
+    b.textContent = t;
+    b.addEventListener('click', function() { b.classList.toggle('active'); });
+    grp1.appendChild(b);
+  });
+  row1.appendChild(lbl1); row1.appendChild(grp1);
+
+  // 대상 항목 버블
+  var row2 = document.createElement('div'); row2.className = 'rv-row';
+  var lbl2 = document.createElement('span'); lbl2.className = 'rv-label'; lbl2.textContent = '대상 항목';
+  var grp2 = document.createElement('div'); grp2.className = 'rv-field-group';
+  TARGET_FIELDS.forEach(function(f) {
+    var b = document.createElement('button');
+    b.className = 'rv-field-btn' + (selFields.indexOf(f) >= 0 ? ' active' : '');
+    b.textContent = f;
+    b.addEventListener('click', function() { b.classList.toggle('active'); });
+    grp2.appendChild(b);
+  });
+  row2.appendChild(lbl2); row2.appendChild(grp2);
+
+  // 의견 텍스트
+  var row3 = document.createElement('div'); row3.className = 'rv-row rv-note-row';
+  var lbl3 = document.createElement('span'); lbl3.className = 'rv-label'; lbl3.textContent = '의견';
+  var ta   = document.createElement('textarea');
   ta.className = 'rv-note'; ta.rows = 3;
   ta.placeholder = '의견을 입력하세요...';
   ta.value = saved.note || '';
-  var footer = document.createElement('div');
-  footer.className = 'rv-footer';
-  var savedAt = document.createElement('span');
-  savedAt.className = 'rv-saved-at';
+  row3.appendChild(lbl3); row3.appendChild(ta);
+
+  // 푸터
+  var footer  = document.createElement('div'); footer.className = 'rv-footer';
+  var savedAt = document.createElement('span'); savedAt.className = 'rv-saved-at';
   savedAt.textContent = saved.savedAt ? saved.savedAt + ' 저장됨' : '';
-  var btn    = document.createElement('button');
+  var btn = document.createElement('button');
   btn.className = 'rv-save-btn'; btn.textContent = '저장';
+
   btn.addEventListener('click', function() {
-    console.log('[저장버튼 클릭] svc=', svc, 'row=', row);
-    var note = ta.value;
+    var note       = ta.value;
+    var issueTypes  = Array.from(grp1.querySelectorAll('.rv-type-btn.active')).map(function(b){return b.textContent;});
+    var targetFields= Array.from(grp2.querySelectorAll('.rv-field-btn.active')).map(function(b){return b.textContent;});
     btn.textContent = '저장 중...'; btn.disabled = true;
     fetch(SUPA_URL + '/rest/v1/tc_reviews', {
       method: 'POST',
@@ -258,14 +302,16 @@ function buildReviewPanelEl(svc, row) {
         'Content-Type': 'application/json',
         'Prefer': 'resolution=merge-duplicates'
       },
-      body: JSON.stringify({ svc: svc, row_number: row, note: note,
-                             updated_at: new Date().toISOString() })
+      body: JSON.stringify({
+        svc: svc, row_number: row, note: note,
+        issue_types: issueTypes, target_fields: targetFields,
+        updated_at: new Date().toISOString()
+      })
     })
     .then(function(r) {
-      console.log('[저장] 응답 status=', r.status);
       if (!r.ok) throw new Error('HTTP ' + r.status);
       var now = new Date().toLocaleString('ko-KR');
-      reviewStore[rvKey] = { note: note, savedAt: now };
+      reviewStore[rvKey] = { note: note, issue_types: issueTypes, target_fields: targetFields, savedAt: now };
       btn.textContent = '✓ 저장됨'; btn.disabled = false;
       btn.style.background = 'rgba(34,197,94,.3)';
       setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2500);
@@ -282,14 +328,16 @@ function buildReviewPanelEl(svc, row) {
       }, 2000);
     })
     .catch(function(e) {
-      console.error('[저장] 실패:', e);
       alert('저장 실패: ' + e.message);
       btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
       btn.style.background = 'rgba(239,68,68,.3)';
     });
   });
+
   footer.appendChild(savedAt); footer.appendChild(btn);
-  div.appendChild(title); div.appendChild(ta); div.appendChild(footer);
+  div.appendChild(title);
+  div.appendChild(row1); div.appendChild(row2); div.appendChild(row3);
+  div.appendChild(footer);
   return div;
 }
 
