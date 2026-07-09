@@ -211,15 +211,12 @@ function loadAllReviews() {
         savedAt: r.updated_at ? new Date(r.updated_at).toLocaleString('ko-KR') : ''
       };
     });
-    // 현재 렌더링된 패널 업데이트
+    // 현재 렌더링된 패널 업데이트 (data-rv-key 속성으로 탐색)
     Object.keys(reviewStore).forEach(function(key) {
-      var parts = key.split('|');
-      var svc = parts[0], row = parts[1];
-      var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
-      var panel = document.getElementById(safeId);
+      var panel = document.querySelector('.sv-review-panel[data-rv-key="' + key + '"]');
       if (!panel) return;
       var ta = panel.querySelector('.rv-note');
-      if (ta && !ta.value) ta.value = reviewStore[key].note;
+      if (ta) ta.value = reviewStore[key].note;
       var sa = panel.querySelector('.rv-saved-at');
       if (sa) sa.textContent = reviewStore[key].savedAt ? reviewStore[key].savedAt + ' 저장됨' : '';
     });
@@ -235,6 +232,7 @@ function buildReviewPanelEl(svc, row) {
   var saved  = reviewStore[rvKey] || {};
   var div    = document.createElement('div');
   div.className = 'sv-review-panel';
+  div.setAttribute('data-rv-key', rvKey);
   var title  = document.createElement('div');
   title.className = 'sv-review-title'; title.textContent = '검수 의견';
   var ta     = document.createElement('textarea');
@@ -1157,6 +1155,17 @@ function renderCompare() {
       var block = document.getElementById(blockId);
       if (block) block.appendChild(buildReviewPanelEl(t[0], t[1]));
     });
+    // DB에서 불러온 의견 반영
+    if (Object.keys(reviewStore).length > 0) {
+      Object.keys(reviewStore).forEach(function(key) {
+        var panel = document.querySelector('.sv-review-panel[data-rv-key="' + key + '"]');
+        if (!panel) return;
+        var ta = panel.querySelector('.rv-note');
+        if (ta) ta.value = reviewStore[key].note;
+        var sa = panel.querySelector('.rv-saved-at');
+        if (sa) sa.textContent = reviewStore[key].savedAt ? reviewStore[key].savedAt + ' 저장됨' : '';
+      });
+    }
   } else {
     el.innerHTML = '<div class="empty-cell" style="padding:40px;text-align:center">데이터 없음</div>';
   }
