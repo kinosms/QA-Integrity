@@ -186,6 +186,85 @@ function drawDonut(id, values, colors, label) {
 
 // ── 페이지네이션 ──────────────────────────────────────────
 
+
+// ══════════════════════════════════════════════════════════════
+// Supabase 연동 — 검수 의견 저장/불러오기
+// ══════════════════════════════════════════════════════════════
+var SUPA_URL  = 'https://fnuvsxkytoycdhgkqykw.supabase.co';
+var SUPA_KEY  = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt';
+var reviewStore = {};  // { 'svc|row': { note, savedAt } }
+
+// 전체 의견 불러오기 (페이지 로드 시 1회)
+function loadAllReviews() {
+  fetch(SUPA_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,updated_at', {
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY
+    }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(rows) {
+    if (!Array.isArray(rows)) return;
+    rows.forEach(function(r) {
+      reviewStore[r.svc + '|' + r.row_number] = {
+        note: r.note || '',
+        savedAt: r.updated_at ? new Date(r.updated_at).toLocaleString('ko-KR') : ''
+      };
+    });
+    // 현재 렌더링된 패널 업데이트
+    Object.keys(reviewStore).forEach(function(key) {
+      var parts = key.split('|');
+      var svc = parts[0], row = parts[1];
+      var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
+      var panel = document.getElementById(safeId);
+      if (!panel) return;
+      var ta = panel.querySelector('.rv-note');
+      if (ta && !ta.value) ta.value = reviewStore[key].note;
+      var sa = panel.querySelector('.rv-saved-at');
+      if (sa) sa.textContent = reviewStore[key].savedAt ? reviewStore[key].savedAt + ' 저장됨' : '';
+    });
+  })
+  .catch(function(e) { console.warn('리뷰 불러오기 실패:', e); });
+}
+
+// 저장 (upsert)
+function saveReview(svc, row) {
+  var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
+  var panel  = document.getElementById(safeId);
+  if (!panel) return;
+  var note = (panel.querySelector('.rv-note') || {}).value || '';
+  var btn  = panel.querySelector('.rv-save-btn');
+
+  if (btn) { btn.textContent = '저장 중...'; btn.disabled = true; }
+
+  fetch(SUPA_URL + '/rest/v1/tc_reviews', {
+    method: 'POST',
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
+    },
+    body: JSON.stringify({ svc: svc, row_number: row, note: note,
+                           updated_at: new Date().toISOString() })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    var now = new Date().toLocaleString('ko-KR');
+    reviewStore[svc + '|' + row] = { note: note, savedAt: now };
+    if (btn) { btn.textContent = '✓ 저장됨'; btn.disabled = false;
+      btn.style.background = 'rgba(34,197,94,.3)';
+      setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2000); }
+    var sa = panel.querySelector('.rv-saved-at');
+    if (sa) sa.textContent = now + ' 저장됨';
+  })
+  .catch(function(e) {
+    console.error('저장 실패:', e);
+    if (btn) { btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
+      btn.style.background = 'rgba(239,68,68,.3)'; }
+  });
+}
+
 function renderPagination(containerId, current, total, cb) {
   const el = document.getElementById(containerId);
   if (!el) return;
@@ -951,6 +1030,23 @@ function buildTCBlock(t) {
       '</div>'
     : '';
 
+  // ── 검수 의견 패널 ───────────────────────────────────
+  var rvKey = t[0] + '|' + t[1];
+  var rvSaved = reviewStore[rvKey] || {};
+  var rvNote = (rvSaved.note || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var rvAt = rvSaved.savedAt ? '<span class="rv-saved-at">' + rvSaved.savedAt + ' 저장됨</span>' : '';
+  var svcEsc = t[0].replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  var safeId = 'rv-' + (t[0]+'_'+t[1]).replace(/[^a-zA-Z0-9가-힣_\\-]/g,'_');
+  var reviewPanel =
+    '<div class="sv-review-panel" id="' + safeId + '">' +
+      '<div class="sv-review-title">검수 의견</div>' +
+      '<textarea class="rv-note" rows="3" placeholder="의견을 입력하세요...">' + rvNote + '</textarea>' +
+      '<div class="rv-footer">' +
+        '<span class="rv-saved-at">' + (rvSaved.savedAt ? rvSaved.savedAt + ' 저장됨' : '') + '</span>' +
+        '<button class="rv-save-btn" onclick="saveReview(\'' + svcEsc + '\',' + t[1] + ')">저장</button>' +
+      '</div>' +
+    '</div>';
+
   // ── 검수 의견 입력 ───────────────────────────────────
   var rvKey = t[0] + '|' + t[1];
   var rvSaved = reviewStore ? (reviewStore[rvKey] || {}) : {};
@@ -1313,6 +1409,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   bindFilters();
   bindToggles();
   renderAll();
+  loadAllReviews();
   let rt;
   window.addEventListener('resize', ()=>{
     clearTimeout(rt);
