@@ -760,45 +760,6 @@ UI 표시와 기능이 정상 동작 함"
 3. 반복 수정 불가능
 4. 북마크 수정 가능
 5. 완료 해제 처리 가능 (할 일 목록 최상단으로 이동)"
-19.톡클라우드_백복(로직),44,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
-ㄴ 나와의 채팅방 
-ㄴ 일반채팅방 (1:1/그룹)
-ㄴ 팀채팅방  
-
-- 챗로그 
-ㄴ 플러스 친구 > 챗로그 타입 
-
-1. 텍스트
-6. 이모티콘
-9. 카카오링크
-11. 미니홈아바타
-12. 스티커
-13. 일정
-14. 투표
-16. 위치정보
-17. 프로필
-20. 움직이는 스티커
-22. 액션콘
-23. 검색
-24. 톡모임
-25. 큰 이모티콘
-26. 답장 말풍선
-51. 보이스톡/페이스톡
-52. 라이브톡
-71. 레버리지 말풍선
-72. 알림톡 말풍선
-73. 채널 동영상 말풍선
-93. 커스텀템플릿
-94. 통합API 템플릿
-95. 통합API(2) 템플릿 > 백업 > 1. 텍스트
-- 500자 이상  : 전체보기
-- 4000자 : 파일",,"1. 백업된 카운트 n개 확인   
-
-# 백업 시작하기 화면 
- - 대화내용 n개 
-
-# 서랍 홈 화면 
- - 대화 버티컬 > 백업 데이터 > 채팅방 n개 / 대화내용 n개"
 19.톡클라우드_백복(로직),45,ambiguous_test_step,Test Step이 비어 있음,P1,common,"- 챗로그 + 미디어 
 ㄴ 나와의 채팅방 
 ㄴ 일반채팅방 (1:1/그룹)
@@ -7199,10 +7160,10 @@ UI 표시와 기능이 정상 동작 함"
 25. 설정,151,missing_precondition,Step/기대결과에 사전 상태 언급이 있으나 사전조건 비어 있음,P1,common,친구 > 친구 이름 동기화 > 친구 이름 동기화 ON > 화면 잠금 사용 안함,PC 카톡 로그인 후 확인,친구 이름이 동기화된 이름으로 표시
 25. 설정,162,duplicated_step_expected,Test Step과 기대결과 유사도 92%,P2,common,친구 > 숨김 친구 관리 > 추천 미허용 시 미노출 확인 > 숨김 친구가 있는 경우,숨김 친구와 메시지 송/수신,숨김 친구와 메시지 송/수신 가능
 25. 설정,244,ambiguous_test_step,Test Step이 비어 있음,P2,android,알림 > 알림 설정 > 알림 커버 > 활성화 확인,,알림 커버에 날짜 및 시간 / 메시지 / 설정 / 카메라 등이 정상적으로 보여지는지 확인한다
-25. 설정,507,ambiguous_expected_result,기대결과가 비어 있음,P3,android,기타 > 웨어러블 디바이스 > Wear OS 설정 > 이전 설정값 유지,작성중,
-25. 설정,509,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 공유 제안 > 이전 설정값 유지,작성중,
-25. 설정,510,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 메시지 읽기/보내기 > 이전 설정값 유지,작성중,
-25. 설정,523,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 웹 브라우저를 통한 확인 > [iOS]
+25. 설정,508,ambiguous_expected_result,기대결과가 비어 있음,P3,android,기타 > 웨어러블 디바이스 > Wear OS 설정 > 이전 설정값 유지,작성중,
+25. 설정,510,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 공유 제안 > 이전 설정값 유지,작성중,
+25. 설정,511,ambiguous_expected_result,기대결과가 비어 있음,P3,ios,기타 > Siri > Siri 메시지 읽기/보내기 > 이전 설정값 유지,작성중,
+25. 설정,524,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 웹 브라우저를 통한 확인 > [iOS]
 정보수집 및 오류 보고 > 메뉴 확인","1. 데모 페이지 접속 (카톡 인앱브라우저 or safari/chrome)
 https://developers.kakao.com/tool/demo/login/login
 
@@ -7210,13 +7171,13 @@ https://developers.kakao.com/tool/demo/login/login
 *주의 : iOS의 경우 랜더링되는 카카오톡앱을 복수 설치한 경우(sandbox~CBT) 테스트할 페이즈의 앱으로 이동 불가할 수 있음
 
 3. 동의창 ",
-25. 설정,524,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 샘플앱을 통한 확인 > [iOS]
+25. 설정,525,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 샘플앱을 통한 확인 > [iOS]
 정보수집 및 오류 보고 > 메뉴 확인","- iOS 샘플 앱의 최상단 빌드 사용
 - android 샘플 앱의 최상단 빌드 사용
   : android 샘플 앱 사용전, developers site에 Android Key Hash를 입력해야 함
   : https://developers.kakao.com/user/profile (계정 설정 > 샘플앱 설정 > Android 키 해시에 아래 값을 추가)
 ",
-25. 설정,525,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 카카오링크 확인 > [iOS]
+25. 설정,526,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 카카오링크 확인 > [iOS]
 정보수집 및 오류 보고 > 메뉴 확인","1. 모바일 브라우저(크롬/사파리)에서 데모 사이트에 접근
   : https://developers.kakao.com/tool/demo/message/kakaolink
 
@@ -7225,7 +7186,7 @@ https://developers.kakao.com/tool/demo/login/login
 3. 친구 선택 후 공유
 
 4. 말풍선이 챗방에 잘 표시 되고, 각 버튼을 통해 샘플페이지로 잘 이동하는지 확인",
-25. 설정,526,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 주요 앱 로그인 확인 > [iOS]
+25. 설정,527,ambiguous_expected_result,기대결과가 비어 있음,P1,common,"소셜 로그인 > 주요 앱 로그인 확인 > [iOS]
 정보수집 및 오류 보고 > 메뉴 확인","아래 앱에서 카카오 로그인이 잘 되는지 확인
 ⚠️톡 암호잠금 설정 ON 및 OFF 상태에서 모두 확인
 - 카카오웹툰

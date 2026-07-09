@@ -309,12 +309,12 @@
     },
     {
       "service_name": "4.채팅목록",
-      "total_tc": 74,
+      "total_tc": 75,
       "first_row": 3,
-      "last_row": 136,
+      "last_row": 138,
       "priority": {
         "P0": 0,
-        "P1": 63,
+        "P1": 64,
         "P2": 1,
         "P3": 10,
         "P4": 0,
@@ -325,7 +325,7 @@
       "os": {
         "android": 0,
         "ios": 0,
-        "common": 74,
+        "common": 75,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -336,7 +336,7 @@
         "data_change": 9,
         "function_behavior": 9,
         "permission_auth": 1,
-        "exception_error": 6,
+        "exception_error": 5,
         "network_server": 1,
         "notification": 32,
         "multi_device_os": 21,
@@ -370,7 +370,7 @@
         "UI노출확인+데이터변경확인+예외에러확인+알림푸시확인": 1
       },
       "precond_distribution": {
-        "채팅방_존재": 67,
+        "채팅방_존재": 70,
         "사진_존재": 8,
         "설정_변경": 3,
         "로그인": 1,
@@ -1834,12 +1834,12 @@
     },
     {
       "service_name": "19.톡클라우드_백복(로직)",
-      "total_tc": 210,
+      "total_tc": 209,
       "first_row": 3,
       "last_row": 333,
       "priority": {
         "P0": 0,
-        "P1": 103,
+        "P1": 102,
         "P2": 0,
         "P3": 107,
         "P4": 0,
@@ -1850,7 +1850,7 @@
       "os": {
         "android": 0,
         "ios": 1,
-        "common": 209,
+        "common": 208,
         "web": 0,
         "pc": 0,
         "empty": 0,
@@ -1864,10 +1864,10 @@
         "exception_error": 25,
         "network_server": 30,
         "notification": 16,
-        "multi_device_os": 19,
+        "multi_device_os": 18,
         "state_persistence": 21,
-        "content_media": 51,
-        "has_precondition": 96,
+        "content_media": 50,
+        "has_precondition": 95,
         "automation_candidate": 3,
         "manual_required": 0
       },
@@ -1875,10 +1875,10 @@
         "UI노출확인+네트워크서버연동+콘텐츠미디어확인": 14,
         "UI노출확인+콘텐츠미디어확인": 7,
         "UI노출확인+네트워크서버연동+설정상태유지+콘텐츠미디어확인": 5,
-        "멀티디바이스OS+콘텐츠미디어확인": 4,
         "UI노출확인+네트워크서버연동": 4,
         "UI노출확인+예외에러확인+알림푸시확인+멀티디바이스OS": 4,
         "UI노출확인+설정상태유지+콘텐츠미디어확인": 3,
+        "멀티디바이스OS+콘텐츠미디어확인": 3,
         "UI노출확인+권한인증확인": 3,
         "네트워크서버연동+설정상태유지+콘텐츠미디어확인": 2,
         "데이터변경확인+예외에러확인": 2,
@@ -1907,11 +1907,11 @@
         "UI노출확인+기능동작확인+권한인증확인+멀티디바이스OS": 1
       },
       "precond_distribution": {
-        "채팅방_존재": 182,
-        "백업_존재": 116,
+        "채팅방_존재": 181,
+        "백업_존재": 115,
         "로그인": 31,
-        "사진_존재": 30,
-        "동영상_존재": 26,
+        "사진_존재": 29,
+        "동영상_존재": 25,
         "구독_상태": 5,
         "관리자_권한": 3,
         "채팅내역_존재": 2,
@@ -1919,10 +1919,10 @@
         "권한_허용": 1
       },
       "quality": {
-        "issue_count": 197,
-        "affected_tc_count": 99,
+        "issue_count": 196,
+        "affected_tc_count": 98,
         "issue_type_counts": {
-          "ambiguous_test_step": 99,
+          "ambiguous_test_step": 98,
           "ambiguous_expected_result": 98,
           "missing_precondition": 0,
           "duplicated_step_expected": 0,
@@ -2477,7 +2477,7 @@
       "service_name": "25. 설정",
       "total_tc": 418,
       "first_row": 3,
-      "last_row": 524,
+      "last_row": 525,
       "priority": {
         "P0": 0,
         "P1": 321,
@@ -2777,10 +2777,10 @@
     }
   ],
   "quality": {
-    "total_issues": 665,
-    "affected_tc_count": 432,
+    "total_issues": 664,
+    "affected_tc_count": 431,
     "issue_type_counts": {
-      "ambiguous_test_step": 288,
+      "ambiguous_test_step": 287,
       "ambiguous_expected_result": 259,
       "missing_precondition": 6,
       "duplicated_step_expected": 13,
@@ -2808,7 +2808,7 @@
       "16.톡클라우드_연락처": 234,
       "17.지갑": 6,
       "18.톡캘린더": 5,
-      "19.톡클라우드_백복(로직)": 197,
+      "19.톡클라우드_백복(로직)": 196,
       "20.톡클라우드_인물분류": 16,
       "21.톡클라우드_버티컬(무료)": 0,
       "22.톡클라우드_버티컬(유료)": 23,
