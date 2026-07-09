@@ -176,25 +176,39 @@ var COL_DEFS = [
   [38,'ctx','Flow Position', function(r){return r[SC.ctxFlowPos]||'';}],
 
   [41,'norm','Normalization Summary', function(r){return r[SC.normSummary]||'';}],
+
+  // 자동화 여부 (열 43, 구분열 42) — TC_RAW에서 조인
+  [43,'auto','자동화 여부', function(r){return '';}],  // 값은 buildSheet에서 tcMap으로 처리
 ];
 
 var GRP_H_BG = {
   orig:C.H_ORIG, ai:C.H_AI, ana:C.H_ANA,
-  int:C.H_INT, sem:C.H_SEM, ctx:C.H_CTX, norm:C.H_NORM
+  int:C.H_INT, sem:C.H_SEM, ctx:C.H_CTX, norm:C.H_NORM, auto:C.H_AUTO
 };
-var SEP_COLS = [8,17,18,23,24,28,29,33,39,40];
+var SEP_COLS = [8,17,18,23,24,28,29,33,39,40,42];
 
 function addr(col, row) {
   return XLSX.utils.encode_cell({ c: col, r: row });
 }
 
+// ── TC_RAW 자동화 맵 빌드 ─────────────────────────────────────────
+function buildTcAutoMap() {
+  var map = {};
+  if (typeof TC_RAW !== 'undefined') {
+    TC_RAW.forEach(function(t) {
+      map[t[0] + '|' + t[1]] = [t[17], t[18]]; // [auto, manual]
+    });
+  }
+  return map;
+}
+
 // ── 시트 빌드 ─────────────────────────────────────────────────────
-function buildSheet(rows) {
+function buildSheet(rows, tcMap) {
   var ws = {};
 
   // 열 너비
   var widths = [];
-  for (var i = 0; i <= 42; i++) widths.push({ wch: 1 });
+  for (var i = 0; i <= 44; i++) widths.push({ wch: 1 });
   [0,1,2,3,9,10,11,12].forEach(function(c){ widths[c]={wch:14}; });
   [4,13].forEach(function(c){ widths[c]={wch:28}; });
   [5,6,14,15].forEach(function(c){ widths[c]={wch:38}; });
@@ -209,6 +223,7 @@ function buildSheet(rows) {
   [34,35,36].forEach(function(c){ widths[c]={wch:22}; });
   [37,38].forEach(function(c){ widths[c]={wch:36}; });
   [41].forEach(function(c){ widths[c]={wch:44}; });
+  [43].forEach(function(c){ widths[c]={wch:14}; });
   ws['!cols'] = widths;
 
   // ── 행 1: 그룹 헤더 ────────────────────────────────────────────
@@ -220,6 +235,7 @@ function buildSheet(rows) {
     {s:30, e:32, bg:C.H_SEM,  label:'Semantic Validation'},
     {s:34, e:38, bg:C.H_CTX,  label:'Context Summary'},
     {s:41, e:41, bg:C.H_NORM, label:'Normalization Summary'},
+    {s:43, e:43, bg:C.H_AUTO, label:'자동화 여부'},
   ];
   ws['!merges'] = [];
   grpDefs.forEach(function(g){
@@ -304,10 +320,30 @@ function buildSheet(rows) {
         cellFont  = mkFont(C.T_DARK, false, 8);
         cellAlign = mkAlign('left','top');
 
-      } else { // norm
+      } else if (grp === 'norm') {
         cellFill  = C.B_NORM;
         cellFont  = mkFont(C.T_DARK, false, 8);
         cellAlign = mkAlign('left','top');
+
+      } else { // auto
+        // 자동화 여부: TC_RAW에서 조인
+        var autoKey = r[SC.svc] + '|' + r[SC.row];
+        var autoInfo = tcMap ? tcMap[autoKey] : null;
+        if (autoInfo) {
+          if (autoInfo[0] === 1) {
+            val = '⚡ 자동화 가능';
+            cellFill = C.B_AUTO_YES; cellFont = mkFont(C.T_AUTO_YES, true, 9);
+          } else if (autoInfo[1] === 1) {
+            val = '👁 수동 필요';
+            cellFill = C.B_AUTO_MANUAL; cellFont = mkFont(C.T_AUTO_MANUAL, true, 9);
+          } else {
+            val = '✗ 어려움';
+            cellFill = C.B_AUTO_NO; cellFont = mkFont(C.T_AUTO_NO, true, 9);
+          }
+        } else {
+          val = ''; cellFill = 'FFFFFFFF'; cellFont = mkFont(C.T_DARK, false, 9);
+        }
+        cellAlign = mkAlign('center','center');
       }
 
       ws[addr(col, exRow)] = mkCell(val || '', cellFill, cellFont, cellAlign);
@@ -320,7 +356,7 @@ function buildSheet(rows) {
   });
 
   ws['!ref'] = XLSX.utils.encode_range({
-    s:{c:0,r:0}, e:{c:41, r:rows.length+1}
+    s:{c:0,r:0}, e:{c:43, r:rows.length+1}
   });
   ws['!rows'] = [{hpt:22},{hpt:20}];
 
