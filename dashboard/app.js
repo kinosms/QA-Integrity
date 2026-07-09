@@ -228,79 +228,75 @@ function loadAllReviews() {
 }
 
 // 저장 (upsert)
-// rv-save-btn 이벤트 위임
-document.addEventListener('click', function(e) {
-  if (e.target && e.target.classList.contains('rv-save-btn')) {
-    var svc = e.target.getAttribute('data-svc');
-    var row = parseInt(e.target.getAttribute('data-row'));
+// rv-save-btn 이벤트 위임 제거 — buildReviewPanel에서 직접 addEventListener 사용
+
+function buildReviewPanelEl(svc, row) {
+  var rvKey  = svc + '|' + row;
+  var saved  = reviewStore[rvKey] || {};
+  var div    = document.createElement('div');
+  div.className = 'sv-review-panel';
+  var title  = document.createElement('div');
+  title.className = 'sv-review-title'; title.textContent = '검수 의견';
+  var ta     = document.createElement('textarea');
+  ta.className = 'rv-note'; ta.rows = 3;
+  ta.placeholder = '의견을 입력하세요...';
+  ta.value = saved.note || '';
+  var footer = document.createElement('div');
+  footer.className = 'rv-footer';
+  var savedAt = document.createElement('span');
+  savedAt.className = 'rv-saved-at';
+  savedAt.textContent = saved.savedAt ? saved.savedAt + ' 저장됨' : '';
+  var btn    = document.createElement('button');
+  btn.className = 'rv-save-btn'; btn.textContent = '저장';
+  btn.addEventListener('click', function() {
     console.log('[저장버튼 클릭] svc=', svc, 'row=', row);
-    if (svc && !isNaN(row)) saveReview(svc, row);
-    else console.warn('[저장버튼] data-svc/row 없음', e.target);
-  }
-});
-
-function saveReview(svc, row) {
-  console.log('[saveReview] 시작 svc=', svc, 'row=', row);
-  // ID로 찾기 → 없으면 data-attribute fallback
-  var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
-  console.log('[saveReview] safeId=', safeId);
-  var panel  = document.getElementById(safeId);
-  console.log('[saveReview] panel=', panel);
-  if (!panel) {
-    // data-svc + data-row 속성으로 찾기
-    var btns = document.querySelectorAll('.rv-save-btn');
-    for (var i = 0; i < btns.length; i++) {
-      if (btns[i].getAttribute('data-svc') === svc &&
-          parseInt(btns[i].getAttribute('data-row')) === row) {
-        panel = btns[i].closest('.sv-review-panel');
-        break;
-      }
-    }
-  }
-  if (!panel) { console.warn('saveReview: panel not found for', svc, row); return; }
-  var note = (panel.querySelector('.rv-note') || {}).value || '';
-  var btn  = panel.querySelector('.rv-save-btn');
-
-  if (btn) { btn.textContent = '저장 중...'; btn.disabled = true; }
-
-  console.log('[saveReview] fetch 시작, note=', note);
-  fetch(SUPA_URL + '/rest/v1/tc_reviews', {
-    method: 'POST',
-    headers: {
-      'apikey': SUPA_KEY,
-      'Authorization': 'Bearer ' + SUPA_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'resolution=merge-duplicates'
-    },
-    body: JSON.stringify({ svc: svc, row_number: row, note: note,
-                           updated_at: new Date().toISOString() })
-  })
-  .then(function(r) {
-    console.log('[saveReview] 응답 status=', r.status);
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    var now = new Date().toLocaleString('ko-KR');
-    reviewStore[svc + '|' + row] = { note: note, savedAt: now };
-    if (btn) { btn.textContent = '✓ 저장됨'; btn.disabled = false;
+    var note = ta.value;
+    btn.textContent = '저장 중...'; btn.disabled = true;
+    fetch(SUPA_URL + '/rest/v1/tc_reviews', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ svc: svc, row_number: row, note: note,
+                             updated_at: new Date().toISOString() })
+    })
+    .then(function(r) {
+      console.log('[저장] 응답 status=', r.status);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var now = new Date().toLocaleString('ko-KR');
+      reviewStore[rvKey] = { note: note, savedAt: now };
+      btn.textContent = '✓ 저장됨'; btn.disabled = false;
       btn.style.background = 'rgba(34,197,94,.3)';
-      setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2500); }
-    var sa = panel.querySelector('.rv-saved-at');
-    if (sa) { sa.textContent = now + ' 저장됨'; sa.style.color = '#4ade80'; }
-    // 저장 완료 토스트
-    var toast = document.createElement('div');
-    toast.textContent = '✓ 저장되었습니다';
-    toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:rgba(34,197,94,.9);'+'color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;'+'box-shadow:0 4px 12px rgba(0,0,0,.3);animation:rv-fadein .2s ease';
-    document.body.appendChild(toast);
-    setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity .5s';
-      setTimeout(function(){ document.body.removeChild(toast); }, 500); }, 2000);
-    console.log('[saveReview] 저장 성공');
-  })
-  .catch(function(e) {
-    console.error('[saveReview] 저장 실패:', e);
-    alert('저장 실패: ' + e.message + '\n콘솔(F12)에서 자세한 오류를 확인하세요.');
-    if (btn) { btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
-      btn.style.background = 'rgba(239,68,68,.3)'; }
+      setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2500);
+      savedAt.textContent = now + ' 저장됨'; savedAt.style.color = '#4ade80';
+      var toast = document.createElement('div');
+      toast.textContent = '✓ 저장되었습니다';
+      toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:rgba(34,197,94,.9);'
+        +'color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:8px;'
+        +'z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+      document.body.appendChild(toast);
+      setTimeout(function(){
+        toast.style.opacity='0'; toast.style.transition='opacity .5s';
+        setTimeout(function(){ if(toast.parentNode) toast.parentNode.removeChild(toast); }, 500);
+      }, 2000);
+    })
+    .catch(function(e) {
+      console.error('[저장] 실패:', e);
+      alert('저장 실패: ' + e.message);
+      btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
+      btn.style.background = 'rgba(239,68,68,.3)';
+    });
   });
+  footer.appendChild(savedAt); footer.appendChild(btn);
+  div.appendChild(title); div.appendChild(ta); div.appendChild(footer);
+  return div;
 }
+
+// saveReview 기능은 buildReviewPanelEl에 통합됨
+
 
 function renderPagination(containerId, current, total, cb) {
   const el = document.getElementById(containerId);
@@ -1067,22 +1063,8 @@ function buildTCBlock(t) {
       '</div>'
     : '';
 
-  // ── 검수 의견 패널 ───────────────────────────────────
-  var rvKey = t[0] + '|' + t[1];
-  var rvSaved = reviewStore[rvKey] || {};
-  var rvNote = (rvSaved.note || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  var rvAt = rvSaved.savedAt ? '<span class="rv-saved-at">' + rvSaved.savedAt + ' 저장됨</span>' : '';
-  var svcEsc = t[0].replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  var safeId = 'rv-' + (t[0]+'_'+t[1]).replace(/[^a-zA-Z0-9가-힣_\\-]/g,'_');
-  var reviewPanel =
-    '<div class="sv-review-panel" id="' + safeId + '">' +
-      '<div class="sv-review-title">검수 의견</div>' +
-      '<textarea class="rv-note" rows="3" placeholder="의견을 입력하세요...">' + rvNote + '</textarea>' +
-      '<div class="rv-footer">' +
-        '<span class="rv-saved-at">' + (rvSaved.savedAt ? rvSaved.savedAt + ' 저장됨' : '') + '</span>' +
-        '<button class="rv-save-btn" data-svc="' + hesc(t[0]) + '" data-row="' + t[1] + '">저장</button>' +
-      '</div>' +
-    '</div>';
+  // 검수 의견 패널 — buildReviewPanelEl로 나중에 DOM 삽입
+  var reviewPanel = '';  // placeholder
 
   // ── 검수 의견 입력 ───────────────────────────────────
   var rvKey = t[0] + '|' + t[1];
@@ -1183,9 +1165,17 @@ function renderCompare() {
   var el = document.getElementById('cmp-body');
   if (!el) return;
 
-  el.innerHTML = page.length
-    ? page.map(buildTCBlock).join('')
-    : '<div class="empty-cell" style="padding:40px;text-align:center">데이터 없음</div>';
+  if (page.length) {
+    el.innerHTML = page.map(buildTCBlock).join('');
+    // 검수 의견 패널 DOM 삽입
+    page.forEach(function(t) {
+      var blockId = 'cmp-row-' + (t[0]+'-'+t[1]).replace(/[\s.()\/-]/g,'-');
+      var block = document.getElementById(blockId);
+      if (block) block.appendChild(buildReviewPanelEl(t[0], t[1]));
+    });
+  } else {
+    el.innerHTML = '<div class="empty-cell" style="padding:40px;text-align:center">데이터 없음</div>';
+  }
 
   var cnt = document.getElementById('cmp-count');
   if (cnt) cnt.textContent = total + '건';
