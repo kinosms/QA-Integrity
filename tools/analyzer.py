@@ -1831,6 +1831,274 @@ def _write_context_linking(tc_master_rows: list):
     return count
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 문장 표준화 엔진 (Phase 4-D)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# 용어 통일 사전 (원본 → 표준)
+_TERM_MAP = [
+    # 앱 관련
+    (re.compile(r'\b앱을\b'), '애플리케이션을'),
+    (re.compile(r'\b앱의\b'), '애플리케이션의'),
+    (re.compile(r'\b앱에서\b'), '애플리케이션에서'),
+    (re.compile(r'\b앱이\b'), '애플리케이션이'),
+    (re.compile(r'\b앱\b'), '애플리케이션'),
+    # 동작 표현
+    (re.compile(r'화면이 뜬다'), '화면이 표시된다.'),
+    (re.compile(r'화면이 뜨면'), '화면이 표시되면'),
+    (re.compile(r'뜨는지'), '표시되는지'),
+    # 팝업 → 맥락에 따라 유지 (명칭 포함 시 유지)
+]
+
+# 사전조건 종결 규칙: (패턴, 치환) 순서 중요
+_PRECOND_ENDINGS = [
+    (re.compile(r'(?<![.。])\s*로그인\s*(?:완료|되어\s*있음|된\s*상태)?\s*$', re.MULTILINE),
+     lambda m: '로그인한 상태이다.'),
+    (re.compile(r'(?<![.。])\s*있음\s*$', re.MULTILINE),
+     lambda m: '상태이다.'),
+    (re.compile(r'(?<![.。])\s*완료\s*$', re.MULTILINE),
+     lambda m: '완료되어 있다.'),
+    (re.compile(r'(?<![.。])\s*상태\s*$', re.MULTILINE),
+     lambda m: '상태이다.'),
+    (re.compile(r'(?<![.。다])$', re.MULTILINE),
+     lambda m: '이다.'),
+]
+
+# Test Step 종결 규칙
+_STEP_ENDINGS = [
+    (re.compile(r'([^\s])[\s]*탭\s*$', re.MULTILINE),     lambda m: m.group(1) + '을(를) 선택한다.'),
+    (re.compile(r'([^\s])[\s]*클릭\s*$', re.MULTILINE),   lambda m: m.group(1) + '을(를) 선택한다.'),
+    (re.compile(r'([^\s])[\s]*선택\s*$', re.MULTILINE),   lambda m: m.group(1) + '을(를) 선택한다.'),
+    (re.compile(r'([^\s])[\s]*입력\s*$', re.MULTILINE),   lambda m: m.group(1) + '을(를) 입력한다.'),
+    (re.compile(r'([^\s])[\s]*진입\s*$', re.MULTILINE),   lambda m: m.group(1) + '에 진입한다.'),
+    (re.compile(r'([^\s])[\s]*실행\s*$', re.MULTILINE),   lambda m: m.group(1) + '을(를) 실행한다.'),
+    (re.compile(r'([^\s])[\s]*확인\s*$', re.MULTILINE),   lambda m: m.group(1) + '을(를) 확인한다.'),
+]
+
+# 기대결과 명사형 → 문장형
+_EXP_ENDINGS = [
+    (re.compile(r'표시됨\b'), '표시된다.'),
+    (re.compile(r'노출됨\b'), '노출된다.'),
+    (re.compile(r'이동됨\b'), '이동된다.'),
+    (re.compile(r'저장됨\b'), '저장된다.'),
+    (re.compile(r'활성화됨\b'), '활성화된다.'),
+    (re.compile(r'비활성화됨\b'), '비활성화된다.'),
+    (re.compile(r'변경됨\b'), '변경된다.'),
+    (re.compile(r'추가됨\b'), '추가된다.'),
+    (re.compile(r'삭제됨\b'), '삭제된다.'),
+    (re.compile(r'완료됨\b'), '완료된다.'),
+    (re.compile(r'생성됨\b'), '생성된다.'),
+    (re.compile(r'해제됨\b'), '해제된다.'),
+    (re.compile(r'설정됨\b'), '설정된다.'),
+    (re.compile(r'전환됨\b'), '전환된다.'),
+    (re.compile(r'반영됨\b'), '반영된다.'),
+]
+
+
+def _apply_term_map(text: str) -> tuple:
+    """용어 통일 적용. 반환: (변환된 텍스트, 변경 목록)"""
+    if not text:
+        return text, []
+    changes = []
+    result = text
+    for pat, repl in _TERM_MAP:
+        new = pat.sub(repl, result)
+        if new != result:
+            changes.append(f'용어 통일: {pat.pattern.strip()} → {repl}')
+            result = new
+    return result, changes
+
+
+def _std_precond(text: str) -> tuple:
+    """사전조건 문장 표준화. 반환: (표준화 텍스트, 변경 목록)"""
+    if not text or not text.strip():
+        return text, []
+    text, changes = _apply_term_map(text)
+    lines_out = []
+    for line in text.splitlines():
+        s = line.strip()
+        if not s:
+            lines_out.append(line)
+            continue
+        changed = False
+        for pat, repl_fn in _PRECOND_ENDINGS:
+            new = pat.sub(repl_fn, s)
+            if new != s:
+                lines_out.append(new)
+                changes.append(f'문장 종결 통일 (사전조건): …{s[-8:]} → …{new[-8:]}')
+                changed = True
+                break
+        if not changed:
+            lines_out.append(s)
+    return '\n'.join(lines_out), changes
+
+
+def _std_step(text: str) -> tuple:
+    """Test Step 문장 표준화. 반환: (표준화 텍스트, 변경 목록)"""
+    if not text or not text.strip():
+        return text, []
+    text, changes = _apply_term_map(text)
+    lines_out = []
+    for line in text.splitlines():
+        s = line.strip()
+        if not s:
+            lines_out.append(line)
+            continue
+        # 이미 표준 종결이면 건드리지 않음
+        if re.search(r'(선택한다|입력한다|실행한다|확인한다|탭한다|진입한다)\.$', s):
+            lines_out.append(s)
+            continue
+        changed = False
+        for pat, repl_fn in _STEP_ENDINGS:
+            new = pat.sub(repl_fn, s)
+            if new != s:
+                lines_out.append(new)
+                changes.append(f'문장 종결 통일 (Step): …{s[-8:]} → …{new[-8:]}')
+                changed = True
+                break
+        if not changed:
+            lines_out.append(s)
+    return '\n'.join(lines_out), changes
+
+
+def _std_expected(text: str) -> tuple:
+    """기대결과 문장 표준화. 반환: (표준화 텍스트, 변경 목록)"""
+    if not text or not text.strip():
+        return text, []
+    text, changes = _apply_term_map(text)
+    result = text
+    for pat, repl in _EXP_ENDINGS:
+        new = pat.sub(repl, result)
+        if new != result:
+            changes.append(f'표현 표준화 (기대결과): {pat.pattern} → {repl}')
+            result = new
+    return result, changes
+
+
+def build_norm_summary(pre_changes, step_changes, exp_changes, ctx_changes=None) -> str:
+    """Normalization Summary 문자열 생성."""
+    all_changes = []
+    seen = set()
+    for c in (pre_changes + step_changes + exp_changes + (ctx_changes or [])):
+        if c not in seen:
+            seen.add(c)
+            all_changes.append(f'- {c}')
+    return '\n'.join(all_changes) if all_changes else ''
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Context 추론 엔진 (Phase 4-E)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_SCREEN_PATTERN = re.compile(
+    r'([가-힣A-Za-z0-9\s\(\)_\-\/]{2,20})'
+    r'(?:화면|팝업|페이지|뷰|창|레이어|바텀시트|다이얼로그)',
+    re.IGNORECASE,
+)
+
+_FLOW_KEYWORDS = {
+    '초기': '초기 진입 단계', '최초': '초기 진입 단계', '설치': '초기 진입 단계',
+    '오류': '예외 처리 단계', '실패': '예외 처리 단계', '예외': '예외 처리 단계',
+    '제한': '예외 처리 단계', '불가': '예외 처리 단계', '차단': '예외 처리 단계',
+    '정상': '정상 흐름 단계', '성공': '정상 흐름 단계',
+}
+
+
+def build_context_summary(tc_list: list, idx: int) -> dict:
+    """
+    서비스 TC 리스트에서 idx 위치 TC의 Context를 추론한다.
+    앞뒤 ±5개 TC를 참고한다.
+    """
+    tc = tc_list[idx]
+    window = tc_list[max(0, idx-5): idx+6]
+
+    cat1 = tc.get('category_1', '') or ''
+    cat2 = tc.get('category_2', '') or ''
+    cat3 = tc.get('category_3', '') or ''
+    cat4 = tc.get('category_4', '') or ''
+    step = tc.get('test_step', '') or ''
+    exp  = tc.get('expected_result', '') or ''
+
+    # ── Feature ────────────────────────────────────────────────────────────
+    # cat1이 있으면 사용, 없으면 윈도우에서 가장 빈번한 cat1 사용
+    if cat1.strip():
+        feature = cat1.strip()
+    else:
+        from collections import Counter
+        cats = [t.get('category_1', '') or '' for t in window if t.get('category_1', '')]
+        feature = Counter(cats).most_common(1)[0][0] if cats else ''
+
+    # ── Screen ──────────────────────────────────────────────────────────────
+    # step + expected에서 화면명 패턴 추출
+    screen = ''
+    for text in [step, exp]:
+        m = _SCREEN_PATTERN.search(text)
+        if m:
+            candidate = m.group(0).strip()
+            if 3 <= len(candidate) <= 30:
+                screen = candidate
+                break
+    # 없으면 윈도우에서 탐색
+    if not screen:
+        for t in window:
+            for text in [t.get('test_step','') or '', t.get('expected_result','') or '']:
+                m = _SCREEN_PATTERN.search(text)
+                if m:
+                    candidate = m.group(0).strip()
+                    if 3 <= len(candidate) <= 30:
+                        screen = candidate
+                        break
+            if screen:
+                break
+
+    # ── Scenario ────────────────────────────────────────────────────────────
+    # cat2 > cat3 > cat4 순으로 사용
+    scenario = cat2.strip() or cat3.strip() or cat4.strip()
+    if not scenario and feature:
+        scenario = feature
+
+    # ── User Goal ───────────────────────────────────────────────────────────
+    # 기대결과 첫 줄을 사용자 관점으로 재작성
+    first_exp = (exp or '').split('\n')[0].strip()
+    first_exp = re.sub(r'^\d+[.)]\s*', '', first_exp).strip()
+    if first_exp:
+        # "~표시된다" → "~가 정상 표시되는지 확인"
+        user_goal = re.sub(r'(표시된다|노출된다|이동된다|저장된다|활성화된다|비활성화된다|완료된다)\.?$',
+                           r'\1 정상 동작하는지 확인한다.', first_exp)
+        if user_goal == first_exp:
+            user_goal = first_exp + '이(가) 정상 동작하는지 확인한다.'
+    else:
+        user_goal = ''
+
+    # ── Flow Position ───────────────────────────────────────────────────────
+    all_cats = ' '.join(filter(None, [cat1, cat2, cat3, cat4]))
+    flow_pos = ''
+    for kw, label in _FLOW_KEYWORDS.items():
+        if kw in all_cats:
+            flow_pos = label
+            break
+    if not flow_pos:
+        # 같은 feature 그룹 내에서 순서 계산
+        feature_tcs = [t for t in tc_list if (t.get('category_1','') or '') == cat1] if cat1 else []
+        if feature_tcs:
+            try:
+                pos = feature_tcs.index(tc) + 1
+                total = len(feature_tcs)
+                flow_pos = f'주요 흐름 {pos}/{total} 단계'
+            except ValueError:
+                flow_pos = '주요 흐름 단계'
+        else:
+            flow_pos = '주요 흐름 단계'
+
+    return {
+        'ctx_feature'     : feature,
+        'ctx_screen'      : screen,
+        'ctx_scenario'    : scenario,
+        'ctx_user_goal'   : user_goal,
+        'ctx_flow_position': flow_pos,
+    }
+
+
 # ── Semantic Validation 헬퍼 ─────────────────────────────────────────────────
 
 _SEM_STOP = {
@@ -1939,7 +2207,24 @@ def _write_ai_standard_tc(tc_master_rows: list):
         'original_intent', 'ai_intent', 'final_check_point',
         # Semantic Validation
         'meaning_match_pct', 'meaning_status', 'sem_reason',
+        # Context Summary (신규)
+        'ctx_feature', 'ctx_screen', 'ctx_scenario',
+        'ctx_user_goal', 'ctx_flow_position',
+        # Normalization Summary (신규)
+        'norm_summary',
     ]
+
+    # ── 서비스별 Context 사전 계산 ──────────────────────────────────────────
+    from collections import defaultdict as _dd
+    svc_tc_map = _dd(list)
+    for tc in tc_master_rows:
+        svc_tc_map[tc['service_name']].append(tc)
+
+    ctx_cache = {}
+    for svc, tc_list in svc_tc_map.items():
+        for idx, tc in enumerate(tc_list):
+            key = tc['service_name'] + '|' + str(tc['row_number'])
+            ctx_cache[key] = build_context_summary(tc_list, idx)
 
     path = os.path.join(OUTPUT_DIR, 'ai_standard_tc.csv')
     with open(path, 'w', newline='', encoding='utf-8-sig') as f:
@@ -1992,6 +2277,19 @@ def _write_ai_standard_tc(tc_master_rows: list):
             else:
                 ai_exp = orig_exp
 
+            # ── 문장 표준화 적용 ────────────────────────────────────────────
+            ai_pre_std, pre_changes = _std_precond(ai_pre)
+            ai_stp_std, stp_changes = _std_step(ai_stp)
+            ai_exp_std, exp_changes = _std_expected(ai_exp)
+
+            # clarified는 표준화 대상 아님 (재작성 필요 메시지 그대로)
+            if recon_type != 'clarified':
+                ai_pre = ai_pre_std
+                ai_stp = ai_stp_std
+                ai_exp = ai_exp_std
+            else:
+                pre_changes, stp_changes, exp_changes = [], [], []
+
             # ── AI Analysis ─────────────────────────────────────────────────
             # 사전조건 분석
             precond_norm = ''
@@ -2006,6 +2304,8 @@ def _write_ai_standard_tc(tc_master_rows: list):
                             seen[p['label']] = 1
                             ev_parts.append(f"• {p['label']}: {p['reason'][:100]}")
                     precond_ev = '\n'.join(ev_parts)
+            if pre_changes:
+                precond_norm = ', '.join(filter(None, [precond_norm, '문장 표준화']))
 
             # Test Step 분석
             step_norm_parts = []
@@ -2020,6 +2320,8 @@ def _write_ai_standard_tc(tc_master_rows: list):
                 step_norm_parts.append('문맥 보완')
                 if not step_reason:
                     step_reason = link.get('reason', '')[:200]
+            if stp_changes:
+                step_norm_parts.append('문장 표준화')
             step_norm = ', '.join(step_norm_parts)
 
             # 기대결과 분석
@@ -2033,6 +2335,8 @@ def _write_ai_standard_tc(tc_master_rows: list):
                 exp_norm_parts.append('표현 표준화')
                 if not exp_reason:
                     exp_reason = f'생략된 "{link.get("omit_expr","")}"를 "{link.get("subject","")}"로 보완'
+            if exp_changes:
+                exp_norm_parts.append('문장 표준화')
             exp_norm = ', '.join(exp_norm_parts)
 
             # 품질 이슈
@@ -2041,10 +2345,39 @@ def _write_ai_standard_tc(tc_master_rows: list):
                 for q in qis[:3]
             )
 
+            # ── Context Summary ──────────────────────────────────────────────
+            ctx = ctx_cache.get(key, {})
+            ctx_changes = []
+            if ctx.get('ctx_screen'):
+                ctx_changes.append(f'Context 기반 화면명: {ctx["ctx_screen"]}')
+
+            # ── Normalization Summary ────────────────────────────────────────
+            norm_sum = build_norm_summary(pre_changes, stp_changes, exp_changes, ctx_changes)
+
             # ── Intent ──────────────────────────────────────────────────────
             orig_intent = _build_intent(tc.get('category_1',''), tc.get('category_2',''), orig_exp)
             ai_intent   = _build_intent(tc.get('category_1',''), tc.get('category_2',''), ai_exp)
-            fcp         = _final_check_point(ai_exp)
+
+            # Final Check Point 강화: 사용자 관점 검증 목적
+            fcp_raw = _final_check_point(ai_exp)
+            screen  = ctx.get('ctx_screen', '')
+            feature = ctx.get('ctx_feature', '')
+            if fcp_raw:
+                # 화면/기능 context가 있고, fcp_raw가 이미 그 내용을 포함하지 않는 경우만 prefix 추가
+                subject_hint = screen or feature
+                if subject_hint and subject_hint not in fcp_raw:
+                    fcp = f'{subject_hint}에서 {fcp_raw}'
+                    # 종결 형태가 없으면 추가
+                    if not fcp.rstrip().endswith(('다.', '다', '요.')):
+                        fcp += '이(가) 정상 동작하는지 확인한다.'
+                else:
+                    # 이미 종결 형태면 유지, 아니면 보완
+                    if not fcp_raw.rstrip().endswith(('다.', '다', '요.')):
+                        fcp = fcp_raw + '이(가) 정상 동작하는지 확인한다.'
+                    else:
+                        fcp = fcp_raw
+            else:
+                fcp = ''
 
             # ── Semantic Validation ─────────────────────────────────────────
             match_pct = _sem_match(orig_stp, orig_exp, ai_stp, ai_exp)
@@ -2099,6 +2432,14 @@ def _write_ai_standard_tc(tc_master_rows: list):
                 # Semantic Validation
                 'meaning_match_pct': match_pct, 'meaning_status': status,
                 'sem_reason': sem_reason,
+                # Context Summary
+                'ctx_feature'      : ctx.get('ctx_feature', ''),
+                'ctx_screen'       : ctx.get('ctx_screen', ''),
+                'ctx_scenario'     : ctx.get('ctx_scenario', ''),
+                'ctx_user_goal'    : ctx.get('ctx_user_goal', ''),
+                'ctx_flow_position': ctx.get('ctx_flow_position', ''),
+                # Normalization Summary
+                'norm_summary': norm_sum,
             })
 
     print(f"[OK] ai_standard_tc.csv  → {len(tc_master_rows)}행")

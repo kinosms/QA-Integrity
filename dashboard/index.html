@@ -13,8 +13,8 @@
   <header>
     <h1>QA Test Coverage Dashboard</h1>
     <span class="badge">7260 TC · Phase 1~4</span>
-    <a href="../output/ai_review.xlsx" download class="dl-btn">⬇ AI Review Excel</a>
-    <button id="btn-csv-export" class="dl-btn csv-btn" onclick="exportCSV()">⬇ CSV 다운로드 (Google Sheets용)</button>
+    <button id="btn-export" class="dl-btn" onclick="exportAIReview()">⬇ AI Review Excel</button>
+    <button id="btn-csv-export" class="dl-btn csv-btn" onclick="exportCSV()">⬇ CSV (Google Sheets용)</button>
   </header>
 
   <div class="layout">
@@ -306,6 +306,12 @@
     </main>
   </div>
 </div>
+<script src="xlsx.full.min.js"></script>
+<script src="xlsx-js-style.js"></script>
+<script src="data_main.js"></script>
+<script src="data_category.js"></script>
+<script src="data_ai_std.js"></script>
+<script src="export_browser.js"></script>
 <script src="csv_export.js"></script>
 <script src="app.js"></script>
 </body>
