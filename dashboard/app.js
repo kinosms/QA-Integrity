@@ -228,10 +228,28 @@ function loadAllReviews() {
 }
 
 // 저장 (upsert)
+function _rvSave(btn) {
+  var svc = btn.getAttribute('data-svc');
+  var row = parseInt(btn.getAttribute('data-row'));
+  saveReview(svc, row);
+}
+
 function saveReview(svc, row) {
+  // ID로 찾기 → 없으면 onclick 속성으로 fallback
   var safeId = 'rv-' + (svc + '_' + row).replace(/[^a-zA-Z0-9가-힣_\-]/g, '_');
   var panel  = document.getElementById(safeId);
-  if (!panel) return;
+  if (!panel) {
+    // data-svc + data-row 속성으로 찾기
+    var btns = document.querySelectorAll('.rv-save-btn');
+    for (var i = 0; i < btns.length; i++) {
+      if (btns[i].getAttribute('data-svc') === svc &&
+          parseInt(btns[i].getAttribute('data-row')) === row) {
+        panel = btns[i].closest('.sv-review-panel');
+        break;
+      }
+    }
+  }
+  if (!panel) { console.warn('saveReview: panel not found for', svc, row); return; }
   var note = (panel.querySelector('.rv-note') || {}).value || '';
   var btn  = panel.querySelector('.rv-save-btn');
 
@@ -1050,7 +1068,7 @@ function buildTCBlock(t) {
       '<textarea class="rv-note" rows="3" placeholder="의견을 입력하세요...">' + rvNote + '</textarea>' +
       '<div class="rv-footer">' +
         '<span class="rv-saved-at">' + (rvSaved.savedAt ? rvSaved.savedAt + ' 저장됨' : '') + '</span>' +
-        '<button class="rv-save-btn" onclick="saveReview(\'' + svcEsc + '\',' + t[1] + ')">저장</button>' +
+        '<button class="rv-save-btn" data-svc="' + hesc(t[0]) + '" data-row="' + t[1] + '" onclick="_rvSave(this)">저장</button>' +
       '</div>' +
     '</div>';
 
