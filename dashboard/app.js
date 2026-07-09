@@ -254,9 +254,16 @@ function saveReview(svc, row) {
     reviewStore[svc + '|' + row] = { note: note, savedAt: now };
     if (btn) { btn.textContent = '✓ 저장됨'; btn.disabled = false;
       btn.style.background = 'rgba(34,197,94,.3)';
-      setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2000); }
+      setTimeout(function(){ btn.textContent = '저장'; btn.style.background = ''; }, 2500); }
     var sa = panel.querySelector('.rv-saved-at');
-    if (sa) sa.textContent = now + ' 저장됨';
+    if (sa) { sa.textContent = now + ' 저장됨'; sa.style.color = '#4ade80'; }
+    // 저장 완료 토스트
+    var toast = document.createElement('div');
+    toast.textContent = '✓ 저장되었습니다';
+    toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:rgba(34,197,94,.9);'+'color:#fff;font-weight:700;font-size:13px;padding:10px 20px;border-radius:8px;z-index:9999;'+'box-shadow:0 4px 12px rgba(0,0,0,.3);animation:rv-fadein .2s ease';
+    document.body.appendChild(toast);
+    setTimeout(function(){ toast.style.opacity='0'; toast.style.transition='opacity .5s';
+      setTimeout(function(){ document.body.removeChild(toast); }, 500); }, 2000);
   })
   .catch(function(e) {
     console.error('저장 실패:', e);
