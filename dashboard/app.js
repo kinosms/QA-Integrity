@@ -309,7 +309,7 @@ function buildReviewPanelEl(svc, row) {
       })
     })
     .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+      if (!r.ok) return r.text().then(function(t){ throw new Error('HTTP ' + r.status + ' — ' + t); });
       var now = new Date().toLocaleString('ko-KR');
       reviewStore[rvKey] = { note: note, issue_types: issueTypes, target_fields: targetFields, savedAt: now };
       btn.textContent = '✓ 저장됨'; btn.disabled = false;
@@ -328,6 +328,7 @@ function buildReviewPanelEl(svc, row) {
       }, 2000);
     })
     .catch(function(e) {
+      console.error('[저장 실패]', e);
       alert('저장 실패: ' + e.message);
       btn.textContent = '✗ 실패 — 재시도'; btn.disabled = false;
       btn.style.background = 'rgba(239,68,68,.3)';
