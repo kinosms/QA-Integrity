@@ -1063,23 +1063,7 @@ function buildTCBlock(t) {
       '</div>'
     : '';
 
-  // 검수 의견 패널 — buildReviewPanelEl로 나중에 DOM 삽입
-  var reviewPanel = '';  // placeholder
-
-  // ── 검수 의견 입력 ───────────────────────────────────
-  var rvKey = t[0] + '|' + t[1];
-  var rvSaved = reviewStore ? (reviewStore[rvKey] || {}) : {};
-  var rvNote = (rvSaved.note || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  var rvAt = rvSaved.savedAt ? '<span class="rv-saved-at">' + rvSaved.savedAt + ' 저장됨</span>' : '';
-  var svcEsc = t[0].replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  var reviewPanel =
-    '<div class="sv-review-panel">' +
-      '<div class="sv-review-title">검수 의견</div>' +
-      '<textarea class="rv-note" rows="3" placeholder="의견을 입력하세요...">' + rvNote + '</textarea>' +
-      '<div class="rv-footer">' + rvAt +
-        '<button class="rv-save-btn" onclick="saveReview(\'' + svcEsc + '\',' + t[1] + ')">저장</button>' +
-      '</div>' +
-    '</div>';
+  var reviewPanel = '';  // DOM은 renderCompare에서 buildReviewPanelEl로 삽입
 
   // ── Semantic Validation ───────────────────────────────────
   var matchPct = parseInt(t[S.match] || 100);
