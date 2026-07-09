@@ -10,7 +10,7 @@
 1.가입,state_persistence,17,0.0574
 1.가입,content_media,18,0.0608
 1.가입,has_precondition,185,0.625
-1.가입,automation_candidate,157,0.5304
+1.가입,automation_candidate,180,0.6081
 1.가입,manual_required,10,0.0338
 1.가입,compound:UI노출확인+권한인증확인+예외에러확인+알림푸시확인,21,0.0709
 1.가입,compound:권한인증확인+예외에러확인,20,0.0676
@@ -64,7 +64,7 @@
 2.친구,state_persistence,16,0.1429
 2.친구,content_media,17,0.1518
 2.친구,has_precondition,15,0.1339
-2.친구,automation_candidate,0,0.0
+2.친구,automation_candidate,74,0.6607
 2.친구,manual_required,3,0.0268
 2.친구,compound:UI노출확인+설정상태유지,8,0.0714
 2.친구,compound:UI노출확인+콘텐츠미디어확인,6,0.0536
@@ -116,7 +116,7 @@
 3.프로필,state_persistence,6,0.0526
 3.프로필,content_media,52,0.4561
 3.프로필,has_precondition,26,0.2281
-3.프로필,automation_candidate,1,0.0088
+3.프로필,automation_candidate,13,0.114
 3.프로필,manual_required,0,0.0
 3.프로필,compound:권한인증확인+예외에러확인+콘텐츠미디어확인,5,0.0439
 3.프로필,compound:권한인증확인+알림푸시확인,5,0.0439
@@ -144,7 +144,7 @@
 4.채팅목록,state_persistence,3,0.04
 4.채팅목록,content_media,12,0.16
 4.채팅목록,has_precondition,40,0.5333
-4.채팅목록,automation_candidate,0,0.0
+4.채팅목록,automation_candidate,44,0.5867
 4.채팅목록,manual_required,0,0.0
 4.채팅목록,compound:알림푸시확인+멀티디바이스OS,7,0.0933
 4.채팅목록,compound:UI노출확인+알림푸시확인,5,0.0667
@@ -178,7 +178,7 @@
 5.일반채팅,state_persistence,37,0.0623
 5.일반채팅,content_media,273,0.4596
 5.일반채팅,has_precondition,277,0.4663
-5.일반채팅,automation_candidate,75,0.1263
+5.일반채팅,automation_candidate,341,0.5741
 5.일반채팅,manual_required,22,0.037
 5.일반채팅,compound:UI노출확인+콘텐츠미디어확인,41,0.069
 5.일반채팅,compound:UI노출확인+기능동작확인+콘텐츠미디어확인,23,0.0387
@@ -283,7 +283,7 @@
 6.비밀채팅,state_persistence,1,0.0132
 6.비밀채팅,content_media,26,0.3421
 6.비밀채팅,has_precondition,26,0.3421
-6.비밀채팅,automation_candidate,2,0.0263
+6.비밀채팅,automation_candidate,6,0.0789
 6.비밀채팅,manual_required,2,0.0263
 6.비밀채팅,compound:알림푸시확인+콘텐츠미디어확인,11,0.1447
 6.비밀채팅,compound:UI노출확인+예외에러확인,2,0.0263
@@ -311,7 +311,7 @@
 7.팀채팅_채팅방,state_persistence,51,0.1065
 7.팀채팅_채팅방,content_media,119,0.2484
 7.팀채팅_채팅방,has_precondition,314,0.6555
-7.팀채팅_채팅방,automation_candidate,204,0.4259
+7.팀채팅_채팅방,automation_candidate,314,0.6555
 7.팀채팅_채팅방,manual_required,0,0.0
 7.팀채팅_채팅방,compound:UI노출확인+예외에러확인,21,0.0438
 7.팀채팅_채팅방,compound:UI노출확인+기능동작확인,19,0.0397
@@ -401,7 +401,7 @@
 8.팀채팅_홈상세,state_persistence,13,0.0922
 8.팀채팅_홈상세,content_media,92,0.6525
 8.팀채팅_홈상세,has_precondition,77,0.5461
-8.팀채팅_홈상세,automation_candidate,0,0.0
+8.팀채팅_홈상세,automation_candidate,36,0.2553
 8.팀채팅_홈상세,manual_required,0,0.0
 8.팀채팅_홈상세,compound:UI노출확인+콘텐츠미디어확인,35,0.2482
 8.팀채팅_홈상세,compound:설정상태유지+콘텐츠미디어확인,8,0.0567
@@ -440,7 +440,7 @@
 9.숏폼,state_persistence,2,0.025
 9.숏폼,content_media,17,0.2125
 9.숏폼,has_precondition,17,0.2125
-9.숏폼,automation_candidate,0,0.0
+9.숏폼,automation_candidate,7,0.0875
 9.숏폼,manual_required,0,0.0
 9.숏폼,compound:UI노출확인+알림푸시확인,2,0.025
 9.숏폼,compound:설정상태유지+콘텐츠미디어확인,1,0.0125
@@ -459,7 +459,7 @@
 10.통화,state_persistence,19,0.1624
 10.통화,content_media,22,0.188
 10.통화,has_precondition,12,0.1026
-10.통화,automation_candidate,0,0.0
+10.통화,automation_candidate,57,0.4872
 10.통화,manual_required,12,0.1026
 10.통화,compound:예외에러확인+네트워크서버연동+설정상태유지,5,0.0427
 10.통화,compound:UI노출확인+기능동작확인,4,0.0342
@@ -505,7 +505,7 @@
 11.톡뮤직,state_persistence,10,0.125
 11.톡뮤직,content_media,8,0.1
 11.톡뮤직,has_precondition,33,0.4125
-11.톡뮤직,automation_candidate,0,0.0
+11.톡뮤직,automation_candidate,14,0.175
 11.톡뮤직,manual_required,0,0.0
 11.톡뮤직,compound:기능동작확인+예외에러확인,6,0.075
 11.톡뮤직,compound:기능동작확인+예외에러확인+멀티디바이스OS,4,0.05
@@ -536,7 +536,7 @@
 12.이모티콘플러스(+키보드),state_persistence,28,0.0571
 12.이모티콘플러스(+키보드),content_media,282,0.5755
 12.이모티콘플러스(+키보드),has_precondition,211,0.4306
-12.이모티콘플러스(+키보드),automation_candidate,130,0.2653
+12.이모티콘플러스(+키보드),automation_candidate,206,0.4204
 12.이모티콘플러스(+키보드),manual_required,0,0.0
 12.이모티콘플러스(+키보드),compound:UI노출확인+콘텐츠미디어확인,67,0.1367
 12.이모티콘플러스(+키보드),compound:네트워크서버연동+콘텐츠미디어확인,18,0.0367
@@ -576,7 +576,7 @@
 13.검색,state_persistence,1,0.0072
 13.검색,content_media,12,0.087
 13.검색,has_precondition,9,0.0652
-13.검색,automation_candidate,0,0.0
+13.검색,automation_candidate,57,0.413
 13.검색,manual_required,1,0.0072
 13.검색,compound:UI노출확인+기능동작확인,7,0.0507
 13.검색,compound:UI노출확인+콘텐츠미디어확인,6,0.0435
@@ -600,7 +600,7 @@
 14.이모티콘스토어,state_persistence,31,0.0328
 14.이모티콘스토어,content_media,297,0.3143
 14.이모티콘스토어,has_precondition,437,0.4624
-14.이모티콘스토어,automation_candidate,105,0.1111
+14.이모티콘스토어,automation_candidate,166,0.1757
 14.이모티콘스토어,manual_required,0,0.0
 14.이모티콘스토어,compound:UI노출확인+콘텐츠미디어확인,26,0.0275
 14.이모티콘스토어,compound:알림푸시확인+콘텐츠미디어확인,22,0.0233
@@ -655,7 +655,7 @@
 15. 알림센터,state_persistence,3,0.0938
 15. 알림센터,content_media,17,0.5312
 15. 알림센터,has_precondition,24,0.75
-15. 알림센터,automation_candidate,0,0.0
+15. 알림센터,automation_candidate,26,0.8125
 15. 알림센터,manual_required,0,0.0
 15. 알림센터,compound:UI노출확인+기능동작확인+알림푸시확인+콘텐츠미디어확인,6,0.1875
 15. 알림센터,compound:데이터변경확인+알림푸시확인,5,0.1562
@@ -679,7 +679,7 @@
 16.톡클라우드_연락처,state_persistence,8,0.0253
 16.톡클라우드_연락처,content_media,11,0.0348
 16.톡클라우드_연락처,has_precondition,151,0.4778
-16.톡클라우드_연락처,automation_candidate,54,0.1709
+16.톡클라우드_연락처,automation_candidate,100,0.3165
 16.톡클라우드_연락처,manual_required,0,0.0
 16.톡클라우드_연락처,compound:데이터변경확인+멀티디바이스OS,17,0.0538
 16.톡클라우드_연락처,compound:UI노출확인+예외에러확인+알림푸시확인,6,0.019
@@ -716,7 +716,7 @@
 17.지갑,state_persistence,23,0.0821
 17.지갑,content_media,30,0.1071
 17.지갑,has_precondition,143,0.5107
-17.지갑,automation_candidate,2,0.0071
+17.지갑,automation_candidate,107,0.3821
 17.지갑,manual_required,0,0.0
 17.지갑,compound:권한인증확인+예외에러확인,15,0.0536
 17.지갑,compound:UI노출확인+권한인증확인+예외에러확인,11,0.0393
@@ -792,7 +792,7 @@
 18.톡캘린더,state_persistence,34,0.1241
 18.톡캘린더,content_media,12,0.0438
 18.톡캘린더,has_precondition,91,0.3321
-18.톡캘린더,automation_candidate,2,0.0073
+18.톡캘린더,automation_candidate,16,0.0584
 18.톡캘린더,manual_required,0,0.0
 18.톡캘린더,compound:UI노출확인+예외에러확인,6,0.0219
 18.톡캘린더,compound:네트워크서버연동+알림푸시확인,5,0.0182
@@ -835,7 +835,7 @@
 19.톡클라우드_백복(로직),state_persistence,21,0.1005
 19.톡클라우드_백복(로직),content_media,50,0.2392
 19.톡클라우드_백복(로직),has_precondition,95,0.4545
-19.톡클라우드_백복(로직),automation_candidate,3,0.0144
+19.톡클라우드_백복(로직),automation_candidate,33,0.1579
 19.톡클라우드_백복(로직),manual_required,0,0.0
 19.톡클라우드_백복(로직),compound:UI노출확인+네트워크서버연동+콘텐츠미디어확인,14,0.067
 19.톡클라우드_백복(로직),compound:UI노출확인+콘텐츠미디어확인,7,0.0335
@@ -881,7 +881,7 @@
 20.톡클라우드_인물분류,state_persistence,26,0.1538
 20.톡클라우드_인물분류,content_media,91,0.5385
 20.톡클라우드_인물분류,has_precondition,120,0.7101
-20.톡클라우드_인물분류,automation_candidate,60,0.355
+20.톡클라우드_인물분류,automation_candidate,78,0.4615
 20.톡클라우드_인물분류,manual_required,0,0.0
 20.톡클라우드_인물분류,compound:기능동작확인+알림푸시확인+콘텐츠미디어확인,15,0.0888
 20.톡클라우드_인물분류,compound:UI노출확인+콘텐츠미디어확인,13,0.0769
@@ -932,7 +932,7 @@
 21.톡클라우드_버티컬(무료),state_persistence,5,0.049
 21.톡클라우드_버티컬(무료),content_media,77,0.7549
 21.톡클라우드_버티컬(무료),has_precondition,41,0.402
-21.톡클라우드_버티컬(무료),automation_candidate,8,0.0784
+21.톡클라우드_버티컬(무료),automation_candidate,23,0.2255
 21.톡클라우드_버티컬(무료),manual_required,0,0.0
 21.톡클라우드_버티컬(무료),compound:UI노출확인+콘텐츠미디어확인,16,0.1569
 21.톡클라우드_버티컬(무료),compound:UI노출확인+멀티디바이스OS+콘텐츠미디어확인,6,0.0588
@@ -967,7 +967,7 @@
 22.톡클라우드_버티컬(유료),state_persistence,73,0.056
 22.톡클라우드_버티컬(유료),content_media,854,0.6549
 22.톡클라우드_버티컬(유료),has_precondition,935,0.717
-22.톡클라우드_버티컬(유료),automation_candidate,361,0.2768
+22.톡클라우드_버티컬(유료),automation_candidate,482,0.3696
 22.톡클라우드_버티컬(유료),manual_required,0,0.0
 22.톡클라우드_버티컬(유료),compound:UI노출확인+콘텐츠미디어확인,161,0.1235
 22.톡클라우드_버티컬(유료),compound:예외에러확인+콘텐츠미디어확인,44,0.0337
@@ -1087,7 +1087,7 @@
 23.죠르디,state_persistence,27,0.1311
 23.죠르디,content_media,62,0.301
 23.죠르디,has_precondition,44,0.2136
-23.죠르디,automation_candidate,2,0.0097
+23.죠르디,automation_candidate,18,0.0874
 23.죠르디,manual_required,5,0.0243
 23.죠르디,compound:알림푸시확인+콘텐츠미디어확인,7,0.034
 23.죠르디,compound:알림푸시확인+설정상태유지,6,0.0291
@@ -1122,7 +1122,7 @@
 24. 더보기,state_persistence,1,0.037
 24. 더보기,content_media,1,0.037
 24. 더보기,has_precondition,9,0.3333
-24. 더보기,automation_candidate,0,0.0
+24. 더보기,automation_candidate,17,0.6296
 24. 더보기,manual_required,0,0.0
 24. 더보기,compound:기능동작확인+알림푸시확인,3,0.1111
 24. 더보기,compound:UI노출확인+네트워크서버연동,3,0.1111
@@ -1144,7 +1144,7 @@
 25. 설정,state_persistence,17,0.0407
 25. 설정,content_media,89,0.2129
 25. 설정,has_precondition,132,0.3158
-25. 설정,automation_candidate,30,0.0718
+25. 설정,automation_candidate,108,0.2584
 25. 설정,manual_required,2,0.0048
 25. 설정,compound:UI노출확인+권한인증확인,12,0.0287
 25. 설정,compound:UI노출확인+알림푸시확인,11,0.0263
@@ -1232,7 +1232,7 @@
 26.기타,state_persistence,7,0.175
 26.기타,content_media,1,0.025
 26.기타,has_precondition,2,0.05
-26.기타,automation_candidate,1,0.025
+26.기타,automation_candidate,33,0.825
 26.기타,manual_required,0,0.0
 26.기타,compound:UI노출확인+설정상태유지,4,0.1
 26.기타,compound:UI노출확인+기능동작확인,4,0.1
@@ -1252,7 +1252,7 @@
 27.카나나템플릿,state_persistence,14,0.0959
 27.카나나템플릿,content_media,123,0.8425
 27.카나나템플릿,has_precondition,35,0.2397
-27.카나나템플릿,automation_candidate,0,0.0
+27.카나나템플릿,automation_candidate,2,0.0137
 27.카나나템플릿,manual_required,0,0.0
 27.카나나템플릿,compound:UI노출확인+콘텐츠미디어확인,20,0.137
 27.카나나템플릿,compound:알림푸시확인+콘텐츠미디어확인,18,0.1233

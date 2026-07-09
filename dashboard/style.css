@@ -701,3 +701,38 @@ tbody tr:hover td { background: var(--surf2); }
   #q-type-bars .bar-item,
   #q-svc-bars  .bar-item { grid-template-columns: 110px 1fr 32px; }
 }
+
+/* ── 자동화 가능성 분석 섹션 ───────────────────────────────── */
+.auto-summary-row {
+  display: flex; align-items: center; gap: 28px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+}
+.auto-gauge-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+.auto-gauge { width: 120px; height: 64px; }
+.auto-gauge-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+.auto-kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; flex: 1; }
+.auto-kpi-item { background: var(--surf2); border-radius: 8px; padding: 12px 14px; text-align: center; }
+.auto-kpi-val  { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.auto-kpi-lbl  { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+.auto-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.auto-panel { display: flex; flex-direction: column; gap: 12px; }
+.auto-panel-title {
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 7px;
+}
+.auto-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.auto-panel-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+.auto-group-item { display: flex; flex-direction: column; gap: 4px; }
+.auto-group-hdr { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.auto-group-name { font-size: 12px; font-weight: 600; }
+.auto-group-cnt  { font-size: 10px; color: var(--muted); white-space: nowrap; }
+.auto-group-desc { font-size: 10.5px; color: rgba(148,163,184,.65); line-height: 1.55; }
+.auto-bar-track  { height: 6px; background: var(--surf2); border-radius: 3px; overflow: hidden; }
+.auto-bar-fill   { height: 100%; border-radius: 3px; transition: width .5s ease; }
+
+/* KPI 클릭 가능 카드 */
+.kpi-clickable { cursor: pointer; transition: border-color .15s, background .15s; }
+.kpi-clickable:hover { border-color: rgba(99,102,241,.6); background: rgba(99,102,241,.08); }
+.kpi-hint { font-size: 9px; color: var(--accent); font-weight: 700; letter-spacing: .04em; }
