@@ -4,8 +4,9 @@
 
 (function() {
 
-var RS_URL = 'https://fnuvsxkytoycdhgkqykw.supabase.co';
-var RS_KEY = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt';
+// app.js에서 선언된 SUPA_URL / SUPA_KEY 재사용
+var RS_URL = typeof SUPA_URL !== 'undefined' ? SUPA_URL : 'https://fnuvsxkytoycdhgkqykw.supabase.co';
+var RS_KEY = typeof SUPA_KEY !== 'undefined' ? SUPA_KEY : 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt';
 
 var ISSUE_TYPE_LABELS = ['의미변경','문맥오판','잘못된정보추가','정보누락','용어표준화미흡','기타'];
 var TARGET_FIELD_LABELS = ['분류1','분류2','분류3','화면전개','사전조건','Test Step','기대결과'];
@@ -94,7 +95,11 @@ function fetchAndRender() {
   if (!body) return;
   body.innerHTML = '<div class="rs-loading">데이터 불러오는 중...</div>';
 
-  fetch(RS_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,issue_types,target_fields,updated_at&limit=10000', {
+  var _docId = typeof currentDocId !== 'undefined' && currentDocId ? currentDocId : null;
+  var _rvUrl = RS_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,issue_types,target_fields,updated_at&limit=10000';
+  if (_docId) _rvUrl += '&document_id=eq.' + _docId;
+
+  fetch(_rvUrl, {
     headers: { 'apikey': RS_KEY, 'Authorization': 'Bearer ' + RS_KEY }
   })
   .then(function(r) {

@@ -1021,12 +1021,26 @@ def load_sheet(wb, sheet_name):
 # ── 메인 분석 루프 ──────────────────────────────────────────────────────────────
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='QA Regression TestCase Analyzer')
+    parser.add_argument('--input', default='Regression TestCase.xlsx',
+                        help='input/ 폴더 내 파일명')
+    parser.add_argument('--name', default=None,
+                        help='documents 테이블 표시 이름')
+    parser.add_argument('--no-upload', action='store_true',
+                        help='Supabase 업로드 건너뜀 (로컬 CSV만 생성)')
+    args = parser.parse_args()
+
+    input_filename = args.input
+    display_name   = args.name or os.path.splitext(input_filename)[0]
+    _input_file    = os.path.join(BASE_DIR, 'input', input_filename)
+
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    print(f"Input  : {INPUT_FILE}")
+    print(f"Input  : {_input_file}")
     print(f"Output : {OUTPUT_DIR}")
     print()
 
-    wb = openpyxl.load_workbook(INPUT_FILE, read_only=True, data_only=True)
+    wb = openpyxl.load_workbook(_input_file, read_only=True, data_only=True)
 
     # 결과 저장용
     tc_master_rows = []
@@ -1341,6 +1355,22 @@ def main():
         if cnt:
             print(f"    {itype}: {cnt}")
     print(f"{'='*55}")
+
+    # ── Supabase 업로드 ────────────────────────────────────────────────────────
+    if not args.no_upload:
+        # coverage.json 재로드 (quality 패치 반영 버전)
+        with open(os.path.join(OUTPUT_DIR, 'coverage.json'), encoding='utf-8') as _f:
+            coverage_final = json.load(_f)
+        doc_id = upload_to_supabase(
+            display_name   = display_name,
+            input_filename = input_filename,
+            total_tc       = total_tc,
+            tc_master_rows = tc_master_rows,
+            quality_issues = quality_issues,
+            service_stats  = service_stats,
+            coverage       = coverage_final,
+        )
+        print(f"DOCUMENT_ID:{doc_id}")
 
 
 def _write_attribute_summary(service_stats):
@@ -2821,6 +2851,211 @@ def _write_summary(service_stats, total_tc, quality_stats=None, excl_report=None
     with open(summary_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines) + '\n')
     print(f"[OK] summary.md")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Supabase 업로드
+# ══════════════════════════════════════════════════════════════════════════════
+
+_SUPA_URL = os.environ.get('SUPABASE_URL',  'https://fnuvsxkytoycdhgkqykw.supabase.co')
+_SUPA_KEY = os.environ.get('SUPABASE_KEY',  'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt')
+
+def _supa_headers(prefer='return=representation'):
+    return {
+        'apikey':        _SUPA_KEY,
+        'Authorization': 'Bearer ' + _SUPA_KEY,
+        'Content-Type':  'application/json',
+        'Prefer':        prefer,
+    }
+
+
+def _supa_post(table: str, rows: list, batch: int = 500, upsert_on: str = None):
+    """rows 를 batch 단위로 Supabase REST API에 INSERT/upsert."""
+    import urllib.request, urllib.error, json as _json
+    url = _SUPA_URL + '/rest/v1/' + table
+    if upsert_on:
+        url += f'?on_conflict={upsert_on}'
+    prefer = f'resolution=merge-duplicates,return=minimal' if upsert_on else 'return=minimal'
+    headers = _supa_headers(prefer)
+
+    for i in range(0, len(rows), batch):
+        chunk = rows[i:i + batch]
+        body  = _json.dumps(chunk, ensure_ascii=False, default=str).encode('utf-8')
+        req   = urllib.request.Request(url, data=body, headers=headers, method='POST')
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                resp.read()
+            print(f'  [{table}] {i + len(chunk)}/{len(rows)} 업로드')
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8', errors='replace')
+            raise RuntimeError(f'[{table}] HTTP {e.code}: {err_body}') from e
+
+
+def upload_to_supabase(
+    display_name:    str,
+    input_filename:  str,
+    total_tc:        int,
+    tc_master_rows:  list,
+    quality_issues:  list,
+    service_stats:   dict,
+    coverage:        dict,
+) -> int:
+    """분석 결과를 Supabase에 업로드하고 document_id 반환."""
+    import urllib.request, urllib.error, json as _json
+
+    print('\n[Supabase] 업로드 시작...')
+
+    # ── 1. documents INSERT ──────────────────────────────────────────────────
+    doc_row = {'name': display_name, 'filename': input_filename, 'total_tc': total_tc}
+    body    = _json.dumps([doc_row], ensure_ascii=False).encode('utf-8')
+    req     = urllib.request.Request(
+        _SUPA_URL + '/rest/v1/documents',
+        data=body, headers=_supa_headers('return=representation'), method='POST'
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            doc_id = _json.loads(resp.read())[0]['id']
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode('utf-8', errors='replace')
+        raise RuntimeError(f'[documents] HTTP {e.code}: {err_body}') from e
+
+    print(f'  [documents] id={doc_id} 등록')
+
+    # ── 2. coverage_service INSERT ───────────────────────────────────────────
+    cov_rows = []
+    for svc in coverage.get('services', []):
+        q = svc.get('quality') or {}
+        cov_rows.append({
+            'document_id':         doc_id,
+            'service_name':        svc['service_name'],
+            'total_tc':            svc['total_tc'],
+            'first_row':           svc.get('first_row'),
+            'last_row':            svc.get('last_row'),
+            'priority_dist':       svc.get('priority') or {},
+            'os_dist':             svc.get('os') or {},
+            'attributes':          svc.get('attributes') or {},
+            'precond_distribution':svc.get('precond_distribution') or {},
+            'issue_count':         q.get('issue_count', 0),
+            'affected_tc_count':   q.get('affected_tc_count', 0),
+            'issue_type_counts':   q.get('issue_type_counts') or {},
+        })
+    _supa_post('coverage_service', cov_rows, upsert_on='document_id,service_name')
+
+    # ── 3. tc_master INSERT ──────────────────────────────────────────────────
+    tc_rows = []
+    for r in tc_master_rows:
+        tc_rows.append({
+            'document_id':         doc_id,
+            'service_name':        r.get('service_name') or r.get('svc'),
+            'row_number':          r.get('row_number')   or r.get('row'),
+            'category_1':          r.get('category_1')   or r.get('cat1'),
+            'category_2':          r.get('category_2')   or r.get('cat2'),
+            'category_3':          r.get('category_3')   or r.get('cat3'),
+            'category_4':          r.get('category_4')   or r.get('cat4'),
+            'precondition':        r.get('precondition'),
+            'test_step':           r.get('test_step'),
+            'expected_result':     r.get('expected_result'),
+            'priority':            r.get('priority'),
+            'priority_raw':        r.get('priority_raw'),
+            'os':                  r.get('os'),
+            'os_raw':              r.get('os_raw'),
+            'version':             r.get('version'),
+            'compound_attribute':  r.get('compound_attribute'),
+            'precond_categories':  str(r.get('precond_categories') or ''),
+            'ui_visibility':       int(r.get('ui_visibility') or 0),
+            'data_change':         int(r.get('data_change') or 0),
+            'function_behavior':   int(r.get('function_behavior') or 0),
+            'permission_auth':     int(r.get('permission_auth') or 0),
+            'exception_error':     int(r.get('exception_error') or 0),
+            'network_server':      int(r.get('network_server') or 0),
+            'notification':        int(r.get('notification') or 0),
+            'multi_device_os':     int(r.get('multi_device_os') or 0),
+            'state_persistence':   int(r.get('state_persistence') or 0),
+            'content_media':       int(r.get('content_media') or 0),
+            'has_precondition':    int(r.get('has_precondition') or 0),
+            'automation_candidate':int(r.get('automation_candidate') or 0),
+            'manual_required':     int(r.get('manual_required') or 0),
+        })
+    _supa_post('tc_master', tc_rows, upsert_on='document_id,service_name,row_number')
+
+    # ── 4. ai_standard_tc INSERT (CSV 재활용) ────────────────────────────────
+    ai_csv = os.path.join(OUTPUT_DIR, 'ai_standard_tc.csv')
+    if os.path.exists(ai_csv):
+        import csv as _csv
+        ai_rows = []
+        with open(ai_csv, encoding='utf-8-sig', newline='') as f:
+            reader = _csv.DictReader(f)
+            for row in reader:
+                def _v(k):
+                    v = row.get(k, '') or ''
+                    return v if v.strip() else None
+                def _i(k):
+                    v = row.get(k, '')
+                    try:    return int(float(v)) if v and v.strip() else None
+                    except: return None
+                ai_rows.append({
+                    'document_id':        doc_id,
+                    'service_name':       _v('service_name'),
+                    'row_number':         _i('row_number'),
+                    'orig_cat1':          _v('orig_cat1'),
+                    'orig_cat2':          _v('orig_cat2'),
+                    'orig_cat3':          _v('orig_cat3'),
+                    'orig_cat4':          _v('orig_cat4'),
+                    'orig_precond':       _v('orig_precond'),
+                    'orig_step':          _v('orig_step'),
+                    'orig_expected':      _v('orig_expected'),
+                    'orig_priority':      _v('orig_priority'),
+                    'ai_cat1':            _v('ai_cat1'),
+                    'ai_cat2':            _v('ai_cat2'),
+                    'ai_cat3':            _v('ai_cat3'),
+                    'ai_cat4':            _v('ai_cat4'),
+                    'ai_precond':         _v('ai_precond'),
+                    'ai_step':            _v('ai_step'),
+                    'ai_expected':        _v('ai_expected'),
+                    'ai_priority':        _v('ai_priority'),
+                    'precond_norm_type':  _v('precond_norm_type'),
+                    'precond_evidence':   _v('precond_evidence'),
+                    'step_norm_type':     _v('step_norm_type'),
+                    'step_reason':        _v('step_reason'),
+                    'expected_norm_type': _v('expected_norm_type'),
+                    'expected_reason':    _v('expected_reason'),
+                    'quality_issues':     _v('quality_issues'),
+                    'original_intent':    _v('original_intent'),
+                    'ai_intent':          _v('ai_intent'),
+                    'final_check_point':  _v('final_check_point'),
+                    'meaning_match_pct':  _i('meaning_match_pct'),
+                    'meaning_status':     _v('meaning_status'),
+                    'sem_reason':         _v('sem_reason'),
+                    'ctx_feature':        _v('ctx_feature'),
+                    'ctx_screen':         _v('ctx_screen'),
+                    'ctx_scenario':       _v('ctx_scenario'),
+                    'ctx_user_goal':      _v('ctx_user_goal'),
+                    'ctx_flow_position':  _v('ctx_flow_position'),
+                    'norm_summary':       _v('norm_summary'),
+                })
+        _supa_post('ai_standard_tc', ai_rows, upsert_on='document_id,service_name,row_number')
+    else:
+        print('  [ai_standard_tc] CSV 없음, 건너뜀')
+
+    # ── 5. quality_issues INSERT ─────────────────────────────────────────────
+    qi_rows = []
+    for r in quality_issues:
+        qi_rows.append({
+            'document_id':   doc_id,
+            'service_name':  r.get('service_name') or r.get('svc'),
+            'row_number':    r.get('row_number')   or r.get('row'),
+            'issue_type':    r.get('issue_type'),
+            'issue_reason':  r.get('issue_reason'),
+            'priority':      r.get('priority'),
+            'os':            r.get('os'),
+            'category_path': r.get('category_path'),
+            'test_step':     r.get('test_step'),
+            'expected_result': r.get('expected_result'),
+        })
+    _supa_post('quality_issues', qi_rows)
+
+    print(f'[Supabase] 업로드 완료. document_id={doc_id}')
+    return doc_id
 
 
 if __name__ == '__main__':

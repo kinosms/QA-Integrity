@@ -75,6 +75,20 @@ const ATTR_COLORS = [
   '#ec4899','#14b8a6','#f59e0b','#64748b','#0ea5e9','#84cc16','#e879f9',
 ];
 
+// ── Supabase 설정 (단일 선언) ──────────────────────────────
+const SUPA_URL = 'https://fnuvsxkytoycdhgkqykw.supabase.co';
+const SUPA_KEY = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt';
+
+// ── 동적 데이터 globals (data_*.js 대체) ──────────────────
+let COVERAGE         = { total_tc: 0, services: [], quality: {} };
+let TC_RAW           = [];
+let QI_RAW           = [];
+let AI_STD           = [];           // 비교 뷰에서만 페이지 단위로 사용
+let CATEGORY_SUMMARY = [];
+
+// ── 현재 문서 ─────────────────────────────────────────────
+let currentDocId = null;
+
 // ── 상태 ─────────────────────────────────────────────────
 
 let currentSvc = 'all';
@@ -190,18 +204,24 @@ function drawDonut(id, values, colors, label) {
 // ══════════════════════════════════════════════════════════════
 // Supabase 연동 — 검수 의견 저장/불러오기
 // ══════════════════════════════════════════════════════════════
-var SUPA_URL  = 'https://fnuvsxkytoycdhgkqykw.supabase.co';
-var SUPA_KEY  = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt';
 var reviewStore = {};  // { 'svc|row': { note, savedAt } }
 
-// 전체 의견 불러오기 (페이지 로드 시 1회)
+// 전체 의견 불러오기 (문서 전환 시 호출)
 function loadAllReviews() {
-  fetch(SUPA_URL + '/rest/v1/tc_reviews?select=svc,row_number,note,issue_types,target_fields,updated_at', {
-    headers: {
-      'apikey': SUPA_KEY,
-      'Authorization': 'Bearer ' + SUPA_KEY
+  if (!currentDocId) return Promise.resolve();
+  reviewStore = {};
+
+  return fetch(
+    SUPA_URL + '/rest/v1/tc_reviews' +
+    '?document_id=eq.' + currentDocId +
+    '&select=svc,row_number,note,issue_types,target_fields,updated_at',
+    {
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY
+      }
     }
-  })
+  )
   .then(function(r) { return r.json(); })
   .then(function(rows) {
     if (!Array.isArray(rows)) return;
@@ -213,7 +233,6 @@ function loadAllReviews() {
         savedAt: r.updated_at ? new Date(r.updated_at).toLocaleString('ko-KR') : ''
       };
     });
-    // 현재 렌더링된 패널 업데이트 (data-rv-key 속성으로 탐색)
     Object.keys(reviewStore).forEach(function(key) {
       var panel = document.querySelector('.sv-review-panel[data-rv-key="' + key + '"]');
       if (!panel) return;
@@ -294,7 +313,7 @@ function buildReviewPanelEl(svc, row) {
     var issueTypes  = Array.from(grp1.querySelectorAll('.rv-type-btn.active')).map(function(b){return b.textContent;});
     var targetFields= Array.from(grp2.querySelectorAll('.rv-field-btn.active')).map(function(b){return b.textContent;});
     btn.textContent = '저장 중...'; btn.disabled = true;
-    fetch(SUPA_URL + '/rest/v1/tc_reviews?on_conflict=svc,row_number', {
+    fetch(SUPA_URL + '/rest/v1/tc_reviews?on_conflict=document_id,svc,row_number', {
       method: 'POST',
       headers: {
         'apikey': SUPA_KEY,
@@ -303,6 +322,7 @@ function buildReviewPanelEl(svc, row) {
         'Prefer': 'resolution=merge-duplicates,return=minimal'
       },
       body: JSON.stringify({
+        document_id: currentDocId,
         svc: svc, row_number: row, note: note,
         issue_types: issueTypes, target_fields: targetFields,
         updated_at: new Date().toISOString()
@@ -790,10 +810,13 @@ function rebuildCmpIssueSelect(svc) {
   cmpFilter.issue = el.value;
 }
 
+var _filtersWired = false;
+
 function bindFilters() {
-  // ── 품질 이슈 서비스 필터 (COVERAGE 기반 동적 생성) ──────────────────
+  // ── 서비스 옵션 clear-and-repopulate (문서 전환 시 재호출 가능) ──────
   const qiSvcEl = document.getElementById('f-qi-svc');
-  if (qiSvcEl && qiSvcEl.options.length <= 1) {
+  if (qiSvcEl) {
+    qiSvcEl.innerHTML = '<option value="all">서비스 전체</option>';
     COVERAGE.services.forEach(s => {
       const opt = document.createElement('option');
       opt.value = s.service_name;
@@ -802,9 +825,9 @@ function bindFilters() {
     });
   }
 
-  // ── 비교 뷰 서비스 필터 (COVERAGE 기반 동적 생성) ────────────────────
   var cmpSvcEl = document.getElementById('cmp-svc');
-  if (cmpSvcEl && cmpSvcEl.options.length <= 1) {
+  if (cmpSvcEl) {
+    cmpSvcEl.innerHTML = '<option value="all">서비스 전체</option>';
     COVERAGE.services.forEach(function(s) {
       var opt = document.createElement('option');
       opt.value = s.service_name;
@@ -812,15 +835,17 @@ function bindFilters() {
       cmpSvcEl.appendChild(opt);
     });
   }
-  // 초기 이슈 필터 구성 (전체 기준)
   rebuildCmpIssueSelect('all');
 
-  // ── 비교 뷰 필터 이벤트 ───────────────────────────────────────────────
+  // ── 이벤트 리스너는 최초 1회만 등록 ─────────────────────────────────
+  if (_filtersWired) return;
+  _filtersWired = true;
+
   if (cmpSvcEl) {
     cmpSvcEl.addEventListener('change', function(e) {
       cmpFilter.svc = e.target.value;
       cmpPage = 1;
-      rebuildCmpIssueSelect(cmpFilter.svc);  // 이슈 드롭다운 재구성
+      rebuildCmpIssueSelect(cmpFilter.svc);
       renderCompare();
     });
   }
@@ -833,7 +858,6 @@ function bindFilters() {
     });
   }
 
-  // ── 기존 필터 이벤트 ──────────────────────────────────────────────────
   const on = (id, fn) => { const el=document.getElementById(id); if(el) el.addEventListener('change', fn); };
   on('f-tc-pri',  e=>{ tcFilter.priority=e.target.value; tcPage=1; renderTC(); });
   on('f-tc-os',   e=>{ tcFilter.os=e.target.value;       tcPage=1; renderTC(); });
@@ -1471,17 +1495,362 @@ function renderAll() {
   run('AutoAnalysis',   renderAutomationAnalysis);
 }
 
+// ══════════════════════════════════════════════════════════════
+// 멀티 문서 지원 — 데이터 로딩
+// ══════════════════════════════════════════════════════════════
+
+function supaFetch(path) {
+  return fetch(SUPA_URL + '/rest/v1/' + path, {
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+  }).then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  });
+}
+
+// Supabase 1000행 제한 우회 — 전체 데이터를 페이지 단위로 반복 fetch
+async function supaFetchAll(basePath) {
+  var sep = basePath.includes('?') ? '&' : '?';
+  var all = [], offset = 0, PAGE_SIZE = 1000;
+  while (true) {
+    var chunk = await supaFetch(basePath + sep + 'limit=' + PAGE_SIZE + '&offset=' + offset);
+    all = all.concat(chunk);
+    if (chunk.length < PAGE_SIZE) break;
+    offset += PAGE_SIZE;
+  }
+  return all;
+}
+
+function buildCoverage(rows) {
+  // 서비스 이름 앞 번호 기준 정렬 ("1.가입" → 1, "15. 알림센터" → 15)
+  rows.sort(function(a, b) {
+    var na = parseInt(a.service_name) || 999;
+    var nb = parseInt(b.service_name) || 999;
+    return na - nb;
+  });
+
+  var services = rows.map(function(r) {
+    return {
+      service_name:         r.service_name,
+      total_tc:             r.total_tc,
+      first_row:            r.first_row,
+      last_row:             r.last_row,
+      priority:             r.priority_dist          || {},
+      os:                   r.os_dist                || {},
+      attributes:           r.attributes             || {},
+      precond_distribution: r.precond_distribution   || {},
+      quality: {
+        issue_count:        r.issue_count            || 0,
+        affected_tc_count:  r.affected_tc_count      || 0,
+        issue_type_counts:  r.issue_type_counts      || {},
+      },
+    };
+  });
+
+  var total_tc = services.reduce(function(s, x) { return s + x.total_tc; }, 0);
+
+  var typeCounts = {};
+  ISSUE_KEYS.forEach(function(k) { typeCounts[k] = 0; });
+  var svcIssueCounts = {};
+  var totalIssues = 0, totalAffected = 0;
+  services.forEach(function(s) {
+    var q = s.quality || {};
+    totalIssues   += q.issue_count        || 0;
+    totalAffected += q.affected_tc_count  || 0;
+    svcIssueCounts[s.service_name] = q.issue_count || 0;
+    Object.entries(q.issue_type_counts || {}).forEach(function(_ref) {
+      var k = _ref[0], v = _ref[1];
+      if (k in typeCounts) typeCounts[k] += v;
+    });
+  });
+  var topType = Object.entries(typeCounts).sort(function(a,b){return b[1]-a[1];})[0];
+  var topSvc  = Object.entries(svcIssueCounts).sort(function(a,b){return b[1]-a[1];})[0];
+
+  return {
+    total_tc: total_tc,
+    services: services,
+    quality: {
+      total_issues:         totalIssues,
+      affected_tc_count:    totalAffected,
+      issue_type_counts:    typeCounts,
+      service_issue_counts: svcIssueCounts,
+      top_issue_type:       topType ? topType[0] : '',
+      top_issue_service:    topSvc  ? topSvc[0]  : '',
+    },
+  };
+}
+
+async function switchDocument(docId) {
+  docId = Number(docId);
+  if (!docId || docId === currentDocId) return;
+
+  var overlay = document.getElementById('loading-overlay');
+  if (overlay) overlay.style.display = 'flex';
+
+  // 비교 뷰 상태 초기화
+  cmpPage = 1; cmpFilter = { svc: 'all', issue: 'all' };
+  AI_STD = []; qi_idx = null; tc_auto_idx = null;
+
+  try {
+    currentDocId = docId;
+
+    var results = await Promise.all([
+      supaFetch('coverage_service?document_id=eq.' + docId),
+      supaFetchAll('tc_master?document_id=eq.' + docId +
+        '&select=service_name,row_number,category_1,category_2,category_3,category_4,' +
+        'priority,os,compound_attribute,ui_visibility,data_change,function_behavior,' +
+        'permission_auth,exception_error,network_server,notification,multi_device_os,' +
+        'state_persistence,content_media,has_precondition,automation_candidate,manual_required' +
+        '&order=service_name,row_number'),
+      supaFetchAll('quality_issues?document_id=eq.' + docId +
+        '&select=service_name,row_number,issue_type,issue_reason,priority,os,category_path,test_step,expected_result' +
+        '&order=service_name,row_number'),
+      supaFetchAll('ai_standard_tc?document_id=eq.' + docId +
+        '&select=service_name,row_number,' +
+        'orig_cat1,orig_cat2,orig_cat3,orig_cat4,orig_precond,orig_step,orig_expected,orig_priority,' +
+        'ai_cat1,ai_cat2,ai_cat3,ai_cat4,ai_precond,ai_step,ai_expected,ai_priority,' +
+        'precond_norm_type,precond_evidence,step_norm_type,step_reason,' +
+        'expected_norm_type,expected_reason,quality_issues,original_intent,ai_intent,' +
+        'final_check_point,meaning_match_pct,meaning_status,sem_reason,' +
+        'ctx_feature,ctx_screen,ctx_scenario,ctx_user_goal,ctx_flow_position,norm_summary' +
+        '&order=service_name,row_number'),
+    ]);
+    var covRows = results[0], tcRows = results[1], qiRows = results[2], aiRows = results[3];
+
+    COVERAGE = buildCoverage(covRows);
+
+    TC_RAW = tcRows.map(function(r) {
+      return [
+        r.service_name, r.row_number,
+        r.category_1, r.category_2, r.priority, r.os,
+        r.ui_visibility, r.data_change, r.function_behavior, r.permission_auth,
+        r.exception_error, r.network_server, r.notification, r.multi_device_os,
+        r.state_persistence, r.content_media, r.has_precondition,
+        r.automation_candidate, r.manual_required, r.compound_attribute,
+      ];
+    });
+
+    QI_RAW = qiRows.map(function(r) {
+      return [
+        r.service_name, r.row_number, r.issue_type, r.issue_reason,
+        r.priority, r.os, r.category_path, r.test_step, r.expected_result,
+      ];
+    });
+
+    // AI_STD positional array — buildTCBlock() 인덱스 순서 맞춤
+    // [0]svc [1]row [2]orig_cat1 [3]orig_cat2 [4]orig_cat3 [5]orig_cat4
+    // [6]orig_precond [7]orig_step [8]orig_expected [9]orig_priority
+    // [10]ai_cat1 [11]ai_cat2 [12]ai_cat3 [13]ai_cat4
+    // [14]ai_precond [15]ai_step [16]ai_expected [17]ai_priority
+    // [18]precond_norm_type [19]precond_evidence [20]step_norm_type [21]step_reason
+    // [22]expected_norm_type [23]expected_reason [24]quality_issues
+    // [25]original_intent [26]ai_intent [27]final_check_point
+    // [28]meaning_match_pct [29]meaning_status [30]sem_reason
+    // [31]ctx_feature [32]ctx_screen [33]ctx_scenario [34]ctx_user_goal
+    // [35]ctx_flow_position [36]norm_summary
+    AI_STD = aiRows.map(function(r) {
+      return [
+        r.service_name, r.row_number,
+        r.orig_cat1, r.orig_cat2, r.orig_cat3, r.orig_cat4,
+        r.orig_precond, r.orig_step, r.orig_expected, r.orig_priority,
+        r.ai_cat1, r.ai_cat2, r.ai_cat3, r.ai_cat4,
+        r.ai_precond, r.ai_step, r.ai_expected, r.ai_priority,
+        r.precond_norm_type, r.precond_evidence,
+        r.step_norm_type, r.step_reason,
+        r.expected_norm_type, r.expected_reason,
+        r.quality_issues,
+        r.original_intent, r.ai_intent, r.final_check_point,
+        r.meaning_match_pct, r.meaning_status, r.sem_reason,
+        r.ctx_feature, r.ctx_screen, r.ctx_scenario,
+        r.ctx_user_goal, r.ctx_flow_position, r.norm_summary,
+      ];
+    });
+
+    // 필터/상태 초기화
+    currentSvc = 'all';
+    tcPage = 1; qiPage = 1;
+    tcFilter = { priority:'all', os:'all', attr:'all' };
+    qiFilter = { svc:'all', type:'all', priority:'all', os:'all' };
+
+    // badge 업데이트
+    var badge = document.getElementById('doc-badge');
+    if (badge) badge.textContent = COVERAGE.total_tc.toLocaleString() + ' TC · Phase 1~4';
+
+    await loadAllReviews();
+    buildSidebar();
+    bindFilters();
+    renderAll();
+
+  } catch(e) {
+    console.error('문서 전환 실패:', e);
+    var body = document.querySelector('.content');
+    if (body) body.innerHTML = '<div style="padding:40px;color:#f87171">문서 로드 실패: ' + e.message + '</div>';
+  } finally {
+    if (overlay) overlay.style.display = 'none';
+  }
+}
+
+async function loadDocumentList() {
+  try {
+    var r = await fetch('/api/input-files');
+    var files = await r.json();
+    var analyzed = files.filter(function(f) { return f.analyzed; });
+
+    var sel = document.getElementById('doc-select');
+    if (!sel) return;
+    sel.innerHTML = '';
+
+    if (!analyzed.length) {
+      var opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = '분석된 문서 없음';
+      sel.appendChild(opt);
+      return;
+    }
+
+    analyzed.forEach(function(f) {
+      var opt = document.createElement('option');
+      opt.value = f.document_id;
+      opt.textContent = f.name;
+      sel.appendChild(opt);
+    });
+
+    // 가장 최근 문서 자동 로드
+    var latest = analyzed[analyzed.length - 1];
+    sel.value = latest.document_id;
+    await switchDocument(latest.document_id);
+
+  } catch(e) {
+    // /api/input-files 미사용 환경 (파일 직접 열기) — 기존 data_*.js 방식 유지
+    console.warn('[loadDocumentList] API 없음, 로컬 데이터 사용:', e.message);
+    buildSidebar();
+    bindFilters();
+    renderAll();
+    loadAllReviews();
+  }
+}
+
+// ── 분석 실행 모달 ─────────────────────────────────────────
+
+window.openAnalyzeModal = async function() {
+  var modal = document.getElementById('analyze-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.getElementById('analyze-progress').style.display = 'none';
+  document.getElementById('analyze-log').textContent = '';
+  var runBtn = document.getElementById('analyze-run-btn');
+  if (runBtn) { runBtn.disabled = false; runBtn.textContent = '분석 시작'; }
+
+  try {
+    var r = await fetch('/api/input-files');
+    var files = await r.json();
+    var sel = document.getElementById('analyze-file-select');
+    sel.innerHTML = '';
+    files.forEach(function(f) {
+      var opt = document.createElement('option');
+      opt.value = f.filename;
+      opt.textContent = f.filename + (f.analyzed ? ' ✓ 분석됨' : '');
+      sel.appendChild(opt);
+    });
+    // 기본 이름 자동 입력
+    sel.dispatchEvent(new Event('change'));
+  } catch(e) {
+    console.warn('파일 목록 로드 실패:', e);
+  }
+};
+
+window.closeAnalyzeModal = function() {
+  var modal = document.getElementById('analyze-modal');
+  if (!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+window.runAnalysis = async function() {
+  var filename = document.getElementById('analyze-file-select').value;
+  var name     = document.getElementById('analyze-name-input').value.trim() || filename;
+  if (!filename) return;
+
+  var runBtn = document.getElementById('analyze-run-btn');
+  runBtn.disabled = true;
+  runBtn.textContent = '분석 중...';
+  document.getElementById('analyze-progress').style.display = 'block';
+
+  try {
+    var r = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: filename, name: name }),
+    });
+    var _ref = await r.json();
+    var jobId = _ref.job_id;
+
+    var logEl = document.getElementById('analyze-log');
+    var bar   = document.getElementById('analyze-progress-bar');
+
+    var pollId = setInterval(async function() {
+      try {
+        var sr = await fetch('/api/analyze/status/' + jobId);
+        var st = await sr.json();
+        if (st.log) logEl.textContent = st.log.slice(-30).join('\n');
+        if (bar) bar.style.width = st.status === 'done' ? '100%' : '60%';
+
+        if (st.status === 'done') {
+          clearInterval(pollId);
+          runBtn.textContent = '완료 ✓';
+          await loadDocumentList();
+          if (st.document_id) {
+            var docSel = document.getElementById('doc-select');
+            if (docSel) docSel.value = st.document_id;
+            await switchDocument(st.document_id);
+          }
+          setTimeout(function() { window.closeAnalyzeModal(); }, 1200);
+
+        } else if (st.status === 'error') {
+          clearInterval(pollId);
+          runBtn.textContent = '실패';
+          runBtn.disabled = false;
+        }
+      } catch(_e) { /* 일시적 네트워크 오류 무시 */ }
+    }, 2000);
+
+  } catch(e) {
+    runBtn.textContent = '요청 실패';
+    runBtn.disabled = false;
+    console.error(e);
+  }
+};
+
 // ── 초기화 ───────────────────────────────────────────────
 
-window.addEventListener('DOMContentLoaded', ()=>{
-  buildSidebar();
-  bindFilters();
+window.addEventListener('DOMContentLoaded', function() {
   bindToggles();
-  renderAll();
-  loadAllReviews();
-  let rt;
-  window.addEventListener('resize', ()=>{
+
+  // 문서 드롭다운 change 이벤트
+  var docSel = document.getElementById('doc-select');
+  if (docSel) {
+    docSel.addEventListener('change', function(e) {
+      if (e.target.value) switchDocument(e.target.value);
+    });
+  }
+
+  // 분석 파일 선택 시 이름 자동입력
+  var fileSel = document.getElementById('analyze-file-select');
+  if (fileSel) {
+    fileSel.addEventListener('change', function(e) {
+      var nameInput = document.getElementById('analyze-name-input');
+      if (nameInput && !nameInput.value) {
+        nameInput.value = e.target.value.replace(/\.xlsx$/i, '');
+      }
+    });
+  }
+
+  loadDocumentList();
+
+  var rt;
+  window.addEventListener('resize', function() {
     clearTimeout(rt);
-    rt = setTimeout(()=>{ renderServiceDonut(); renderPriorityDonut(); }, 150);
+    rt = setTimeout(function() { renderServiceDonut(); renderPriorityDonut(); }, 150);
   });
 });
