@@ -58,7 +58,6 @@ header h1 { font-size: 16px; font-weight: 700; letter-spacing: -.3px; }
   padding: 2px 10px;
 }
 .dl-btn {
-  margin-left: auto;
   font-size: 11px; font-weight: 700;
   background: rgba(74,222,128,.15); color: #4ade80;
   border: 1px solid rgba(74,222,128,.3);
@@ -779,3 +778,180 @@ tbody tr:hover td { background: var(--surf2); }
 }
 .rv-type-btn.active  { background: rgba(139,92,246,.25); color: #c4b5fd; border-color: #c4b5fd; }
 .rv-field-btn.active { background: rgba(14,165,233,.25);  color: #7dd3fc; border-color: #7dd3fc; }
+
+/* ── 의견 분석 버튼 ─────────────────────────────────────── */
+.stats-btn {
+  margin-left: auto; /* 헤더 오른쪽 정렬 시작점 */
+  background: rgba(99,102,241,.15); color: #a5b4fc;
+  border-color: rgba(99,102,241,.35);
+}
+.stats-btn:hover { background: rgba(99,102,241,.28); }
+
+/* ── 의견 분석 모달 ─────────────────────────────────────── */
+.rs-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 200;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 32px 20px;
+  overflow-y: auto;
+}
+.rs-modal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 960px;
+  display: flex; flex-direction: column;
+  min-height: 200px;
+}
+.rs-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--bg); border-radius: 12px 12px 0 0; z-index: 1;
+}
+.rs-modal-title {
+  font-size: 15px; font-weight: 700; letter-spacing: -.3px;
+}
+.rs-modal-close {
+  background: none; border: none; color: var(--muted); font-size: 16px;
+  cursor: pointer; padding: 4px 8px; border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+.rs-modal-close:hover { color: var(--text); background: var(--surf2); }
+.rs-modal-body {
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 20px;
+  flex: 1;
+}
+
+/* 로딩/에러/빈 상태 */
+.rs-loading, .rs-error, .rs-empty {
+  padding: 48px; text-align: center; color: var(--muted); font-size: 13px;
+}
+.rs-error { color: #f87171; }
+
+/* KPI 행 */
+.rs-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.rs-kpi-card {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.rs-kpi-label { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.rs-kpi-val   { font-size: 22px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+.rs-kpi-sub   { font-size: 11px; color: var(--muted); }
+
+/* 카드 */
+.rs-card {
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.rs-card-title {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  letter-spacing: .04em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* 2열 */
+.rs-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 막대 행 공통 */
+.rs-bar-row, .rs-svc-row, .rs-combo-row {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+}
+.rs-bar-row   { grid-template-columns: 120px 1fr 80px; }
+.rs-svc-row   { grid-template-columns: 140px 1fr 80px; }
+.rs-combo-row { grid-template-columns: 1fr 120px 36px; margin-bottom: 4px; }
+
+.rs-bar-label, .rs-svc-label, .rs-combo-label {
+  font-size: 11.5px; color: var(--text); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.rs-bar-track {
+  background: var(--surf2); border-radius: 4px; height: 8px; overflow: hidden;
+}
+.rs-bar-track-thin { height: 6px; }
+.rs-bar-fill  { height: 100%; border-radius: 4px; transition: width .4s ease; }
+.rs-bar-stat  { font-size: 11px; font-weight: 600; color: var(--text); text-align: right; white-space: nowrap; }
+.rs-pct       { color: var(--muted); font-weight: 400; }
+
+/* 서비스 막대 */
+.rs-svc-bars { display: flex; flex-direction: column; gap: 6px; }
+
+/* 조합 리스트 */
+.rs-combo-list { display: flex; flex-direction: column; gap: 6px; }
+
+/* 히트맵 */
+.rs-heatmap-wrap { overflow-x: auto; }
+.rs-heatmap {
+  border-collapse: collapse;
+  font-size: 11px;
+  width: 100%;
+}
+.rs-heatmap th, .rs-heatmap td {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+  white-space: nowrap;
+}
+.rs-hm-th-svc { text-align: left; min-width: 80px; }
+.rs-hm-th     { font-weight: 600; color: var(--muted); font-size: 10px; min-width: 58px; }
+.rs-hm-td-svc {
+  text-align: left; font-size: 11px; color: var(--muted);
+  max-width: 120px; overflow: hidden; text-overflow: ellipsis;
+}
+.rs-hm-cell   { font-size: 11px; font-weight: 600; min-width: 36px; }
+
+/* 최근 내역 테이블 */
+.rs-tbl-wrap { overflow-x: auto; }
+.rs-table {
+  width: 100%; border-collapse: collapse; font-size: 12px;
+}
+.rs-table th {
+  padding: 8px 10px; border-bottom: 1px solid var(--border);
+  text-align: left; font-size: 10px; font-weight: 700;
+  color: var(--muted); letter-spacing: .04em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.rs-table td {
+  padding: 8px 10px; border-bottom: 1px solid rgba(46,51,80,.5);
+  vertical-align: top;
+}
+.rs-table tr:last-child td { border-bottom: none; }
+.rs-td-muted  { color: var(--muted); white-space: nowrap; }
+.rs-td-note   { max-width: 280px; font-size: 11px; line-height: 1.5; color: var(--text); }
+.rs-td-time   { color: var(--muted); font-size: 10.5px; white-space: nowrap; }
+.rs-empty-cell { color: rgba(148,163,184,.4); }
+
+/* 태그 */
+.rs-tag {
+  display: inline-block; font-size: 10px; border-radius: 5px;
+  padding: 2px 7px; margin: 1px 2px 1px 0;
+}
+.rs-tag-type  { background: rgba(139,92,246,.2); color: #c4b5fd; }
+.rs-tag-field { background: rgba(14,165,233,.2); color: #7dd3fc; }
+
+@media (max-width: 700px) {
+  .rs-kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .rs-two-col { grid-template-columns: 1fr; }
+  .rs-bar-row { grid-template-columns: 90px 1fr 60px; }
+  .rs-svc-row { grid-template-columns: 100px 1fr 60px; }
+}
