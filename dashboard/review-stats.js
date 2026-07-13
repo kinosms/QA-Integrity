@@ -80,6 +80,11 @@ function onBodyClick(e) {
   });
   row.classList.add('rs-bar-active');
   updateDetailSection(ft, fv, color);
+
+  var section = document.getElementById('rs-detail-section');
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 // ── 데이터 Fetch ─────────────────────────────────────────
@@ -274,25 +279,57 @@ function renderDetailTable(rows) {
   if (!rows.length) {
     return '<div class="rs-empty" style="padding:24px">해당하는 데이터가 없습니다.</div>';
   }
+
+  // AI_STD 인덱스 (전역 AI_STD 사용 — app.js에서 로드됨)
+  var aiIdx = null;
+  if (typeof AI_STD !== 'undefined') {
+    aiIdx = new Map();
+    AI_STD.forEach(function(a) { aiIdx.set(a[0] + '|' + a[1], a); });
+  }
+
   return (
     '<div class="rs-tbl-wrap">' +
-      '<table class="rs-table">' +
+      '<table class="rs-table rs-table-wide">' +
         '<thead><tr>' +
-          '<th>서비스</th><th>행</th><th>이슈 유형</th><th>대상 항목</th><th>의견</th><th>저장 시각</th>' +
+          '<th>서비스</th><th>행</th><th>이슈 유형</th><th>대상 항목</th>' +
+          '<th>의견</th><th>원본 TC</th><th>AI 분석</th>' +
         '</tr></thead>' +
         '<tbody>' +
           rows.map(function(r) {
             var types  = (r.issue_types  || []).map(function(t) { return '<span class="rs-tag rs-tag-type">'  + esc(t) + '</span>'; }).join('');
             var fields = (r.target_fields || []).map(function(f) { return '<span class="rs-tag rs-tag-field">' + esc(f) + '</span>'; }).join('');
             var note   = r.note ? esc(r.note).replace(/\n/g, '<br>') : '<span class="rs-empty-cell">-</span>';
-            var time   = r.updated_at ? new Date(r.updated_at).toLocaleString('ko-KR') : '-';
+
+            var origCell = '<span class="rs-empty-cell">-</span>';
+            var aiCell   = '<span class="rs-empty-cell">-</span>';
+            if (aiIdx) {
+              var key = (r.svc || '') + '|' + r.row_number;
+              var aiRow = aiIdx.get(key);
+              if (aiRow) {
+                // 원본: 사전조건[6] + step[7] + expected[8]
+                var origParts = [];
+                if (aiRow[6]) origParts.push('<span class="rs-tc-label">사전조건</span>' + esc(aiRow[6]));
+                if (aiRow[7]) origParts.push('<span class="rs-tc-label">Step</span>' + esc(aiRow[7]));
+                if (aiRow[8]) origParts.push('<span class="rs-tc-label">기대결과</span>' + esc(aiRow[8]));
+                if (origParts.length) origCell = origParts.join('<br>');
+
+                // AI: precond[14] + step[15] + expected[16]
+                var aiParts = [];
+                if (aiRow[14]) aiParts.push('<span class="rs-tc-label ai">사전조건</span>' + esc(aiRow[14]));
+                if (aiRow[15]) aiParts.push('<span class="rs-tc-label ai">Step</span>' + esc(aiRow[15]));
+                if (aiRow[16]) aiParts.push('<span class="rs-tc-label ai">기대결과</span>' + esc(aiRow[16]));
+                if (aiParts.length) aiCell = aiParts.join('<br>');
+              }
+            }
+
             return '<tr>' +
               '<td class="rs-td-muted">' + esc(r.svc || '-') + '</td>' +
               '<td class="rs-td-num">' + (r.row_number || '-') + '</td>' +
               '<td>' + (types  || '<span class="rs-empty-cell">-</span>') + '</td>' +
               '<td>' + (fields || '<span class="rs-empty-cell">-</span>') + '</td>' +
               '<td class="rs-td-note">' + note + '</td>' +
-              '<td class="rs-td-time">' + time + '</td>' +
+              '<td class="rs-td-tc">' + origCell + '</td>' +
+              '<td class="rs-td-tc rs-td-ai">' + aiCell + '</td>' +
             '</tr>';
           }).join('') +
         '</tbody>' +

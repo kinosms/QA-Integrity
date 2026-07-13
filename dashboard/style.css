@@ -801,7 +801,7 @@ tbody tr:hover td { background: var(--surf2); }
   border: 1px solid var(--border);
   border-radius: 12px;
   width: 100%;
-  max-width: 960px;
+  max-width: 1400px;
   display: flex; flex-direction: column;
   min-height: 200px;
 }
@@ -939,9 +939,28 @@ tbody tr:hover td { background: var(--surf2); }
 .rs-table tr:last-child td { border-bottom: none; }
 .rs-td-muted  { color: var(--muted); white-space: nowrap; }
 .rs-td-num    { color: var(--muted); white-space: nowrap; text-align: right; }
-.rs-td-note   { max-width: 280px; font-size: 11px; line-height: 1.5; color: var(--text); }
+.rs-td-note   { font-size: 11px; line-height: 1.5; color: var(--text); min-width: 180px; max-width: 260px; }
 .rs-td-time   { color: var(--muted); font-size: 10.5px; white-space: nowrap; }
 .rs-empty-cell { color: rgba(148,163,184,.4); }
+
+/* TC / AI 내용 셀 */
+.rs-table-wide .rs-td-tc {
+  font-size: 11px; line-height: 1.55; color: var(--muted);
+  min-width: 200px; max-width: 320px; vertical-align: top;
+}
+.rs-table-wide .rs-td-ai { color: #a5b4fc; }
+
+/* TC 라벨 */
+.rs-tc-label {
+  display: inline-block;
+  font-size: 9px; font-weight: 700; letter-spacing: .04em;
+  background: var(--surf2); color: var(--muted);
+  border-radius: 3px; padding: 1px 5px;
+  margin-right: 4px; margin-bottom: 2px; white-space: nowrap;
+}
+.rs-tc-label.ai {
+  background: rgba(99,102,241,.15); color: #a5b4fc;
+}
 
 /* 클릭 가능한 막대 행 */
 .rs-bar-clickable {
