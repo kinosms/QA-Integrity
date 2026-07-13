@@ -1691,16 +1691,15 @@ async function switchDocument(docId) {
 }
 
 async function loadDocumentList() {
+  var sel = document.getElementById('doc-select');
+  if (!sel) return;
+
   try {
-    var r = await fetch('/api/input-files');
-    var files = await r.json();
-    var analyzed = files.filter(function(f) { return f.analyzed; });
+    // Supabase documents 테이블에서 직접 조회 (server.py 불필요)
+    var docs = await supaFetch('documents?select=id,name,filename,total_tc&order=created_at');
 
-    var sel = document.getElementById('doc-select');
-    if (!sel) return;
     sel.innerHTML = '';
-
-    if (!analyzed.length) {
+    if (!docs.length) {
       var opt = document.createElement('option');
       opt.value = '';
       opt.textContent = '분석된 문서 없음';
@@ -1708,25 +1707,21 @@ async function loadDocumentList() {
       return;
     }
 
-    analyzed.forEach(function(f) {
+    docs.forEach(function(d) {
       var opt = document.createElement('option');
-      opt.value = f.document_id;
-      opt.textContent = f.name;
+      opt.value = d.id;
+      opt.textContent = d.name;
       sel.appendChild(opt);
     });
 
     // 가장 최근 문서 자동 로드
-    var latest = analyzed[analyzed.length - 1];
-    sel.value = latest.document_id;
-    await switchDocument(latest.document_id);
+    var latest = docs[docs.length - 1];
+    sel.value = latest.id;
+    await switchDocument(latest.id);
 
   } catch(e) {
-    // /api/input-files 미사용 환경 (파일 직접 열기) — 기존 data_*.js 방식 유지
-    console.warn('[loadDocumentList] API 없음, 로컬 데이터 사용:', e.message);
-    buildSidebar();
-    bindFilters();
-    renderAll();
-    loadAllReviews();
+    console.error('[loadDocumentList] 실패:', e.message);
+    sel.innerHTML = '<option value="">문서 로드 실패</option>';
   }
 }
 
@@ -1742,8 +1737,10 @@ window.openAnalyzeModal = async function() {
   var runBtn = document.getElementById('analyze-run-btn');
   if (runBtn) { runBtn.disabled = false; runBtn.textContent = '분석 시작'; }
 
+  // server.py 없이는 파일 목록 조회 불가 — 안내 메시지 표시
   try {
     var r = await fetch('/api/input-files');
+    if (!r.ok) throw new Error();
     var files = await r.json();
     var sel = document.getElementById('analyze-file-select');
     sel.innerHTML = '';
@@ -1753,10 +1750,15 @@ window.openAnalyzeModal = async function() {
       opt.textContent = f.filename + (f.analyzed ? ' ✓ 분석됨' : '');
       sel.appendChild(opt);
     });
-    // 기본 이름 자동 입력
     sel.dispatchEvent(new Event('change'));
   } catch(e) {
-    console.warn('파일 목록 로드 실패:', e);
+    var body = document.getElementById('analyze-modal-body');
+    if (body) body.innerHTML =
+      '<div style="padding:20px;color:#94a3b8;font-size:13px;line-height:1.8">' +
+      '새 문서 분석은 로컬 환경에서만 가능합니다.<br><br>' +
+      '터미널에서 실행하세요:<br>' +
+      '<code style="background:#0f1117;padding:8px 12px;border-radius:6px;display:block;margin-top:8px;font-size:12px;color:#67e8f9">' +
+      'python3 upload_to_db.py</code></div>';
   }
 };
 
