@@ -810,7 +810,8 @@ tbody tr:hover td { background: var(--surf2); }
   padding: 16px 24px;
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0;
-  background: var(--bg); border-radius: 12px 12px 0 0; z-index: 1;
+  /* 오버레이 z-index:200 기준 — 테이블 thead(z-index 없음)보다 높아야 함 */
+  background: var(--bg); border-radius: 12px 12px 0 0; z-index: 201;
 }
 .rs-modal-title {
   font-size: 15px; font-weight: 700; letter-spacing: -.3px;
@@ -937,9 +938,50 @@ tbody tr:hover td { background: var(--surf2); }
 }
 .rs-table tr:last-child td { border-bottom: none; }
 .rs-td-muted  { color: var(--muted); white-space: nowrap; }
+.rs-td-num    { color: var(--muted); white-space: nowrap; text-align: right; }
 .rs-td-note   { max-width: 280px; font-size: 11px; line-height: 1.5; color: var(--text); }
 .rs-td-time   { color: var(--muted); font-size: 10.5px; white-space: nowrap; }
 .rs-empty-cell { color: rgba(148,163,184,.4); }
+
+/* 클릭 가능한 막대 행 */
+.rs-bar-clickable {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 4px 6px;
+  margin: 0 -6px;
+  transition: background .12s;
+}
+.rs-bar-clickable:hover  { background: rgba(255,255,255,.04); }
+.rs-bar-clickable.rs-bar-active { background: rgba(99,102,241,.12); }
+
+/* 힌트 텍스트 */
+.rs-card-hint {
+  font-size: 9px; font-weight: 400; letter-spacing: 0;
+  text-transform: none; color: rgba(148,163,184,.55);
+  margin-left: 6px;
+}
+
+/* 필터 상세 헤더 */
+.rs-detail-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px; flex-wrap: wrap;
+}
+.rs-detail-chip {
+  font-size: 12px; font-weight: 700;
+  border: 1px solid; border-radius: 6px;
+  padding: 3px 10px;
+}
+.rs-detail-count {
+  font-size: 12px; color: var(--muted);
+}
+.rs-detail-reset {
+  margin-left: auto;
+  font-size: 10px; font-weight: 600; cursor: pointer;
+  background: var(--surf2); color: var(--muted);
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 3px 10px; transition: all .12s;
+}
+.rs-detail-reset:hover { color: var(--text); border-color: var(--muted); }
 
 /* 태그 */
 .rs-tag {
