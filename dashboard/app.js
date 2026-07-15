@@ -299,6 +299,9 @@ function buildReviewPanelEl(svc, row) {
   ta.className = 'rv-note'; ta.rows = 3;
   ta.placeholder = '의견을 입력하세요...';
   ta.value = saved.note || '';
+  // 한글 IME 조합 중 이벤트 중복 방지
+  ta.addEventListener('compositionstart', function() { ta._composing = true; });
+  ta.addEventListener('compositionend',   function() { ta._composing = false; });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
   // 푸터
@@ -309,6 +312,8 @@ function buildReviewPanelEl(svc, row) {
   btn.className = 'rv-save-btn'; btn.textContent = '저장';
 
   btn.addEventListener('click', function() {
+    // IME 조합 완료 대기 후 저장 (한글 마지막 글자 누락 방지)
+    if (ta._composing) { setTimeout(function(){ btn.click(); }, 50); return; }
     var note       = ta.value;
     var issueTypes  = Array.from(grp1.querySelectorAll('.rv-type-btn.active')).map(function(b){return b.textContent;});
     var targetFields= Array.from(grp2.querySelectorAll('.rv-field-btn.active')).map(function(b){return b.textContent;});
@@ -1270,16 +1275,23 @@ function scrollToCompare(svc, row) {
   var card = document.getElementById('card-compare');
   if (card) card.classList.remove('collapsed');
 
+  // 1단계: 비교 뷰 섹션 상단으로 먼저 스크롤
+  var content = document.querySelector('.content');
+  if (card && content) {
+    content.scrollTo({ top: card.offsetTop - 16, behavior: 'smooth' });
+  }
+
+  // 2단계: 해당 행 하이라이트 (렌더링 완료 후)
   setTimeout(function() {
-    var id = 'cmp-row-' + (svc+'-'+row).replace(/[\s.()\/]/g,'-');
+    var id = 'cmp-row-' + (svc+'-'+row).replace(/[\s.()\/-]/g,'-');
     var el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior:'smooth', block:'center' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       el.classList.remove('cmp-highlight');
       void el.offsetWidth;
       el.classList.add('cmp-highlight');
     }
-  }, 150);
+  }, 300);
 }
 
 

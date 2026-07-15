@@ -12,6 +12,7 @@ var C = {
   H_SEM  : 'FF1A1A35',  // Semantic 헤더: 다크 네이비
   H_CTX  : 'FF1A3A2A',  // Context 헤더: 다크 에메랄드
   H_NORM : 'FF3A2A00',  // Norm 헤더: 다크 앰버
+  H_RV   : 'FF2A1A3A',  // 검수 의견 헤더: 다크 인디고
 
   // 데이터 배경 — 원본: 연한 블루그레이 (밝게)
   B_ORIG : 'FFEEF2FA',  // 원본 셀: 연한 파란빛 흰색
@@ -179,13 +180,18 @@ var COL_DEFS = [
 
   // 자동화 여부 (열 43, 구분열 42) — TC_RAW에서 조인
   [43,'auto','자동화 여부', function(r){return '';}],  // 값은 buildSheet에서 tcMap으로 처리
+
+  // 검수 의견 (열 45~47, 구분열 44)
+  [45,'rv','이슈 유형',  function(r){return '';}],  // 값은 buildSheet에서 rvMap으로 처리
+  [46,'rv','대상 항목',  function(r){return '';}],
+  [47,'rv','검수 의견',  function(r){return '';}],
 ];
 
 var GRP_H_BG = {
   orig:C.H_ORIG, ai:C.H_AI, ana:C.H_ANA,
-  int:C.H_INT, sem:C.H_SEM, ctx:C.H_CTX, norm:C.H_NORM, auto:C.H_AUTO
+  int:C.H_INT, sem:C.H_SEM, ctx:C.H_CTX, norm:C.H_NORM, auto:C.H_AUTO, rv:C.H_RV
 };
-var SEP_COLS = [8,17,18,23,24,28,29,33,39,40,42];
+var SEP_COLS = [8,17,18,23,24,28,29,33,39,40,42,44];
 
 function addr(col, row) {
   return XLSX.utils.encode_cell({ c: col, r: row });
@@ -208,7 +214,7 @@ function buildSheet(rows, tcMap) {
 
   // 열 너비
   var widths = [];
-  for (var i = 0; i <= 44; i++) widths.push({ wch: 1 });
+  for (var i = 0; i <= 48; i++) widths.push({ wch: 1 });
   [0,1,2,3,9,10,11,12].forEach(function(c){ widths[c]={wch:14}; });
   [4,13].forEach(function(c){ widths[c]={wch:28}; });
   [5,6,14,15].forEach(function(c){ widths[c]={wch:38}; });
@@ -224,6 +230,9 @@ function buildSheet(rows, tcMap) {
   [37,38].forEach(function(c){ widths[c]={wch:36}; });
   [41].forEach(function(c){ widths[c]={wch:44}; });
   [43].forEach(function(c){ widths[c]={wch:14}; });
+  [45].forEach(function(c){ widths[c]={wch:22}; });
+  [46].forEach(function(c){ widths[c]={wch:22}; });
+  [47].forEach(function(c){ widths[c]={wch:44}; });
   ws['!cols'] = widths;
 
   // ── 행 1: 그룹 헤더 ────────────────────────────────────────────
@@ -236,6 +245,7 @@ function buildSheet(rows, tcMap) {
     {s:34, e:38, bg:C.H_CTX,  label:'Context Summary'},
     {s:41, e:41, bg:C.H_NORM, label:'Normalization Summary'},
     {s:43, e:43, bg:C.H_AUTO, label:'자동화 여부'},
+    {s:45, e:47, bg:C.H_RV,   label:'검수 의견'},
   ];
   ws['!merges'] = [];
   grpDefs.forEach(function(g){
@@ -325,6 +335,24 @@ function buildSheet(rows, tcMap) {
         cellFont  = mkFont(C.T_DARK, false, 8);
         cellAlign = mkAlign('left','top');
 
+      } else if (grp === 'rv') {
+        // 검수 의견: reviewStore에서 조인
+        var rvKey = r[SC.svc] + '|' + r[SC.row];
+        var rvInfo = (typeof reviewStore !== 'undefined') ? reviewStore[rvKey] : null;
+        if (col === 45) {
+          val = rvInfo && rvInfo.issue_types && rvInfo.issue_types.length
+            ? rvInfo.issue_types.join(', ') : '';
+        } else if (col === 46) {
+          val = rvInfo && rvInfo.target_fields && rvInfo.target_fields.length
+            ? rvInfo.target_fields.join(', ') : '';
+        } else {
+          val = (rvInfo && rvInfo.note) ? rvInfo.note : '';
+        }
+        var hasRv = rvInfo && (val || '').trim();
+        cellFill  = hasRv ? 'FFEDE7F6' : 'FFFFFFFF';
+        cellFont  = mkFont(hasRv ? C.T_INFER : C.T_DARK, false, 9);
+        cellAlign = col === 47 ? mkAlign('left','top') : mkAlign('left','center');
+
       } else { // auto
         // 자동화 여부: TC_RAW에서 조인
         var autoKey = r[SC.svc] + '|' + r[SC.row];
@@ -356,7 +384,7 @@ function buildSheet(rows, tcMap) {
   });
 
   ws['!ref'] = XLSX.utils.encode_range({
-    s:{c:0,r:0}, e:{c:43, r:rows.length+1}
+    s:{c:0,r:0}, e:{c:47, r:rows.length+1}
   });
   ws['!rows'] = [{hpt:22},{hpt:20}];
 
