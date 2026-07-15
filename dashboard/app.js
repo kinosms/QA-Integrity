@@ -298,16 +298,8 @@ function buildReviewPanelEl(svc, row) {
   var ta   = document.createElement('textarea');
   ta.className = 'rv-note'; ta.rows = 3;
   ta.placeholder = '의견을 입력하세요...';
-  // 브라우저 자동완성/맞춤법 검사가 한글 IME 커서 위치를 간섭하므로 모두 끔
-  ta.setAttribute('autocomplete',    'off');
-  ta.setAttribute('autocorrect',     'off');
-  ta.setAttribute('autocapitalize',  'off');
-  ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
-  // IME 조합 상태 추적 (저장 버튼에서만 사용)
-  ta.addEventListener('compositionstart', function() { ta._composing = true; });
-  ta.addEventListener('compositionend',   function() { ta._composing = false; });
-  // ESC 키 상위 전파 차단 (모달 닫힘 방지)
+  // ESC가 모달을 닫지 않도록 전파만 차단, 나머지는 브라우저 기본 동작
   ta.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') e.stopPropagation();
   });
@@ -321,8 +313,6 @@ function buildReviewPanelEl(svc, row) {
   btn.className = 'rv-save-btn'; btn.textContent = '저장';
 
   btn.addEventListener('click', function() {
-    // IME 조합 완료 대기 후 저장 (한글 마지막 글자 누락 방지)
-    if (ta._composing) { setTimeout(function(){ btn.click(); }, 50); return; }
     var note       = ta.value;
     var issueTypes  = Array.from(grp1.querySelectorAll('.rv-type-btn.active')).map(function(b){return b.textContent;});
     var targetFields= Array.from(grp2.querySelectorAll('.rv-field-btn.active')).map(function(b){return b.textContent;});
