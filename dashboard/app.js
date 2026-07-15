@@ -304,12 +304,19 @@ function buildReviewPanelEl(svc, row) {
   ta.setAttribute('autocapitalize',  'off');
   ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
-  // 한글 IME 조합 중 이벤트 중복 방지
+  // 한글 IME 조합 상태 추적
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
-  // 키 이벤트가 상위 document 리스너로 버블링되지 않도록 차단 (백스페이스 홀드 버벅임 방지)
-  ta.addEventListener('keydown', function(e) { e.stopPropagation(); });
-  ta.addEventListener('keyup',   function(e) { e.stopPropagation(); });
+  // input 이벤트로 composing 상태 강제 해제 — 백스페이스 홀드 시 IME가 조합 상태로 남아 버벅이는 현상 방지
+  ta.addEventListener('input', function() {
+    if (!ta._composing) return;
+    // 조합 중이 아닌 일반 입력(백스페이스 등)이면 강제 해제
+    ta._composing = false;
+  });
+  // ESC 키만 상위 전파 차단
+  ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') e.stopPropagation();
+  });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
   // 푸터
