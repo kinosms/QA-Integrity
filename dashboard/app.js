@@ -304,8 +304,13 @@ function buildReviewPanelEl(svc, row) {
   ta.setAttribute('autocapitalize',  'off');
   ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
-  // 백스페이스 홀드: 브라우저/IME 기본 동작을 완전히 차단하고
-  // 자체 타이머로 50ms 간격 한 글자씩 삭제 (조합 여부 무관하게 항상 적용)
+  // 한글 IME 조합 상태 추적
+  ta.addEventListener('compositionstart', function() { ta._composing = true; });
+  ta.addEventListener('compositionend',   function() { ta._composing = false; });
+
+  // 백스페이스 홀드:
+  // - 조합 중(isComposing)일 때만 브라우저 기본 동작 차단 + 자체 타이머로 처리
+  // - 조합 중이 아닐 때는 브라우저 기본 동작 그대로 (스페이스/영문 등 정상 동작 보장)
   var _bsTimer = null;
 
   function _deleteOne() {
@@ -314,20 +319,22 @@ function buildReviewPanelEl(svc, row) {
       ta.value = ta.value.slice(0, s) + ta.value.slice(end);
       ta.setSelectionRange(s, s);
     } else if (s > 0) {
-      var chars = [...ta.value];
-      // selectionStart는 UTF-16 코드유닛 기준 → 유니코드 글자 인덱스로 변환
       var charIdx = [...ta.value.slice(0, s)].length;
+      var chars = [...ta.value];
       chars.splice(charIdx - 1, 1);
       var nb = chars.join('');
       ta.value = nb;
       var newPos = [...nb].slice(0, charIdx - 1).join('').length;
       ta.setSelectionRange(newPos, newPos);
     }
+    ta._composing = false;
   }
 
   ta.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { e.stopPropagation(); return; }
     if (e.key !== 'Backspace') return;
+    // 조합 중일 때만 가로챔 — 아닐 때는 브라우저에 맡김
+    if (!e.isComposing && !ta._composing) return;
     e.preventDefault();
     if (_bsTimer) return;
     _deleteOne();
