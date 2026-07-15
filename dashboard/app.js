@@ -307,27 +307,41 @@ function buildReviewPanelEl(svc, row) {
   // 한글 IME 조합 상태 추적
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
-  // macOS 한글 IME 백스페이스 홀드 버그:
-  // OS가 조합 중 backspace 반복을 큐에 쌓다가 한번에 처리 → keydown에서 직접 가로챔
-  // (beforeinput은 첫 이벤트만 잡히고 repeat 이벤트는 못 잡음)
-  ta.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { e.stopPropagation(); return; }
-    if (e.key !== 'Backspace') return;
-    if (!e.isComposing && !ta._composing) return;
-    e.preventDefault();
+
+  // macOS 한글 IME 백스페이스 홀드 버그 해결:
+  // IME가 조합 중 backspace를 큐에 쌓다가 한꺼번에 처리하는 현상을
+  // 자체 타이머로 완전히 대체 — IME 이벤트 의존 없이 직접 한 글자씩 삭제
+  var _bsTimer = null;
+
+  function _deleteOne() {
     var s = ta.selectionStart, end = ta.selectionEnd;
     if (s !== end) {
       ta.value = ta.value.slice(0, s) + ta.value.slice(end);
       ta.setSelectionRange(s, s);
     } else if (s > 0) {
-      // spread로 한글 복합 문자(유니코드) 한 글자 단위 처리
       var before = [...ta.value.slice(0, s)];
       before.pop();
-      var newBefore = before.join('');
-      ta.value = newBefore + ta.value.slice(s);
-      ta.setSelectionRange(newBefore.length, newBefore.length);
+      var nb = before.join('');
+      ta.value = nb + ta.value.slice(s);
+      ta.setSelectionRange(nb.length, nb.length);
     }
     ta._composing = false;
+  }
+
+  ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { e.stopPropagation(); return; }
+    if (e.key !== 'Backspace') return;
+    // 조합 중이 아니면 브라우저 기본 동작에 맡김
+    if (!e.isComposing && !ta._composing) return;
+    e.preventDefault();
+    if (_bsTimer) return; // 이미 타이머 실행 중
+    _deleteOne(); // 즉시 1회
+    _bsTimer = setInterval(_deleteOne, 50); // 이후 50ms 간격 반복
+  });
+
+  ta.addEventListener('keyup', function(e) {
+    if (e.key !== 'Backspace') return;
+    if (_bsTimer) { clearInterval(_bsTimer); _bsTimer = null; }
   });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
