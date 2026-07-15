@@ -1259,7 +1259,19 @@ function renderCompare() {
   if (info) info.textContent = total + '건 중 ' +
     (total ? Math.min((cmpPage-1)*CMP_PAGE+1,total) : 0) + '–' +
     Math.min(cmpPage*CMP_PAGE, total);
-  renderPagination('cmp-pager', cmpPage, pages, function(p){ cmpPage=p; renderCompare(); });
+  renderPagination('cmp-pager', cmpPage, pages, function(p){
+    cmpPage = p;
+    renderCompare();
+    // 페이지 이동 시 '원본 TC vs AI 분석 결과' 섹션 상단으로 스크롤
+    var card = document.getElementById('card-compare');
+    var content = document.querySelector('.content');
+    if (card && content) {
+      var cardTop = card.getBoundingClientRect().top
+                  - content.getBoundingClientRect().top
+                  + content.scrollTop;
+      content.scrollTo({ top: cardTop - 16, behavior: 'smooth' });
+    }
+  });
 }
 
 // ── scrollToCompare ───────────────────────────────────────────
