@@ -304,13 +304,8 @@ function buildReviewPanelEl(svc, row) {
   ta.setAttribute('autocapitalize',  'off');
   ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
-  // 한글 IME 조합 상태 추적
-  ta.addEventListener('compositionstart', function() { ta._composing = true; });
-  ta.addEventListener('compositionend',   function() { ta._composing = false; });
-
-  // macOS 한글 IME 백스페이스 홀드 버그 해결:
-  // IME가 조합 중 backspace를 큐에 쌓다가 한꺼번에 처리하는 현상을
-  // 자체 타이머로 완전히 대체 — IME 이벤트 의존 없이 직접 한 글자씩 삭제
+  // 백스페이스 홀드: 브라우저/IME 기본 동작을 완전히 차단하고
+  // 자체 타이머로 50ms 간격 한 글자씩 삭제 (조합 여부 무관하게 항상 적용)
   var _bsTimer = null;
 
   function _deleteOne() {
@@ -319,29 +314,35 @@ function buildReviewPanelEl(svc, row) {
       ta.value = ta.value.slice(0, s) + ta.value.slice(end);
       ta.setSelectionRange(s, s);
     } else if (s > 0) {
-      var before = [...ta.value.slice(0, s)];
-      before.pop();
-      var nb = before.join('');
-      ta.value = nb + ta.value.slice(s);
-      ta.setSelectionRange(nb.length, nb.length);
+      var chars = [...ta.value];
+      // selectionStart는 UTF-16 코드유닛 기준 → 유니코드 글자 인덱스로 변환
+      var charIdx = [...ta.value.slice(0, s)].length;
+      chars.splice(charIdx - 1, 1);
+      var nb = chars.join('');
+      ta.value = nb;
+      var newPos = [...nb].slice(0, charIdx - 1).join('').length;
+      ta.setSelectionRange(newPos, newPos);
     }
-    ta._composing = false;
   }
 
   ta.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { e.stopPropagation(); return; }
     if (e.key !== 'Backspace') return;
-    // 조합 중이 아니면 브라우저 기본 동작에 맡김
-    if (!e.isComposing && !ta._composing) return;
     e.preventDefault();
-    if (_bsTimer) return; // 이미 타이머 실행 중
-    _deleteOne(); // 즉시 1회
-    _bsTimer = setInterval(_deleteOne, 50); // 이후 50ms 간격 반복
+    if (_bsTimer) return;
+    _deleteOne();
+    _bsTimer = setInterval(_deleteOne, 50);
   });
 
   ta.addEventListener('keyup', function(e) {
     if (e.key !== 'Backspace') return;
-    if (_bsTimer) { clearInterval(_bsTimer); _bsTimer = null; }
+    clearInterval(_bsTimer);
+    _bsTimer = null;
+  });
+
+  ta.addEventListener('blur', function() {
+    clearInterval(_bsTimer);
+    _bsTimer = null;
   });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
