@@ -307,10 +307,21 @@ function buildReviewPanelEl(svc, row) {
   // 한글 IME 조합 상태 추적
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
-  // input 이벤트로 composing 상태 강제 해제 — 백스페이스 홀드 시 IME가 조합 상태로 남아 버벅이는 현상 방지
-  ta.addEventListener('input', function() {
+  // macOS 한글 IME 백스페이스 홀드 버그 수정:
+  // IME가 조합 중일 때 backspace 이벤트를 내부 큐에 쌓아뒀다가 한번에 처리하는 현상을
+  // beforeinput에서 직접 가로채 즉시 한 글자씩 처리하여 방지
+  ta.addEventListener('beforeinput', function(e) {
+    if (e.inputType !== 'deleteContentBackward') return;
     if (!ta._composing) return;
-    // 조합 중이 아닌 일반 입력(백스페이스 등)이면 강제 해제
+    e.preventDefault();
+    var s = ta.selectionStart, end = ta.selectionEnd;
+    if (s !== end) {
+      ta.value = ta.value.slice(0, s) + ta.value.slice(end);
+      ta.setSelectionRange(s, s);
+    } else if (s > 0) {
+      ta.value = ta.value.slice(0, s - 1) + ta.value.slice(s);
+      ta.setSelectionRange(s - 1, s - 1);
+    }
     ta._composing = false;
   });
   // ESC 키만 상위 전파 차단
