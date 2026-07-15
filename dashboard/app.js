@@ -299,7 +299,12 @@ function buildReviewPanelEl(svc, row) {
   ta.className = 'rv-note'; ta.rows = 3;
   ta.placeholder = '의견을 입력하세요...';
   ta.value = saved.note || '';
-  // ESC가 모달을 닫지 않도록 전파만 차단, 나머지는 브라우저 기본 동작
+  // 타이핑 즉시 reviewStore에 반영 — renderCompare 재실행 시 입력 내용 보존
+  ta.addEventListener('input', function() {
+    if (!reviewStore[rvKey]) reviewStore[rvKey] = {};
+    reviewStore[rvKey].note = ta.value;
+  });
+  // ESC가 모달을 닫지 않도록 전파만 차단
   ta.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') e.stopPropagation();
   });
