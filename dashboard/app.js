@@ -1280,23 +1280,30 @@ function scrollToCompare(svc, row) {
   var card = document.getElementById('card-compare');
   if (card) card.classList.remove('collapsed');
 
-  // 1단계: 비교 뷰 섹션 상단으로 먼저 스크롤
+  // .content 가 실제 스크롤 컨테이너 — card 의 .content 내 상대 위치 계산
   var content = document.querySelector('.content');
   if (card && content) {
-    content.scrollTo({ top: card.offsetTop - 16, behavior: 'smooth' });
+    var cardTop = card.getBoundingClientRect().top
+                - content.getBoundingClientRect().top
+                + content.scrollTop;
+    content.scrollTo({ top: cardTop - 16, behavior: 'smooth' });
   }
 
-  // 2단계: 해당 행 하이라이트 (렌더링 완료 후)
+  // 해당 행 하이라이트 (렌더링 + 스크롤 완료 후)
   setTimeout(function() {
     var id = 'cmp-row-' + (svc+'-'+row).replace(/[\s.()\/-]/g,'-');
     var el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // cmp-body 기준 상대 top → content 스크롤 위치로 변환
+      var elTop = el.getBoundingClientRect().top
+                - content.getBoundingClientRect().top
+                + content.scrollTop;
+      content.scrollTo({ top: elTop - 16, behavior: 'smooth' });
       el.classList.remove('cmp-highlight');
       void el.offsetWidth;
       el.classList.add('cmp-highlight');
     }
-  }, 300);
+  }, 400);
 }
 
 
