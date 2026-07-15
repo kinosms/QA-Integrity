@@ -307,6 +307,9 @@ function buildReviewPanelEl(svc, row) {
   // 한글 IME 조합 중 이벤트 중복 방지
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
+  // 키 이벤트가 상위 document 리스너로 버블링되지 않도록 차단 (백스페이스 홀드 버벅임 방지)
+  ta.addEventListener('keydown', function(e) { e.stopPropagation(); });
+  ta.addEventListener('keyup',   function(e) { e.stopPropagation(); });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
   // 푸터
