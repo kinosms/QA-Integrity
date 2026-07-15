@@ -304,52 +304,12 @@ function buildReviewPanelEl(svc, row) {
   ta.setAttribute('autocapitalize',  'off');
   ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
-  // 한글 IME 조합 상태 추적
+  // IME 조합 상태 추적 (저장 버튼에서만 사용)
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
-
-  // 백스페이스 홀드:
-  // - 조합 중(isComposing)일 때만 브라우저 기본 동작 차단 + 자체 타이머로 처리
-  // - 조합 중이 아닐 때는 브라우저 기본 동작 그대로 (스페이스/영문 등 정상 동작 보장)
-  var _bsTimer = null;
-
-  function _deleteOne() {
-    var s = ta.selectionStart, end = ta.selectionEnd;
-    if (s !== end) {
-      ta.value = ta.value.slice(0, s) + ta.value.slice(end);
-      ta.setSelectionRange(s, s);
-    } else if (s > 0) {
-      var charIdx = [...ta.value.slice(0, s)].length;
-      var chars = [...ta.value];
-      chars.splice(charIdx - 1, 1);
-      var nb = chars.join('');
-      ta.value = nb;
-      var newPos = [...nb].slice(0, charIdx - 1).join('').length;
-      ta.setSelectionRange(newPos, newPos);
-    }
-    ta._composing = false;
-  }
-
+  // ESC 키 상위 전파 차단 (모달 닫힘 방지)
   ta.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { e.stopPropagation(); return; }
-    if (e.key !== 'Backspace') return;
-    // 조합 중일 때만 가로챔 — 아닐 때는 브라우저에 맡김
-    if (!e.isComposing && !ta._composing) return;
-    e.preventDefault();
-    if (_bsTimer) return;
-    _deleteOne();
-    _bsTimer = setInterval(_deleteOne, 50);
-  });
-
-  ta.addEventListener('keyup', function(e) {
-    if (e.key !== 'Backspace') return;
-    clearInterval(_bsTimer);
-    _bsTimer = null;
-  });
-
-  ta.addEventListener('blur', function() {
-    clearInterval(_bsTimer);
-    _bsTimer = null;
+    if (e.key === 'Escape') e.stopPropagation();
   });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
