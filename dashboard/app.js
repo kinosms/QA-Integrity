@@ -307,26 +307,27 @@ function buildReviewPanelEl(svc, row) {
   // 한글 IME 조합 상태 추적
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
   ta.addEventListener('compositionend',   function() { ta._composing = false; });
-  // macOS 한글 IME 백스페이스 홀드 버그 수정:
-  // IME가 조합 중일 때 backspace 이벤트를 내부 큐에 쌓아뒀다가 한번에 처리하는 현상을
-  // beforeinput에서 직접 가로채 즉시 한 글자씩 처리하여 방지
-  ta.addEventListener('beforeinput', function(e) {
-    if (e.inputType !== 'deleteContentBackward') return;
-    if (!ta._composing) return;
+  // macOS 한글 IME 백스페이스 홀드 버그:
+  // OS가 조합 중 backspace 반복을 큐에 쌓다가 한번에 처리 → keydown에서 직접 가로챔
+  // (beforeinput은 첫 이벤트만 잡히고 repeat 이벤트는 못 잡음)
+  ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { e.stopPropagation(); return; }
+    if (e.key !== 'Backspace') return;
+    if (!e.isComposing && !ta._composing) return;
     e.preventDefault();
     var s = ta.selectionStart, end = ta.selectionEnd;
     if (s !== end) {
       ta.value = ta.value.slice(0, s) + ta.value.slice(end);
       ta.setSelectionRange(s, s);
     } else if (s > 0) {
-      ta.value = ta.value.slice(0, s - 1) + ta.value.slice(s);
-      ta.setSelectionRange(s - 1, s - 1);
+      // spread로 한글 복합 문자(유니코드) 한 글자 단위 처리
+      var before = [...ta.value.slice(0, s)];
+      before.pop();
+      var newBefore = before.join('');
+      ta.value = newBefore + ta.value.slice(s);
+      ta.setSelectionRange(newBefore.length, newBefore.length);
     }
     ta._composing = false;
-  });
-  // ESC 키만 상위 전파 차단
-  ta.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') e.stopPropagation();
   });
   row3.appendChild(lbl3); row3.appendChild(ta);
 
