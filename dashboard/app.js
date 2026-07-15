@@ -298,6 +298,11 @@ function buildReviewPanelEl(svc, row) {
   var ta   = document.createElement('textarea');
   ta.className = 'rv-note'; ta.rows = 3;
   ta.placeholder = '의견을 입력하세요...';
+  // 브라우저 자동완성/맞춤법 검사가 한글 IME 커서 위치를 간섭하므로 모두 끔
+  ta.setAttribute('autocomplete',    'off');
+  ta.setAttribute('autocorrect',     'off');
+  ta.setAttribute('autocapitalize',  'off');
+  ta.setAttribute('spellcheck',      'false');
   ta.value = saved.note || '';
   // 한글 IME 조합 중 이벤트 중복 방지
   ta.addEventListener('compositionstart', function() { ta._composing = true; });
