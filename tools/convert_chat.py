@@ -867,6 +867,11 @@ def write_outputs(screen_dict, target_dict, state_dict, trans_dict,
     with open(os.path.join(OUT_DIR, 'conversion.json'), 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False)
 
+    # 정적 배포(GitHub Pages 등)용 — 대시보드가 상대경로로 직접 로드
+    dashboard_json = os.path.join(BASE_DIR, 'dashboard', 'conversion.json')
+    with open(dashboard_json, 'w', encoding='utf-8') as f:
+        json.dump(payload, f, ensure_ascii=False)
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 

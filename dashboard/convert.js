@@ -47,10 +47,24 @@ window.addEventListener('DOMContentLoaded', function(){
 
 function loadConversion(){
   var ov = $('loading-overlay'); if(ov) ov.style.display='flex';
-  apiJson('/api/chat-conversion')
+  // 1순위: 커밋된 정적 JSON (정적 URL 배포에서 동작) → 2순위: 백엔드 API
+  fetchStaticJson('./conversion.json')
+    .catch(function(){ return apiJson('/api/chat-conversion'); })
     .then(function(d){ DATA = d; renderAll(); })
-    .catch(function(e){ showEmpty(e && /server\.py/.test(e.message) ? e.message : ''); })
+    .catch(function(){ showEmpty('변환 결과 파일(conversion.json)을 찾을 수 없습니다.'); })
     .finally(function(){ if(ov) ov.style.display='none'; });
+}
+
+// 정적 파일 로드: HTML 404 응답은 JSON.parse 에서 걸러짐
+function fetchStaticJson(url){
+  return fetch(url, {cache:'no-cache'}).then(function(r){
+    if(!r.ok) throw new Error('no static json');
+    return r.text().then(function(t){
+      var d = JSON.parse(t);
+      if(!d || !d.summary) throw new Error('invalid json');
+      return d;
+    });
+  });
 }
 
 function showEmpty(msg){
