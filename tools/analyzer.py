@@ -920,7 +920,12 @@ def detect_quality_issues(tc):
 
 
 def forward_fill(rows, col_indices):
-    """지정 컬럼들에 대해 위→아래 방향으로 빈 셀을 직전 비어있지 않은 값으로 채운다."""
+    """지정 컬럼들에 대해 위→아래 방향으로 빈 셀을 직전 비어있지 않은 값으로 채운다.
+
+    col_indices 는 상위→하위 분류 순서(예: [분류1, 분류2, 분류3, 분류4])로 전달한다.
+    상위 분류에 새 값이 등장하면 그 아래 하위 분류의 carry 는 무효화한다.
+    (예: 분류1 이 새 블록으로 바뀌면 이전 블록의 분류4 값이 흘러들지 않는다.)
+    """
     last = {c: None for c in col_indices}
     filled = []
     for row in rows:
@@ -928,14 +933,19 @@ def forward_fill(rows, col_indices):
         # 행 길이 보장
         while len(row) <= max(col_indices):
             row.append(None)
-        for c in col_indices:
+        higher_changed = False   # 이 행에서 상위 레벨 분류가 새 값으로 바뀌었는가
+        for c in col_indices:     # 상위 → 하위 순회
             v = row[c]
-            if v is not None and str(v).strip() != '':
+            has_value = v is not None and str(v).strip() != ''
+            if higher_changed:
+                # 상위 분류가 바뀌었으면 하위 분류의 이전 carry 를 무효화
+                last[c] = None
+            if has_value:
                 last[c] = str(v).strip()
-                # 원본값 유지 (str로 통일)
-                row[c] = last[c]
+                row[c] = last[c]     # 원본값 유지 (str로 통일)
+                higher_changed = True  # 이 레벨이 바뀌었으니 더 하위 레벨도 리셋
             else:
-                row[c] = last[c]   # None 이면 None 그대로 (아직 채울 값 없음)
+                row[c] = last[c]     # None 이면 None 그대로 (아직 채울 값 없음)
         filled.append(row)
     return filled
 

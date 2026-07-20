@@ -308,6 +308,23 @@ def build_result_state(expected_seg, target_ids, result_screen, is_generated):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 강화(enrichment) — LLM 의미 분석으로 추출한 사전조건/파라미터
+# ══════════════════════════════════════════════════════════════════════════════
+
+def load_enrichment():
+    """build_enrichment.py 가 생성한 enrichment.json 을 로드(없으면 None)."""
+    path = os.path.join(OUT_DIR, 'enrichment.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:  # noqa: BLE001
+        print(f'[warn] enrichment.json 로드 실패({e}) — 규칙 기반으로만 진행')
+        return None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 변환 본체
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -326,6 +343,13 @@ def convert():
 
     rows, excl, first_row, last_row = load_sheet(wb, SHEET_NAME)
     print(f'[2/8] 시트 로드 완료 — 후보 {len(rows)}행, Excel 범위 {first_row}~{last_row}')
+
+    ENRICHMENT = load_enrichment()
+    if ENRICHMENT:
+        print(f'[2.5/8] 강화 데이터 로드 — TC {len(ENRICHMENT["tcs"])} / '
+              f'State 종류 {len(ENRICHMENT["states"])}')
+    else:
+        print('[2.5/8] 강화 데이터 없음 — 규칙 기반 사전조건만 사용')
 
     # ── 원본 TC 수집 (Excel 행번호 부여) ─────────────────────────────────────
     # load_sheet 는 header 다음 행부터 반환. Excel 행번호 = first_row + index
@@ -395,14 +419,33 @@ def convert():
             else '원본 TC를 1:1로 구조화 변환'
         )
 
-        # precondition state (TC 공통 → 첫 Step 에 부여)
-        pre_data = resolve_states(src['precond'] + ' ' + full_text, 'data')
-        pre_ui = resolve_states(src['precond'] + ' ' + full_text, 'ui')
-        pre_perm = resolve_states(src['precond'] + ' ' + full_text, 'permission')
+        # ── 사전조건/파라미터: 강화(enrichment) 우선, 없으면 규칙 기반 fallback ──
+        enr = ENRICHMENT['tcs'].get(new_tc_id) if ENRICHMENT else None
+
+        # 규칙 기반 fallback (강화 자체가 없는 TC 에서만 첫 스텝에 사용)
+        rule_data = resolve_states(src['precond'] + ' ' + full_text, 'data')
+        rule_ui = resolve_states(src['precond'] + ' ' + full_text, 'ui')
+        rule_perm = resolve_states(src['precond'] + ' ' + full_text, 'permission')
+
+        # 강화 사전조건/파라미터를 step_no 별로 정리
+        enr_pre = {}    # step_no -> {'data':[state_id...], 'ui':[...], 'permission':[...]}
+        enr_param = {}  # step_no -> {'target_parameter':str, 'action_parameter':str}
+        if enr:
+            for pc in enr['preconditions']:
+                d = enr_pre.setdefault(pc['step_no'], {'data': [], 'ui': [], 'permission': []})
+                sid = pc['state_id']
+                if sid not in d[pc['bucket']]:
+                    d[pc['bucket']].append(sid)
+            for pr in enr['parameters']:
+                val = pr.get('value')
+                if val is None or (isinstance(val, str) and not val.strip()):
+                    continue
+                d = enr_param.setdefault(pr['step_no'], {})
+                d[pr['field']] = val if isinstance(val, str) else json.dumps(val, ensure_ascii=False)
 
         cur_screen = start_screen
         used_targets_tc = set()
-        used_states_tc = set(pre_data + pre_ui + pre_perm)
+        used_states_tc = set()
         used_screens_tc = {start_screen}
         generated_flag = False
 
@@ -426,7 +469,7 @@ def convert():
                 generated_flag = True
             result_state = build_result_state(exp_seg, tgts, result_screen, is_generated)
 
-            # action_parameter
+            # action_parameter (규칙 기반 기본값)
             action_param = NA
             if action == 'INPUT':
                 m = re.search(r"['\"“”\[]([^'\"“”\]]{1,30})['\"“”\]]", seg)
@@ -435,13 +478,26 @@ def convert():
             elif action == 'WAIT':
                 action_param = json.dumps({'timeout': '30s'}, ensure_ascii=False)
 
-            # precondition: 첫 스텝에만 TC 공통 사전조건 부여
-            if step_no == 1:
-                p_data = ' / '.join(pre_data) if pre_data else NA
-                p_ui = ' / '.join(pre_ui) if pre_ui else NA
-                p_perm = ' / '.join(pre_perm) if pre_perm else NA
+            # precondition 부여: 강화 우선 → (강화 없는 TC 한정) 첫 스텝 규칙 fallback
+            step_pre = enr_pre.get(step_no)
+            if step_pre is not None:
+                d_ids, u_ids, p_ids = step_pre['data'], step_pre['ui'], step_pre['permission']
+            elif step_no == 1 and not enr:
+                d_ids, u_ids, p_ids = rule_data, rule_ui, rule_perm
             else:
-                p_data = p_ui = p_perm = NA
+                d_ids = u_ids = p_ids = []
+            p_data = ' / '.join(d_ids) if d_ids else NA
+            p_ui = ' / '.join(u_ids) if u_ids else NA
+            p_perm = ' / '.join(p_ids) if p_ids else NA
+            used_states_tc.update(d_ids)
+            used_states_tc.update(u_ids)
+            used_states_tc.update(p_ids)
+
+            # target/action parameter: 강화 우선
+            step_param = enr_param.get(step_no, {})
+            target_param = step_param.get('target_parameter', NA)
+            if step_param.get('action_parameter'):
+                action_param = step_param['action_parameter']
 
             tc_steps.append({
                 'new_tc_id': new_tc_id,
@@ -451,7 +507,7 @@ def convert():
                 'precondition_ui_state': p_ui,
                 'precondition_permission_state': p_perm,
                 'target': target_id,
-                'target_parameter': NA,
+                'target_parameter': target_param,
                 'action': action,
                 'action_parameter': action_param,
                 'result_screen': result_screen,
@@ -546,10 +602,32 @@ def convert():
             })
 
     state_dict = []
+    catalog_state_ids = set()
     for sid, typ, defn, crit, _bkt, _kws in STATE_CATALOG:
+        catalog_state_ids.add(sid)
         if sid in state_rows:
             state_dict.append({
                 'state_id': sid, 'state_type': typ, 'definition': defn, 'criteria': crit,
+                'source_rows': sorted(state_rows[sid]),
+                'used_tc_count': len(state_use_tc.get(sid, set())),
+            })
+
+    # 강화(enrichment) 로 도입된 State 도 사전에 등록 (카탈로그 중복 제외)
+    if ENRICHMENT:
+        BKT_TYPE = {'data': 'Data State', 'ui': 'UI State', 'permission': 'Permission State'}
+        id_meta = {m['state_id']: m for m in ENRICHMENT['states'].values()}
+        for sid in sorted(state_rows):
+            if sid in catalog_state_ids:
+                continue
+            meta = id_meta.get(sid)
+            if not meta:
+                continue
+            crit = ('[검토 필요] ' if meta.get('review') else '') + meta['label']
+            state_dict.append({
+                'state_id': sid,
+                'state_type': BKT_TYPE.get(meta['bucket'], 'Data State'),
+                'definition': meta['label'],
+                'criteria': crit,
                 'source_rows': sorted(state_rows[sid]),
                 'used_tc_count': len(state_use_tc.get(sid, set())),
             })
