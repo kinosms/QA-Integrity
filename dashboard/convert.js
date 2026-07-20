@@ -21,9 +21,11 @@ function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){retur
 function $(id){ return document.getElementById(id); }
 
 // API 호출 헬퍼: HTML 404 등 비-JSON 응답을 명확한 에러로 변환
+// file:// 로 열었거나 다른 포트/호스트에서 열어도 백엔드(localhost:8080)를 자동으로 찾음
+var API_BASE = /^https?:\/\/(localhost|127\.0\.0\.1):8080/.test(location.href) ? '' : 'http://localhost:8080';
 var SERVER_HINT = '백엔드 서버가 실행 중이 아닙니다. 터미널에서 "python server.py" 실행 후 http://localhost:8080 으로 접속하세요.';
 function apiJson(url, opts){
-  return fetch(url, opts).then(function(r){
+  return fetch(API_BASE + url, opts).then(function(r){
     var ct = r.headers.get('content-type') || '';
     if(!r.ok || ct.indexOf('application/json') < 0){
       throw new Error(SERVER_HINT);

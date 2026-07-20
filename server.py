@@ -28,6 +28,16 @@ SUPA_KEY = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt'
 
 app = Flask(__name__, static_folder=DASHBOARD_DIR)
 
+
+# ── CORS: file:// 또는 다른 포트/호스트에서 대시보드를 열어도 API 접근 허용 ──
+@app.after_request
+def _add_cors(resp):
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    return resp
+
+
 # 진행 중인 분석 작업 저장소
 jobs: dict = {}  # job_id -> { status, document_id, log, proc }
 
