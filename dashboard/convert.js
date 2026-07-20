@@ -19,6 +19,18 @@ var READ_CLS   = {READY:'ready',REVIEW_REQUIRED:'review',MANUAL_ONLY:'manual'};
 // ── 유틸 ───────────────────────────────────────────────────
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 function $(id){ return document.getElementById(id); }
+
+// API 호출 헬퍼: HTML 404 등 비-JSON 응답을 명확한 에러로 변환
+var SERVER_HINT = '백엔드 서버가 실행 중이 아닙니다. 터미널에서 "python server.py" 실행 후 http://localhost:8080 으로 접속하세요.';
+function apiJson(url, opts){
+  return fetch(url, opts).then(function(r){
+    var ct = r.headers.get('content-type') || '';
+    if(!r.ok || ct.indexOf('application/json') < 0){
+      throw new Error(SERVER_HINT);
+    }
+    return r.json();
+  });
+}
 function rowsText(arr){ return (arr||[]).join(' '); }
 function naCls(v){ return (v==='해당없음') ? ' class="na"' : ''; }
 
@@ -33,21 +45,28 @@ window.addEventListener('DOMContentLoaded', function(){
 
 function loadConversion(){
   var ov = $('loading-overlay'); if(ov) ov.style.display='flex';
-  fetch('/api/chat-conversion')
-    .then(function(r){ if(!r.ok) throw new Error('no data'); return r.json(); })
+  apiJson('/api/chat-conversion')
     .then(function(d){ DATA = d; renderAll(); })
-    .catch(function(){ showEmpty(); })
+    .catch(function(e){ showEmpty(e && /server\.py/.test(e.message) ? e.message : ''); })
     .finally(function(){ if(ov) ov.style.display='none'; });
 }
 
-function showEmpty(){
+function showEmpty(msg){
   $('empty-state').style.display='block';
   $('dash-root').style.display='none';
   var sb=$('status-badge'); sb.textContent='미변환'; sb.className='status-badge warn';
+  if(msg){
+    var es=$('empty-state');
+    es.querySelector('#empty-hint') || (function(){
+      var d=document.createElement('div'); d.id='empty-hint';
+      d.style.cssText='color:#fb923c;font-size:12px;margin-top:14px'; es.appendChild(d);
+    })();
+    $('empty-hint').textContent='⚠ '+msg;
+  }
 }
 
 function loadFileList(){
-  fetch('/api/input-files').then(function(r){return r.json();}).then(function(files){
+  apiJson('/api/input-files').then(function(files){
     var sel=$('analyze-file-select'); if(!sel) return;
     sel.innerHTML='';
     files.forEach(function(f){
@@ -56,7 +75,10 @@ function loadFileList(){
       if(f.filename.indexOf('Regression')>=0) o.selected=true;
       sel.appendChild(o);
     });
-  }).catch(function(){});
+  }).catch(function(){
+    var sel=$('analyze-file-select');
+    if(sel) sel.innerHTML='<option value="">서버 미실행 — python server.py 필요</option>';
+  });
 }
 
 // ══════════════════════════════════════════════════════════
@@ -511,19 +533,18 @@ function runConversion(){
   $('analyze-progress-bar').style.width='15%';
   $('analyze-log').textContent='변환 요청...';
 
-  fetch('/api/chat-conversion/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename:file})})
-    .then(function(r){return r.json();})
+  apiJson('/api/chat-conversion/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({filename:file})})
     .then(function(res){
       if(res.error) throw new Error(res.error);
       pollStatus(res.job_id);
     })
-    .catch(function(e){ btn.textContent='요청 실패'; btn.disabled=false; $('analyze-log').textContent=String(e); });
+    .catch(function(e){ btn.textContent='요청 실패'; btn.disabled=false; $('analyze-log').textContent=(e&&e.message)||String(e); });
 }
 
 function pollStatus(jobId){
   var btn=$('analyze-run-btn');
   var timer=setInterval(function(){
-    fetch('/api/analyze/status/'+jobId).then(function(r){return r.json();}).then(function(st){
+    apiJson('/api/analyze/status/'+jobId).then(function(st){
       $('analyze-log').textContent=(st.log||[]).join('\n');
       $('analyze-log').scrollTop=$('analyze-log').scrollHeight;
       if(st.status==='done'){
