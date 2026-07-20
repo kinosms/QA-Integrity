@@ -1,0 +1,22 @@
+{
+  "source_sheet": "5.일반채팅",
+  "source_tc_count": 594,
+  "converted_tc_count": 594,
+  "converted_step_count": 1014,
+  "screen_dictionary_count": 11,
+  "target_dictionary_count": 17,
+  "state_dictionary_count": 12,
+  "transition_dictionary_count": 7,
+  "mapped_source_tc_count": 594,
+  "unmapped_source_tc_count": 0,
+  "split_source_tc_count": 245,
+  "merged_source_tc_count": 0,
+  "automation_ready_count": 221,
+  "review_required_count": 351,
+  "manual_only_count": 22,
+  "validation_passed": 15,
+  "validation_total": 15,
+  "status": "success",
+  "first_source_row": 3,
+  "last_source_row": 947
+}

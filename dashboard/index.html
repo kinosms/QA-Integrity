@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QA Dashboard — Phase 1·2·3·4</title>
+  <title>QA 구조화 TC 변환 — 5.일반채팅</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="convert.css" />
 </head>
 <body>
 <div class="app">
@@ -12,370 +13,133 @@
   <!-- ── 로딩 오버레이 ── -->
   <div id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,17,25,.75);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:12px">
     <div style="width:36px;height:36px;border:3px solid #6366f1;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite"></div>
-    <div style="color:#94a3b8;font-size:13px">문서 로딩 중...</div>
+    <div style="color:#94a3b8;font-size:13px">변환 결과 로딩 중...</div>
   </div>
   <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
   <!-- ── 헤더 ── -->
   <header>
-    <h1>QA Test Coverage Dashboard</h1>
-    <span class="badge" id="doc-badge">— TC · Phase 1~4</span>
-    <select id="doc-select" class="doc-select"><option value="">로딩 중...</option></select>
+    <h1>QA 구조화 TC 변환</h1>
+    <span class="badge" id="scope-badge">5.일반채팅</span>
+    <span id="status-badge" class="status-badge">—</span>
+    <div style="flex:1"></div>
     <button class="dl-btn analyze-btn" onclick="openAnalyzeModal()">▶ 분석 실행</button>
-    <button class="dl-btn stats-btn" onclick="openReviewStats()">의견 분석</button>
-    <button id="btn-export" class="dl-btn" onclick="exportAIReview()">⬇ AI Review Excel</button>
-    <button id="btn-csv-export" class="dl-btn csv-btn" onclick="exportCSV()">⬇ CSV (Google Sheets용)</button>
+    <button id="btn-xlsx" class="dl-btn" onclick="exportConversionXlsx()">⬇ Excel</button>
+    <button id="btn-csv" class="dl-btn csv-btn" onclick="exportConversionCsv()">⬇ CSV</button>
   </header>
 
-  <div class="layout">
+  <div class="layout" style="display:block;overflow:hidden;height:calc(100vh - 56px)">
+    <main class="content" id="content" style="overflow-y:auto;height:100%;padding:20px 24px">
 
-    <!-- ── 사이드바 ── -->
-    <aside class="sidebar">
-      <div class="sidebar-label">서비스 필터</div>
-      <div id="sidebar-nav"></div>
-    </aside>
+      <!-- 데이터 없음 안내 -->
+      <div id="empty-state" style="display:none;text-align:center;color:#94a3b8;padding:80px 20px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px">변환 결과가 없습니다</div>
+        <div style="font-size:13px;margin-bottom:18px">상단의 <b>▶ 분석 실행</b> 버튼으로 '5.일반채팅' 시트 변환을 실행하세요.</div>
+        <button class="dl-btn" onclick="openAnalyzeModal()">▶ 분석 실행</button>
+      </div>
 
-    <!-- ── 메인 콘텐츠 ── -->
-    <main class="content">
+      <div id="dash-root" style="display:none">
 
-      <!-- KPI 행 -->
-      <div id="kpi-row" class="kpi-row"></div>
+        <!-- ══ 추적성 요약 KPI ══ -->
+        <div id="kpi-row" class="kpi-row"></div>
 
-      <!-- ══════════════ PHASE 1 ══════════════ -->
-
-      <!-- 서비스 분포 + 우선순위 분포 -->
-      <div class="two-col">
-
-        <div class="section-card" id="card-svc-donut">
-          <div class="section-header">
-            <span class="sec-title">서비스별 TC 분포</span>
-            <span class="sec-badge">Phase 1</span>
-            <span class="toggle-icon">▾</span>
+        <!-- ══ 유지 통계 4종 ══ -->
+        <div class="two-col">
+          <div class="section-card" id="card-svc">
+            <div class="section-header"><span class="sec-title">서비스별 TC 분포</span><span class="toggle-icon">▾</span></div>
+            <div class="section-body"><div id="svc-dist"></div></div>
           </div>
-          <div class="section-body dist-body">
-            <div class="donut-wrap">
-              <canvas id="donut-service" width="160" height="160"></canvas>
-            </div>
-            <div id="legend-service" class="legend legend-grid"></div>
+          <div class="section-card" id="card-pri">
+            <div class="section-header"><span class="sec-title">우선순위 분포</span><span class="toggle-icon">▾</span></div>
+            <div class="section-body"><div id="pri-dist"></div></div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="section-card" id="card-os">
+            <div class="section-header"><span class="sec-title">OS 분포</span><span class="toggle-icon">▾</span></div>
+            <div class="section-body"><div id="os-dist" class="os-grid"></div></div>
+          </div>
+          <div class="section-card" id="card-attr">
+            <div class="section-header"><span class="sec-title">TC 속성 분포</span><span class="toggle-icon">▾</span></div>
+            <div class="section-body"><div id="attr-dist"></div></div>
           </div>
         </div>
 
-        <div class="section-card" id="card-pri-donut">
-          <div class="section-header">
-            <span class="sec-title">우선순위 분포</span>
-            <span class="sec-badge">Phase 1</span>
-            <span class="toggle-icon">▾</span>
+        <!-- ══ 원본-신규 추적성 검증 ══ -->
+        <div class="section-card" id="card-trace">
+          <div class="section-header"><span class="sec-title">원본-신규 추적성 검증</span><span class="toggle-icon">▾</span></div>
+          <div class="section-body">
+            <div id="trace-grid" class="trace-grid"></div>
+            <div id="trace-unmapped-wrap" style="margin-top:18px"></div>
+            <div class="sub-title" style="margin-top:20px;margin-bottom:8px">데이터 품질 검증 (15항목)</div>
+            <div id="validation-list"></div>
           </div>
-          <div class="section-body dist-body">
-            <div class="donut-wrap">
-              <canvas id="donut-priority" width="160" height="160"></canvas>
-            </div>
-            <div id="legend-priority" class="legend legend-grid"></div>
-          </div>
+        </div>
+
+        <!-- ══ A. Screen Dictionary ══ -->
+        <div class="section-card" id="card-screen">
+          <div class="section-header"><span class="sec-title">A. Screen Dictionary</span><span class="dict-count" id="cnt-screen"></span><span class="toggle-icon">▾</span></div>
+          <div class="section-body"><div id="screen-view"></div></div>
+        </div>
+
+        <!-- ══ B. Target Dictionary ══ -->
+        <div class="section-card" id="card-target">
+          <div class="section-header"><span class="sec-title">B. Target Dictionary</span><span class="dict-count" id="cnt-target"></span><span class="toggle-icon">▾</span></div>
+          <div class="section-body"><div id="target-view"></div></div>
+        </div>
+
+        <!-- ══ C. State Dictionary ══ -->
+        <div class="section-card" id="card-state">
+          <div class="section-header"><span class="sec-title">C. State Dictionary</span><span class="dict-count" id="cnt-state"></span><span class="toggle-icon">▾</span></div>
+          <div class="section-body"><div id="state-view"></div></div>
+        </div>
+
+        <!-- ══ D. Transition Dictionary ══ -->
+        <div class="section-card" id="card-transition">
+          <div class="section-header"><span class="sec-title">D. Transition Dictionary</span><span class="dict-count" id="cnt-transition"></span><span class="toggle-icon">▾</span></div>
+          <div class="section-body"><div id="transition-view"></div></div>
+        </div>
+
+        <!-- ══ E. 신규 TC 결과표 ══ -->
+        <div class="section-card" id="card-tc">
+          <div class="section-header"><span class="sec-title">E. 신규 TC 결과</span><span class="dict-count" id="cnt-tc"></span><span class="toggle-icon">▾</span></div>
+          <div class="section-body"><div id="tc-view"></div></div>
         </div>
 
       </div>
-
-      <!-- OS 분포 -->
-      <div class="section-card" id="card-os">
-        <div class="section-header">
-          <span class="sec-title">OS 분포</span>
-          <span class="sec-badge">Phase 1</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div id="os-grid" class="os-grid"></div>
-        </div>
-      </div>
-
-      <!-- ══════════════ PHASE 2 ══════════════ -->
-
-      <!-- TC 속성 분포 -->
-      <div class="section-card" id="card-attr">
-        <div class="section-header">
-          <span class="sec-title">TC 속성 분포</span>
-          <span class="sec-badge p2">Phase 2</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div id="attr-bars"></div>
-        </div>
-      </div>
-
-      <!-- 서비스별 속성 히트맵 -->
-      <div class="section-card" id="card-heatmap">
-        <div class="section-header">
-          <span class="sec-title">서비스별 속성 히트맵</span>
-          <span class="sec-badge p2">Phase 2</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body" style="overflow-x:auto;padding-top:0">
-          <div id="heatmap-wrap"></div>
-        </div>
-      </div>
-
-      <!-- 사전조건 속성 분포 (Phase 4) -->
-      <div class="section-card" id="card-precond">
-        <div class="section-header">
-          <span class="sec-title">사전조건 속성 분포</span>
-          <span class="sec-badge p4">Phase 4</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <!-- 전체 분포 막대 -->
-          <div class="sub-title" style="margin-bottom:10px">전체 카테고리 분포</div>
-          <div id="precond-bars"></div>
-          <!-- 서비스별 히트맵 -->
-          <div class="sub-title" style="margin-top:20px;margin-bottom:10px">서비스별 분포 (상위 5 카테고리)</div>
-          <div id="precond-svc-heatmap" style="overflow-x:auto"></div>
-        </div>
-      </div>
-
-      <!-- 복합 속성 조합 -->
-      <div class="section-card" id="card-compound">
-        <div class="section-header">
-          <span class="sec-title">복합 속성 조합 (상위 20)</span>
-          <span class="sec-badge p2">Phase 2</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div id="compound-attr-bars"></div>
-        </div>
-      </div>
-
-      <!-- ══════════════ PHASE 3 ══════════════ -->
-
-      <!-- 품질 점검 요약 -->
-      <div class="section-card" id="card-quality">
-        <div class="section-header">
-          <span class="sec-title">품질 점검 요약</span>
-          <span class="sec-badge p3">Phase 3</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div id="q-kpis" class="q-kpis"></div>
-          <div class="two-col" style="margin-top:20px;gap:20px">
-            <div>
-              <div class="sub-title">이슈 유형별</div>
-              <div id="q-type-bars"></div>
-            </div>
-            <div>
-              <div class="sub-title">서비스별 이슈 수</div>
-              <div id="q-svc-bars"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 품질 이슈 목록 -->
-      <div class="section-card" id="card-qi">
-        <div class="section-header">
-          <span class="sec-title">품질 이슈 목록</span>
-          <span class="sec-badge p3">Phase 3</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div class="filter-row">
-            <select class="fsel" id="f-qi-svc">
-              <option value="all">서비스 전체</option>
-              <!-- JS에서 COVERAGE.services 기반으로 동적 추가 -->
-            </select>
-            <select class="fsel" id="f-qi-type">
-              <option value="all">이슈 유형 전체</option>
-              <option value="ambiguous_test_step">Test Step 모호</option>
-              <option value="ambiguous_expected_result">기대결과 모호</option>
-              <option value="missing_precondition">사전조건 누락</option>
-              <option value="duplicated_step_expected">Step=Expected 중복</option>
-              <option value="multiple_purpose">복수 목적 혼재</option>
-              <option value="invalid_priority">Priority 이상값</option>
-              <option value="invalid_os">OS 이상값</option>
-              <option value="invalid_category">분류 누락/불일치</option>
-            </select>
-            <select class="fsel" id="f-qi-pri">
-              <option value="all">우선순위 전체</option>
-              <option value="P0">P0</option><option value="P1">P1</option>
-              <option value="P2">P2</option><option value="P3">P3</option>
-              <option value="P4">P4</option><option value="P5">P5</option>
-            </select>
-            <select class="fsel" id="f-qi-os">
-              <option value="all">OS 전체</option>
-              <option value="common">공통</option>
-              <option value="android">Android</option>
-              <option value="ios">iOS</option>
-            </select>
-          </div>
-          <div class="tbl-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>서비스</th><th>행</th><th>이슈 유형</th>
-                  <th>탐지 근거</th><th>분류 경로</th><th>P</th><th>OS</th>
-                </tr>
-              </thead>
-              <tbody id="qi-tbody"></tbody>
-            </table>
-          </div>
-          <div id="qi-page-info" class="page-info"></div>
-          <div id="qi-pager" class="pager"></div>
-        </div>
-      </div>
-
-      <!-- ══════════════ TC 비교 뷰 ══════════════ -->
-
-      <div class="section-card" id="card-compare">
-        <div class="section-header">
-          <span class="sec-title">원본 TC vs AI 분석 결과</span>
-          <span class="sec-badge">Phase 1·2·3</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body" style="padding-top:0;padding-bottom:0">
-          <!-- 필터 (JS에서 동적 생성) -->
-          <div class="filter-row" style="padding:16px 0 12px">
-            <select class="fsel" id="cmp-svc">
-              <option value="all">서비스 전체</option>
-              <!-- 서비스 목록: bindCmpFilters()에서 동적 삽입 -->
-            </select>
-            <select class="fsel" id="cmp-issue">
-              <option value="all">이슈 유형 전체</option>
-              <!-- 선택한 서비스의 실제 이슈 유형: cmp-svc 변경 시 재생성 -->
-            </select>
-            <span id="cmp-count" class="cmp-count"></span>
-          </div>
-
-          <!-- 비교 테이블 헤더 -->
-          <div class="cmp-header-row">
-            <div class="cmp-orig-head">원본 TC</div>
-            <div class="cmp-ai-head">AI Standard TC</div>
-          </div>
-
-          <!-- 비교 테이블 바디 -->
-          <div id="cmp-body" class="cmp-body"></div>
-
-          <!-- 페이지네이션 -->
-          <div style="padding:12px 0;display:flex;align-items:center;justify-content:flex-end;gap:8px">
-            <span id="cmp-page-info" class="page-info" style="margin:0"></span>
-            <div id="cmp-pager" class="pager"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TC 전체 목록 -->
-      <div class="section-card" id="card-tc">
-        <div class="section-header">
-          <span class="sec-title">TC 목록 (7260건 전체)</span>
-          <span class="sec-badge">Phase 1·2</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body">
-          <div class="filter-row">
-            <select class="fsel" id="f-tc-pri">
-              <option value="all">우선순위 전체</option>
-              <option value="P0">P0</option><option value="P1">P1</option>
-              <option value="P2">P2</option><option value="P3">P3</option>
-              <option value="P4">P4</option><option value="P5">P5</option>
-            </select>
-            <select class="fsel" id="f-tc-os">
-              <option value="all">OS 전체</option>
-              <option value="common">공통</option>
-              <option value="android">Android</option>
-              <option value="ios">iOS</option>
-            </select>
-            <select class="fsel" id="f-tc-attr">
-              <option value="all">속성 전체</option>
-              <option value="ui_visibility">UI 노출 확인</option>
-              <option value="data_change">데이터 변경 확인</option>
-              <option value="function_behavior">기능 동작 확인</option>
-              <option value="permission_auth">권한/인증 확인</option>
-              <option value="exception_error">예외/에러 확인</option>
-              <option value="network_server">네트워크/서버 연동</option>
-              <option value="notification">알림/푸시 확인</option>
-              <option value="multi_device_os">멀티디바이스/OS 차이</option>
-              <option value="state_persistence">설정/상태 유지 확인</option>
-              <option value="content_media">콘텐츠/미디어 확인</option>
-              <option value="has_precondition">사전조건 있음</option>
-              <option value="automation_candidate">자동화 후보</option>
-              <option value="manual_required">수동 확인 필요</option>
-            </select>
-          </div>
-          <div class="tbl-wrap tbl-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>서비스</th><th>행</th><th>카테고리1</th>
-                  <th>카테고리2</th><th>P</th><th>OS</th><th>속성 태그</th>
-                </tr>
-              </thead>
-              <tbody id="tc-tbody"></tbody>
-            </table>
-          </div>
-          <div id="tc-page-info" class="page-info"></div>
-          <div id="tc-pager" class="pager"></div>
-        </div>
-      </div>
-
-      <!-- ══════════════ 자동화 분석 ══════════════ -->
-      <div class="section-card collapsed" id="card-automation">
-        <div class="section-header">
-          <span class="sec-title">자동화 가능성 분석</span>
-          <span class="sec-badge p2">Automation</span>
-          <span class="toggle-icon">▾</span>
-        </div>
-        <div class="section-body" id="auto-analysis-body">
-          <!-- JS renderAutomationAnalysis()로 렌더링 -->
-        </div>
-      </div>
-
     </main>
   </div>
 </div>
+
 <!-- ── 분석 실행 모달 ── -->
 <div id="analyze-modal" class="rs-modal-overlay" style="display:none" onclick="if(event.target===this)closeAnalyzeModal()">
   <div class="rs-modal" style="max-width:500px">
     <div class="rs-modal-header">
-      <span class="rs-modal-title">분석 실행</span>
+      <span class="rs-modal-title">분석 실행 — 5.일반채팅 변환</span>
       <button class="rs-modal-close" onclick="closeAnalyzeModal()">✕</button>
     </div>
     <div class="rs-modal-body">
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">분석할 파일 (input/ 폴더)</div>
+        <div class="modal-label">분석할 파일 (input/ 폴더)</div>
         <select id="analyze-file-select" class="fsel" style="width:100%"></select>
       </div>
-      <div style="margin-bottom:16px">
-        <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">표시 이름</div>
-        <input id="analyze-name-input" type="text" placeholder="예: Regression TestCase v2"
-          style="width:100%;background:#1a1d27;border:1px solid #2e3350;color:#e2e8f0;
-                 padding:7px 10px;border-radius:6px;font-size:13px;box-sizing:border-box">
+      <div style="font-size:12px;color:#94a3b8;margin-bottom:14px">
+        '5.일반채팅' 시트만 신규 구조화 TC 체계로 변환합니다. 다른 시트는 대상에서 제외됩니다.
       </div>
       <div id="analyze-progress" style="display:none;margin-bottom:14px">
         <div style="height:4px;background:#2e3350;border-radius:2px;margin-bottom:8px">
           <div id="analyze-progress-bar" style="height:100%;width:0%;background:#6366f1;border-radius:2px;transition:width .5s ease"></div>
         </div>
-        <pre id="analyze-log" style="background:#0f1117;border:1px solid #2e3350;border-radius:6px;
-             padding:10px;font-size:10px;color:#94a3b8;max-height:180px;overflow-y:auto;
-             white-space:pre-wrap;word-break:break-all;margin:0"></pre>
+        <pre id="analyze-log" style="background:#0f1117;border:1px solid #2e3350;border-radius:6px;padding:10px;font-size:10px;color:#94a3b8;max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin:0"></pre>
       </div>
-      <button id="analyze-run-btn" class="dl-btn" onclick="runAnalysis()"
+      <button id="analyze-run-btn" class="dl-btn" onclick="runConversion()"
         style="width:100%;justify-content:center;font-size:13px;padding:8px">분석 시작</button>
     </div>
   </div>
 </div>
 
-<!-- ── 의견 분석 모달 ── -->
-<div id="review-stats-modal" class="rs-modal-overlay" style="display:none" onclick="if(event.target===this)closeReviewStats()">
-  <div class="rs-modal">
-    <div class="rs-modal-header">
-      <span class="rs-modal-title">검수 의견 통계 분석</span>
-      <button class="rs-modal-close" onclick="closeReviewStats()">✕</button>
-    </div>
-    <div class="rs-modal-body" id="rs-body"></div>
-  </div>
-</div>
-
 <script src="xlsx.full.min.js"></script>
 <script src="xlsx-js-style.js"></script>
-<script src="export_browser.js"></script>
-<script src="csv_export.js"></script>
-<script src="app.js"></script>
-<script src="review-stats.js"></script>
+<script src="convert.js"></script>
 </body>
 </html>

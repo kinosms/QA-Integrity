@@ -21,6 +21,7 @@ _ssl_ctx.verify_mode = ssl.CERT_NONE
 BASE_DIR      = os.path.dirname(os.path.abspath(__file__))
 DASHBOARD_DIR = os.path.join(BASE_DIR, 'dashboard')
 INPUT_DIR     = os.path.join(BASE_DIR, 'input')
+CONV_DIR      = os.path.join(BASE_DIR, 'output', 'chat_conversion')
 
 SUPA_URL = 'https://fnuvsxkytoycdhgkqykw.supabase.co'
 SUPA_KEY = 'sb_publishable_H_fiKjJsX13kBe9dM3Y6vg_r-QEnHgt'
@@ -159,6 +160,53 @@ def _run_job(job_id: str, filename: str, name: str):
     except Exception as e:
         jobs[job_id]['status'] = 'error'
         jobs[job_id]['log'].append(f'[서버 오류] {e}')
+
+
+# ── API: 5.일반채팅 신규 체계 변환 ───────────────────────────
+
+@app.get('/api/chat-conversion')
+def get_chat_conversion():
+    """output/chat_conversion/conversion.json 반환 (없으면 204)."""
+    import json as _json
+    path = os.path.join(CONV_DIR, 'conversion.json')
+    if not os.path.exists(path):
+        return jsonify({'error': 'not_converted'}), 404
+    with open(path, encoding='utf-8') as f:
+        return app.response_class(f.read(), mimetype='application/json')
+
+
+@app.post('/api/chat-conversion/run')
+def run_chat_conversion():
+    """convert_chat.py 를 비동기 실행하고 job_id 반환."""
+    data = request.get_json(silent=True) or {}
+    filename = data.get('filename', '').strip() or 'Regression TestCase.xlsx'
+
+    input_path = os.path.join(INPUT_DIR, filename)
+    if not os.path.exists(input_path):
+        return jsonify({'error': f'파일 없음: {filename}'}), 404
+
+    job_id = str(uuid.uuid4())
+    jobs[job_id] = {'status': 'running', 'document_id': None, 'log': []}
+
+    def _run():
+        try:
+            proc = subprocess.Popen(
+                [sys.executable, os.path.join(BASE_DIR, 'tools', 'convert_chat.py'),
+                 '--input', filename],
+                cwd=BASE_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True, bufsize=1,
+            )
+            jobs[job_id]['proc'] = proc
+            for line in proc.stdout:
+                jobs[job_id]['log'].append(line.rstrip())
+            proc.wait()
+            jobs[job_id]['status'] = 'done' if proc.returncode == 0 else 'error'
+        except Exception as e:
+            jobs[job_id]['status'] = 'error'
+            jobs[job_id]['log'].append(f'[서버 오류] {e}')
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({'job_id': job_id})
 
 
 # ── API: 분석 상태 조회 ──────────────────────────────────────
