@@ -352,6 +352,94 @@ def load_split():
         return None
 
 
+def load_conditions():
+    """build_conditions.py 가 생성한 condition_override.json 로드(없으면 None)."""
+    path = os.path.join(OUT_DIR, 'condition_override.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:  # noqa: BLE001
+        print(f'[warn] condition_override.json 로드 실패({e}) — 조건 분리 생략')
+        return None
+
+
+def _merge_precondition(step, add_pcs, states_meta):
+    """add_pcs(=[{bucket,state_key,...}]) 의 state_id 를 step 의 precondition 필드에 병합."""
+    used = []
+    field = {'data': 'precondition_data_state', 'ui': 'precondition_ui_state',
+             'permission': 'precondition_permission_state'}
+    for pc in add_pcs or []:
+        meta = states_meta.get(pc['state_key'])
+        if not meta:
+            continue
+        sid = meta['state_id']
+        f = field.get(meta['bucket'], 'precondition_data_state')
+        cur = step.get(f, NA)
+        ids = [] if cur == NA else cur.split(' / ')
+        if sid not in ids:
+            ids.append(sid)
+        step[f] = ' / '.join(ids)
+        used.append(sid)
+    return used
+
+
+def apply_conditions(tc_steps, COND):
+    """조건→precondition 분리 적용(annotate/split). TC별 step_no 재부여.
+    반환: (새 tc_steps, {state_id: set(new_tc_id)})."""
+    from collections import OrderedDict
+    states_meta = COND.get('states', {})
+    overrides = COND.get('steps', {})
+    usage = {}
+
+    by_tc = OrderedDict()
+    for s in tc_steps:
+        by_tc.setdefault(s['new_tc_id'], []).append(s)
+
+    out = []
+    for tcid, slist in by_tc.items():
+        new_no = 0
+        for s in slist:
+            rec = overrides.get(f"{tcid}|{s['step_no']}")
+            if not rec:
+                new_no += 1
+                ns = dict(s); ns['step_no'] = new_no
+                out.append(ns)
+                continue
+            if rec['decision'] == 'annotate':
+                new_no += 1
+                ns = dict(s); ns['step_no'] = new_no
+                for sid in _merge_precondition(ns, rec.get('add_preconditions'), states_meta):
+                    usage.setdefault(sid, set()).add(tcid)
+                if rec.get('result_state', '').strip():
+                    ns['result_state'] = rec['result_state'].strip()
+                out.append(ns)
+            elif rec['decision'] == 'split':
+                for case in rec['cases']:
+                    new_no += 1
+                    ns = dict(s); ns['step_no'] = new_no
+                    for sid in _merge_precondition(ns, case.get('add_preconditions'), states_meta):
+                        usage.setdefault(sid, set()).add(tcid)
+                    ns['action'] = case.get('action', ns['action'])
+                    ap = case.get('action_parameter')
+                    if ap in (None, '', NA):
+                        pass  # 원 스텝 action_parameter 유지
+                    elif isinstance(ap, str):
+                        ns['action_parameter'] = ap
+                    else:
+                        ns['action_parameter'] = json.dumps(ap, ensure_ascii=False)
+                    rs = (case.get('result_state') or '').strip()
+                    if rs:
+                        ns['result_state'] = rs
+                    out.append(ns)
+            else:
+                new_no += 1
+                ns = dict(s); ns['step_no'] = new_no
+                out.append(ns)
+    return out, usage
+
+
 def expand_splits(tc_steps, SPLIT):
     """액션/시나리오 분리 대상 스텝을 하위 스텝으로 확장하고 TC별 step_no 재부여.
     하위 스텝은 원 스텝의 화면/타깃/사전조건을 상속하되 action/action_parameter/result_state 를 교체.
@@ -427,6 +515,11 @@ def convert():
     SPLIT = load_split()
     if SPLIT:
         print(f'[2.7/8] 스텝 분리 데이터 로드 — {len(SPLIT)} 스텝 분리 대상')
+
+    CONDITIONS = load_conditions()
+    if CONDITIONS:
+        print(f'[2.8/8] 조건 분리 데이터 로드 — {len(CONDITIONS.get("steps", {}))} 스텝 / '
+              f'신규 State {len(CONDITIONS.get("states", {}))}')
 
     # ── 원본 TC 수집 (Excel 행번호 부여) ─────────────────────────────────────
     # load_sheet 는 header 다음 행부터 반환. Excel 행번호 = first_row + index
@@ -663,10 +756,25 @@ def convert():
     if SPLIT:
         before = len(tc_steps)
         tc_steps = expand_splits(tc_steps, SPLIT)
-        print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step '
-              f'(스텝 분리 +{len(tc_steps) - before})')
+        split_delta = len(tc_steps) - before
     else:
-        print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step')
+        split_delta = 0
+
+    # 조건→precondition 분리 적용 (annotate/split)
+    cond_delta = 0
+    if CONDITIONS:
+        before = len(tc_steps)
+        tc_steps, cond_usage = apply_conditions(tc_steps, CONDITIONS)
+        cond_delta = len(tc_steps) - before
+        # 조건 State 사용 집계 (state_dict 등록용)
+        tc_row = {t['new_tc_id']: t['_min_row'] for t in tc_master}
+        for sid, tcids in cond_usage.items():
+            for tcid in tcids:
+                state_rows.setdefault(sid, set()).add(tc_row.get(tcid, 0))
+                state_use_tc.setdefault(sid, set()).add(tcid)
+
+    print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step '
+          f'(스텝 분리 +{split_delta} / 조건 분리 +{cond_delta})')
 
     # 기본 정렬: 최소 원본행 → new_tc_id
     tc_master.sort(key=lambda t: (t['_min_row'], t['new_tc_id']))
@@ -701,10 +809,14 @@ def convert():
                 'used_tc_count': len(state_use_tc.get(sid, set())),
             })
 
-    # 강화(enrichment) 로 도입된 State 도 사전에 등록 (카탈로그 중복 제외)
-    if ENRICHMENT:
+    # 강화(enrichment)/조건분리로 도입된 State 도 사전에 등록 (카탈로그 중복 제외)
+    if ENRICHMENT or CONDITIONS:
         BKT_TYPE = {'data': 'Data State', 'ui': 'UI State', 'permission': 'Permission State'}
-        id_meta = {m['state_id']: m for m in ENRICHMENT['states'].values()}
+        id_meta = {}
+        if ENRICHMENT:
+            id_meta.update({m['state_id']: m for m in ENRICHMENT['states'].values()})
+        if CONDITIONS:  # 조건분리 State 가 우선(OS 등 신규 정의)
+            id_meta.update({m['state_id']: m for m in CONDITIONS['states'].values()})
         for sid in sorted(state_rows):
             if sid in catalog_state_ids:
                 continue

@@ -1,0 +1,783 @@
+{
+  "states": {
+    "blocked_relation": {
+      "state_id": "STA_BLOCKED_RELATION",
+      "bucket": "data",
+      "label": "일반 그룹채팅에서 상대를 차단한 관계 상태",
+      "review": false
+    },
+    "os_android": {
+      "state_id": "STA_OS_ANDROID",
+      "bucket": "data",
+      "label": "Android OS 환경",
+      "review": false
+    },
+    "os_ios": {
+      "state_id": "STA_OS_IOS",
+      "bucket": "data",
+      "label": "iOS 환경",
+      "review": false
+    },
+    "ladder_participants_10_or_more": {
+      "state_id": "STA_LADDER_PARTICIPANTS_10_OR_MORE",
+      "bucket": "data",
+      "label": "사다리 게임 참여 인원이 10명 이상인 상태",
+      "review": true
+    },
+    "call_history_exists": {
+      "state_id": "STA_CALL_HISTORY_EXISTS",
+      "bucket": "data",
+      "label": "통화 이력이 존재하는 상태",
+      "review": true
+    },
+    "message_contains_text": {
+      "state_id": "STA_MESSAGE_CONTAINS_TEXT",
+      "bucket": "data",
+      "label": "대상 메시지에 텍스트가 포함된 상태",
+      "review": true
+    }
+  },
+  "steps": {
+    "CHAT_NEW_0025|1": {
+      "decision": "annotate",
+      "add_preconditions": [
+        {
+          "bucket": "data",
+          "state_key": "blocked_relation",
+          "label": "일반 그룹채팅에서 상대를 차단한 관계 상태"
+        }
+      ],
+      "result_state": "말풍선 리액션 기능을 사용할 수 없음 - 내가 차단한 사용자: 리액션 메뉴 미제공 - 나를 차단한 사용자: 리액션 메뉴 제공 - 1:1 일반채팅은 미제공(비활성화), 팀채팅은 차단과 무관하게 사용 가능"
+    },
+    "CHAT_NEW_0028|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "상대방 프로필이 노출되고 [1:1채팅] [통화하기] [페이스톡] [펑](등록된 게시물이 있는 경우) 버튼이 노출됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "상대방 프로필이 노출되나 1:1 채팅방 내에서 탭한 경우 [1:1채팅] 버튼은 미노출됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0029|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "상대방 프로필이 노출되고 [1:1채팅] [보이스톡] [페이스톡] [펑](등록된 게시물이 있는 경우) 버튼이 노출됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "상대방 프로필이 노출되나 1:1 채팅방 내에서 탭한 경우 [1:1채팅] 버튼은 미노출됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0182|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "VERIFY",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "미니플레이어 재생 상태와 뷰가 유지됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "VERIFY",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "미니뷰가 사라짐"
+        }
+      ]
+    },
+    "CHAT_NEW_0194|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "WAIT",
+          "action_parameter": {
+            "os": "Android",
+            "timeout": "30s"
+          },
+          "result_state": "메시지가 정상 전송됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "WAIT",
+          "action_parameter": {
+            "os": "iOS",
+            "timeout": "30s"
+          },
+          "result_state": "전송 실패 메시지로 처리되고 말풍선 좌측 하단에 [재전송]/[삭제] 버튼이 노출됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0274|1": {
+      "decision": "annotate",
+      "add_preconditions": [
+        {
+          "bucket": "data",
+          "state_key": "ladder_participants_10_or_more",
+          "label": "사다리 게임 참여 인원이 10명 이상인 상태"
+        }
+      ],
+      "result_state": "전체 결과만 표시됨 — 게임 결과, 프로필 카드 + 매칭된 항목값, 통과한 참여자 리스트(프로필 이미지 / [나] 이름 / [통과], 프로필 이미지 / 이름 / [통과] …), 리스트가 화면을 넘어가면 좌우 스크롤 가능, [게임 다시하기] / [내 결과 공유하기]"
+    },
+    "CHAT_NEW_0305|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "채팅방 내 사진 말풍선으로 전송 완료됨 (사진 선택 순서에 따른 전송 순서 미보장)"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "채팅방 내 사진 말풍선으로 전송 완료됨 (선택 순서에 따라 전송 순서 보장됨)"
+        }
+      ]
+    },
+    "CHAT_NEW_0309|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "채팅방 내 동영상 말풍선으로 개별 전송 완료됨 (인코딩 대기·압축·전송 처리 후 전송되며, 선택 순서에 따른 전송 순서 미보장)"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "채팅방 내 동영상 말풍선으로 개별 전송 완료됨 (인코딩 대기·압축·전송 처리 후 전송되며, 선택 순서에 따라 전송 순서 보장됨)"
+        }
+      ]
+    },
+    "CHAT_NEW_0315|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "전송 불가 안내가 노출됨 — 일반채팅방: \"300MB 이상의 파일은 전송할 수 없습니다.\" 토스트 / 채널·비밀채팅방: (일반사진) \"20MB 이상의 고용량 이미지는 전송할 수 없습니다.\" / (GIF) \"20MB 이상의 GIF 파일은 전송할 수 없습니다.\" 토스트"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "전송 불가 팝업이 노출됨 — 일반채팅방: \"파일 사이즈 제한을 초과하는 항목은 전송시 제외 됩니다.(300MB) [확인]\" / 채널·비밀채팅방: \"파일 사이즈 제한을 초과하는 항목은 전송 시 제외됩니다. (사진 20MB, 동영상 300MB) [확인]\""
+        }
+      ]
+    },
+    "CHAT_NEW_0316|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "전송 가능한 파일만 전송 처리됨 (전송 불가 토스트 메시지가 노출되며 선택 불가)"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "전송 가능한 파일만 전송 처리됨 (전송 불가 팝업 발생 후 해당 파일 제외하여 전송 처리)"
+        }
+      ]
+    },
+    "CHAT_NEW_0317|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "전송 불가 안내가 노출됨 — 일반채팅방·채널·비밀채팅방 모두 \"300MB 이상의 파일은 전송할 수 없습니다.\" 토스트"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "전송 불가 팝업이 노출됨 — 일반채팅방: \"파일 사이즈 제한을 초과하는 항목은 전송시 제외 됩니다.(300MB) [확인]\" / 채널·비밀채팅방: \"파일 사이즈 제한을 초과하는 항목은 전송 시 제외됩니다. (사진 20MB, 동영상 300MB) [확인]\""
+        }
+      ]
+    },
+    "CHAT_NEW_0318|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "전송 가능한 파일만 전송 처리됨 (전송 불가 토스트 메시지가 노출되며 선택 불가)"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "전송 가능한 파일만 전송 처리됨 (전송 불가 팝업 발생 후 해당 파일 제외하여 전송 처리)"
+        }
+      ]
+    },
+    "CHAT_NEW_0329|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "촬영 메뉴 팝업이 노출됨 — 사진 촬영/동영상 촬영"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "카메라 실행 후 비디오·사진 메뉴가 제공됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0345|2": {
+      "decision": "annotate",
+      "add_preconditions": [
+        {
+          "bucket": "data",
+          "state_key": "call_history_exists",
+          "label": "통화 이력이 존재하는 상태"
+        }
+      ],
+      "result_state": "상단 메뉴 모음에 검색 버튼이 추가 표시되고, 통화 이력이 표시되며, 통화 녹음을 진행한 통화인 경우 통화 상세보기 진입점이 제공됨"
+    },
+    "CHAT_NEW_0399|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "이어받기 얼럿이 노출됨 — \"저장하기 기기에 저장 중이던 항목이 존재합니다. 파일을 이어받으시겠습니까? [ ] 새로 저장하기 [취소] [확인]\""
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "이어받기 얼럿이 노출됨 — 타이틀 \"파일 저장하기\", 서브 문구 \"기기에 저장 중이던 파일이 존재합니다.\\n이어서 받으시겠습니까?\""
+        }
+      ]
+    },
+    "CHAT_NEW_0400|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "이어받기 얼럿이 노출됨 — \"저장하기 기기에 저장 중이던 항목이 존재합니다. 파일을 이어받으시겠습니까? [ ] 새로 저장하기 [취소] [저장]\""
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "이어받기 얼럿이 노출됨 — 타이틀 \"파일 저장하기\", 서브 문구 \"기기에 저장 중이던 파일이 존재합니다.\\n이어서 받으시겠습니까?\" [이어서 받기] [새로 저장하기] [취소]"
+        }
+      ]
+    },
+    "CHAT_NEW_0423|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "VERIFY",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "말풍선 컨텍스트 메뉴가 노출됨 — 삭제 / 답장 / 전달 / 책갈피 설정 / 캡처"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "VERIFY",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "말풍선 컨텍스트 메뉴가 노출됨 — 답장 / 공유 / 책갈피 설정 / 캡처 / 삭제"
+        }
+      ]
+    },
+    "CHAT_NEW_0444|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "음성메시지 말풍선 컨텍스트 메뉴가 노출됨 — 말풍선 리액션 / 내 파일에 저장 / 답장 / 공유 / 나에게 / 책갈피 설정 / 캡처 / 삭제"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "음성메시지 말풍선 컨텍스트 메뉴가 노출됨 — 복사 / 선택 복사 / 답장 / 공유 / 나에게 / 책갈피 설정 / 캡처 / 삭제 / 말풍선 리액션 (위치는 가변적, 최상단인 경우도 있음)"
+        }
+      ]
+    },
+    "CHAT_NEW_0445|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "액션 시트가 노출됨 — [카카오톡 프로필 보내기] [연락처 보내기]"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "바텀 시트가 노출됨 — [카카오톡 프로필 보내기] [연락처 보내기] [취소]"
+        }
+      ]
+    },
+    "CHAT_NEW_0449|2": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "selection": "단일 선택(복수 선택 불가)",
+            "os": "Android"
+          },
+          "result_state": "선택한 연락처의 미리보기 UI가 표시됨 — [전송] 버튼 탭 시 채팅방에 연락처가 전송됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "selection": "단일 선택(복수 선택 불가)",
+            "os": "iOS"
+          },
+          "result_state": "선택한 연락처 말풍선이 발송됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0452|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "디바이스 미디어 파일 저장소로 이동되어 풀뷰로 멀티미디어 선택창이 노출됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "디바이스 파일 앱이 풀뷰로 열리며 설치 혹은 로그인된 클라우드(ex. 구글 드라이브) 항목이 노출됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0463|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "선택한 파일이 별도 안내 얼럿 없이 전송됨. 전송된 말풍선에 파일명(파일명.확장자), 유효기간(~yyyy.m.d), 용량(xx.xx KB / MB)이 노출됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "SELECT",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "파일 전송 얼럿이 노출되고 [전송] 탭 시 채팅방으로 전송됨. 전송된 말풍선에 파일명(파일명.확장자), 유효기간(~yyyy.m.d), 용량(xx.xx KB / MB)이 노출됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0465|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "파일 말풍선 컨텍스트 메뉴가 노출됨 — 말풍선 리액션(7일 이내) / 내 파일에 저장 / 답장 / 공유 / 나에게 / 공지 / 책갈피 설정 / 캡처 / 삭제 / 신고(차단 상태의 말풍선인 경우에만 노출). 말풍선 위치에 따라 리액션 위치는 상/하로 가변적"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "파일 말풍선 컨텍스트 메뉴가 노출됨 — 답장 / 공유 / 나에게 / 공지 / 책갈피 설정 / 캡처 / 삭제 / 말풍선 리액션(7일 이내). 말풍선 위치에 따라 리액션 위치는 상/하로 가변적"
+        }
+      ]
+    },
+    "CHAT_NEW_0566|1": {
+      "decision": "split",
+      "cases": [
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_android",
+              "label": "Android OS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "Android"
+          },
+          "result_state": "txt 파일이 첨부된 상태로 OS 액션 시트가 노출됨"
+        },
+        {
+          "add_preconditions": [
+            {
+              "bucket": "data",
+              "state_key": "os_ios",
+              "label": "iOS 환경"
+            }
+          ],
+          "action": "TAP",
+          "action_parameter": {
+            "os": "iOS"
+          },
+          "result_state": "\"편지쓰기\" 페이지로 이동되며 대화 내용이 zip 파일로 첨부됨"
+        }
+      ]
+    },
+    "CHAT_NEW_0580|1": {
+      "decision": "annotate",
+      "add_preconditions": [
+        {
+          "bucket": "data",
+          "state_key": "message_contains_text",
+          "label": "대상 메시지에 텍스트가 포함된 상태"
+        }
+      ],
+      "result_state": "수정 메뉴가 추가되어 노출됨. 메뉴 순서: 복사, 선택 복사, 수정, 답장, 공유, 나에게(나챗방 제외), 공지, 책갈피 설정, 캡쳐, 수정, 삭제"
+    }
+  }
+}
