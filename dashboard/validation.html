@@ -151,6 +151,72 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
   .pane.tree{grid-row:2/3;grid-column:2/3;max-height:42vh}
   .detail{grid-row:3/4;grid-column:1/3}
   .cards,.cards4{grid-template-columns:1fr 1fr}}
+/* ===== Code Mapping (가상/TC 기반) ===== */
+.cmap{border:1.5px dashed var(--accent);border-radius:14px;padding:16px 18px;margin:22px 0 20px;
+  background:linear-gradient(180deg,var(--accent-w),transparent 60%)}
+.cmap .cmhead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.cmap .cmhead h3{font-size:15px;font-weight:800;margin:0}
+.cmap .virt{font-size:10.5px;font-weight:800;color:var(--accent);background:var(--card);
+  border:1px solid var(--accent);border-radius:20px;padding:2px 9px}
+.cmap .cmwarn{color:var(--dim);font-size:11.5px;margin:2px 0 14px}
+.cmap .cmwarn b{color:var(--accent)}
+.mst{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px}
+.mst.suggested{background:var(--warn-bg);color:var(--warn)}
+.mst.review{background:var(--fail-bg);color:var(--fail)}
+.mst.confirmed{background:var(--ok-bg);color:var(--ok)}
+.cmap .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+.cfield{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.cfield .lab{color:var(--dim);font-size:10.5px;font-weight:700;margin-bottom:5px;display:flex;justify-content:space-between}
+.cfield .val{font-size:13px;font-weight:600;word-break:break-word}
+.cfield .val.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);font-size:12px}
+.cfield .sub{color:var(--muted);font-size:11px;font-weight:600;margin-top:2px}
+.cfield.edited{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-w)}
+.edtag{font-size:9.5px;font-weight:800;color:var(--accent)}
+/* confidence meter */
+.confmeter{display:flex;align-items:center;gap:10px}
+.confmeter .track{flex:1;height:7px;border-radius:20px;background:var(--idle-bg);overflow:hidden}
+.confmeter .track i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,var(--accent),#7c5cff)}
+.confmeter .pctv{font-size:14px;font-weight:800}
+.cband{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+.cband.High{background:var(--ok-bg);color:var(--ok)}
+.cband.Medium{background:var(--warn-bg);color:var(--warn)}
+.cband.Low{background:var(--fail-bg);color:var(--fail)}
+.cbasis{list-style:none;margin:6px 0 0;padding:0}
+.cbasis li{position:relative;padding:3px 0 3px 16px;font-size:12px;color:var(--txt)}
+.cbasis li::before{content:"›";position:absolute;left:2px;color:var(--accent);font-weight:800}
+.cmact{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cmact .btn{font-size:11.5px;padding:7px 12px}
+/* virtual screen diagram */
+.vscreen{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;margin:12px 0 4px}
+.vscreen .vhead{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:9px 13px;background:var(--chip);border-bottom:1px solid var(--line)}
+.vscreen .vhead .vn{font-weight:800;font-size:12.5px}
+.vscreen .vhead .vid{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--accent)}
+.vscreen .vhead .vflag{font-size:9.5px;font-weight:800;color:var(--muted);border:1px dashed var(--muted);border-radius:6px;padding:1px 6px}
+.vregion{padding:9px 13px;border-bottom:1px dashed var(--line)}
+.vregion:last-child{border-bottom:none}
+.vregion .rl{font-size:9.5px;font-weight:800;color:var(--muted);margin-bottom:6px}
+.vchips{display:flex;flex-wrap:wrap;gap:6px}
+.vchip{font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px;
+  background:var(--bg);border:1px solid var(--line);color:var(--dim)}
+.vchip.cur{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(79,110,247,.4)}
+.vmore{font-size:11px;color:var(--muted);align-self:center}
+/* modal */
+.cm-mask{position:fixed;inset:0;background:rgba(10,15,25,.5);display:none;z-index:50;align-items:center;justify-content:center}
+.cm-mask.on{display:flex}
+.cm-box{background:var(--card);border:1px solid var(--line);border-radius:14px;width:min(560px,92vw);
+  max-height:82vh;overflow:auto;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.cm-box h3{margin:0 0 4px;font-size:16px;font-weight:800}
+.cm-box .mdesc{color:var(--dim);font-size:12px;margin-bottom:16px}
+.cm-box label{display:block;font-size:11px;font-weight:700;color:var(--dim);margin:11px 0 4px}
+.cm-box input,.cm-box select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;color:var(--txt);font-size:13px;font-family:inherit}
+.cm-box .mrow{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.rel-row{display:flex;gap:9px;align-items:center;padding:10px 11px;border:1px solid var(--line);border-radius:9px;
+  margin-bottom:7px;cursor:pointer;font-size:12.5px}
+.rel-row:hover{background:var(--bg);border-color:var(--accent)}
+.rel-row .rp{color:var(--muted);font-size:10.5px;margin-top:2px}
+.rel-row .rmst{margin-left:auto;flex:none}
 </style>
 </head>
 <body>
@@ -200,9 +266,18 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
     </div>
   </main>
 </div>
+<!-- 매핑 수정 / 관련 체크포인트 모달 -->
+<div class="cm-mask" id="cm-mask"><div class="cm-box" id="cm-box"></div></div>
+<script src="./code_mapping.js"></script>
 <script>
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-let M=null, SEL={f:0,g:0,i:0,c:0};
+let M=null, CM=null, SEL={f:0,g:0,i:0,c:0};
+/* 사용자 편집 오버레이 (localStorage) — 실제 코드 연동 시 이 레이어가 actual 로 대체됨 */
+let SCREEN_OV={}, CP_OV={};
+try{SCREEN_OV=JSON.parse(localStorage.getItem('qa_vmap_screen_ov')||'{}');}catch(e){}
+try{CP_OV=JSON.parse(localStorage.getItem('qa_vmap_cp_ov')||'{}');}catch(e){}
+function saveOV(){localStorage.setItem('qa_vmap_screen_ov',JSON.stringify(SCREEN_OV));
+  localStorage.setItem('qa_vmap_cp_ov',JSON.stringify(CP_OV));}
 
 function fnName(f){return f.function_name||f.function;}
 function itemCP(it){return (it.checkpoints||[]).length;}
@@ -356,9 +431,152 @@ function renderCPDetail(it){
       <div class="card"><div class="lab">증거 (Evidence)</div><div class="evrow">${ev}</div></div>
     </div>
     <div class="note"><b>실행 결과 (Result): 미실행</b> — 이 검증 모델은 구조 설계 데이터입니다.
-      테스트 실행 결과(통과/실패·Tester·Device·스크린샷)를 연동하면 각 체크포인트의 통과율과 상태가 자동 반영됩니다.</div>`;
+      테스트 실행 결과(통과/실패·Tester·Device·스크린샷)를 연동하면 각 체크포인트의 통과율과 상태가 자동 반영됩니다.</div>
+    <div id="cmap-slot"></div>`;
+  renderCodeMapping();
 }
 function evIcon(e){const m={Screenshot:'🖼',OCR:'🔤',ComponentTree:'🌳',APIResponse:'🔌',DB:'🗄',Log:'📜',Accessibility:'♿',Video:'🎬'};return m[e]||'📎';}
+
+/* ================= CODE MAPPING (가상 / TC 기반) ================= */
+const MST={virtual_confirmed:{cls:'confirmed',lb:'확정됨'},virtual_suggested:{cls:'suggested',lb:'가상 매핑(추정)'},
+  review_required:{cls:'review',lb:'검수 필요'},unmapped:{cls:'review',lb:'미매핑'}};
+const REGION_LB={top:'상단 영역',body:'본문 영역',input:'입력 영역',overlay:'오버레이(팝업·시트)'};
+/* 생성 매핑 + 사용자 오버레이(화면/체크포인트) 병합 → 최종 표시값 */
+function resolveMapping(cpId){
+  if(!CM||!CM.checkpoints[cpId])return null;
+  const base=CM.checkpoints[cpId], sc=SCREEN_OV[base.screen_id]||{}, cp=CP_OV[cpId]||{};
+  const reg=CM.screens[base.screen_id]||{};
+  const status=cp.mapping_status||sc.mapping_status||base.mapping_status;
+  const edited=!!(sc.screen_name||sc.screen_id_alias||sc.activity_candidate||sc.fragment_candidate||cp.mapping_status||sc.mapping_status);
+  return Object.assign({},base,{
+    screen_name:sc.screen_name||reg.screen_name,
+    screen_id_disp:sc.screen_id_alias||base.screen_id,
+    activity_candidate:sc.activity_candidate||base.activity_candidate,
+    fragment_candidate:sc.fragment_candidate||base.fragment_candidate,
+    mapping_status:status, edited:edited, _origScreen:base.screen_id});
+}
+function renderCodeMapping(){
+  const slot=document.getElementById('cmap-slot'); if(!slot)return;
+  if(!CM){slot.innerHTML='';return;}
+  const cpId=CodeMapping.cpId(SEL.f,SEL.g,SEL.i,SEL.c), mp=resolveMapping(cpId);
+  if(!mp){slot.innerHTML='';return;}
+  const st=MST[mp.mapping_status]||MST.review, pctv=Math.round(mp.confidence*100);
+  const ed=f=>mp.edited&&(SCREEN_OV[mp._origScreen]||{})[f]?'<span class="edtag"> ✎수정됨</span>':'';
+  const basis=(mp.mapping_basis||[]).map(b=>`<li>${esc(b)}</li>`).join('');
+  const overlay=mp.overlay_candidate?`<div class="cfield"><div class="lab">Overlay Candidate</div><div class="val mono">${esc(mp.overlay_candidate)}</div></div>`:'';
+  slot.innerHTML=`
+   <div class="cmap">
+     <div class="cmhead"><h3>Code Mapping</h3><span class="virt">가상 · TC 기반</span>
+       <span class="spacer" style="flex:1"></span><span class="mst ${st.cls}">${st.lb}</span></div>
+     <div class="cmwarn">⚠ 실제 Android 소스코드가 연결되지 않아 <b>TC 문서에서 추론한 가상 구조</b>입니다.
+       Activity·Fragment·ID는 확정값이 아니며, 실제 코드 연동 시 교체됩니다.</div>
+     <div class="grid2">
+       <div class="cfield${(SCREEN_OV[mp._origScreen]||{}).screen_name?' edited':''}"><div class="lab">Screen Name${ed('screen_name')}</div>
+         <div class="val">${esc(mp.screen_name)}</div><div class="sub mono">${esc(mp.screen_id_disp)}</div></div>
+       <div class="cfield"><div class="lab">Target</div>
+         <div class="val mono">${esc(mp.target_name||'-')}</div><div class="sub mono">${esc(mp.target_id||'미지정')}</div></div>
+     </div>
+     <div class="cfield" style="margin-bottom:10px"><div class="lab">가상 Android 구조 (Virtual Structure)</div>
+       <div class="grid2" style="margin:6px 0 0">
+         <div><div class="sub">Activity 후보${ed('activity_candidate')}</div><div class="val mono">${esc(mp.activity_candidate)}</div></div>
+         <div><div class="sub">Fragment 후보${ed('fragment_candidate')}</div><div class="val mono">${esc(mp.fragment_candidate)}</div></div>
+         <div><div class="sub">Route 후보</div><div class="val mono">${esc(mp.route_candidate||'-')}</div></div>
+         <div><div class="sub">Overlay 후보</div><div class="val mono">${esc(mp.overlay_candidate||'없음')}</div></div>
+       </div></div>
+     <div class="grid2">
+       <div class="cfield"><div class="lab">Expected State (정규화)</div><div class="val mono">${esc(mp.expected_state||'-')}</div></div>
+       <div class="cfield"><div class="lab">Mapping Confidence</div>
+         <div class="confmeter"><span class="pctv">${pctv}%</span><span class="track"><i style="width:${pctv}%"></i></span>
+           <span class="cband ${mp.confidence_band}">${mp.confidence_band}</span></div></div>
+     </div>
+     <div class="cfield"><div class="lab">Mapping Basis (추론 근거)</div><ul class="cbasis">${basis}</ul></div>
+     ${renderVScreen(mp._origScreen,mp.target_name)}
+     <div class="cmact">
+       <button class="btn" id="cm-edit">✎ 매핑 수정</button>
+       <button class="btn ${mp.mapping_status==='virtual_confirmed'?'':'primary'}" id="cm-confirm">${mp.mapping_status==='virtual_confirmed'?'↺ 확정 해제':'✓ 매핑 확정'}</button>
+       <button class="btn" id="cm-scr">🗂 동일 화면 체크포인트 (${(CM.byScreen[mp._origScreen]||[]).length})</button>
+       ${mp.target_id?`<button class="btn" id="cm-tgt">🎯 동일 Target 체크포인트 (${(CM.byTarget[mp.target_id]||[]).length})</button>`:''}
+     </div>
+   </div>`;
+  slot.querySelector('#cm-edit').onclick=()=>openEditModal(cpId);
+  slot.querySelector('#cm-confirm').onclick=()=>toggleConfirm(cpId);
+  slot.querySelector('#cm-scr').onclick=()=>openRelated('screen',mp._origScreen,'동일 화면: '+mp.screen_name);
+  const tg=slot.querySelector('#cm-tgt'); if(tg)tg.onclick=()=>openRelated('target',mp.target_id,'동일 Target: '+mp.target_name);
+}
+/* TC 기반 가상 화면 구조도 (실제 스크린샷 아님) */
+function renderVScreen(screenId,curTarget){
+  const s=CM.screens[screenId]; if(!s)return '';
+  const buckets={top:[],body:[],input:[],overlay:[]};
+  (s.targets||[]).forEach(t=>buckets[CodeMapping.region(t)].push(t));
+  const CAP=10;
+  const order=['top','body','input','overlay'];
+  const regions=order.filter(r=>buckets[r].length||r==='body'&&false).map(r=>{
+    let list=buckets[r];
+    if(!list.length)return '';
+    const hasCur=list.indexOf(curTarget)>=0;
+    let show=list.slice(0,CAP);
+    if(hasCur&&show.indexOf(curTarget)<0){show=show.slice(0,CAP-1);show.push(curTarget);}
+    const more=list.length-show.length;
+    const chips=show.map(t=>`<span class="vchip${t===curTarget?' cur':''}">${esc(t)}</span>`).join('')
+      +(more>0?`<span class="vmore">+${more}</span>`:'');
+    return `<div class="vregion"><div class="rl">${REGION_LB[r]}</div><div class="vchips">${chips}</div></div>`;
+  }).join('');
+  return `<div class="vscreen">
+    <div class="vhead"><span><span class="vn">${esc(s.screen_name)}</span> <span class="vid">${esc(s.screen_id)}</span></span>
+      <span class="vflag">TC 기반 가상 화면</span></div>${regions}</div>`;
+}
+/* 매핑 수정 모달 (화면 단위 편집 → 동일 화면 CP 일괄 반영) */
+function openEditModal(cpId){
+  const mp=resolveMapping(cpId), box=document.getElementById('cm-box');
+  box.innerHTML=`<h3>매핑 수정</h3>
+    <div class="mdesc">화면 단위 값입니다. 저장하면 <b>동일 화면(${esc(mp.screen_id_disp)})을 공유하는 모든 체크포인트</b>에 일관 반영됩니다.</div>
+    <label>Screen Name</label><input id="e-sn" value="${esc(mp.screen_name)}"/>
+    <label>Screen ID</label><input id="e-sid" value="${esc(mp.screen_id_disp)}"/>
+    <label>Activity 후보</label><input id="e-act" value="${esc(mp.activity_candidate)}"/>
+    <label>Fragment 후보</label><input id="e-frg" value="${esc(mp.fragment_candidate)}"/>
+    <div class="mrow"><button class="btn" id="e-cancel">취소</button>
+      <button class="btn" id="e-reset">기본값 복원</button>
+      <button class="btn primary" id="e-save">저장</button></div>`;
+  showMask(true);
+  box.querySelector('#e-cancel').onclick=()=>showMask(false);
+  box.querySelector('#e-reset').onclick=()=>{delete SCREEN_OV[mp._origScreen];saveOV();showMask(false);renderCodeMapping();};
+  box.querySelector('#e-save').onclick=()=>{
+    SCREEN_OV[mp._origScreen]={screen_name:box.querySelector('#e-sn').value.trim(),
+      screen_id_alias:box.querySelector('#e-sid').value.trim(),
+      activity_candidate:box.querySelector('#e-act').value.trim(),
+      fragment_candidate:box.querySelector('#e-frg').value.trim(),
+      mapping_status:(SCREEN_OV[mp._origScreen]||{}).mapping_status};
+    saveOV();showMask(false);renderCodeMapping();};
+}
+function toggleConfirm(cpId){
+  const cur=(CP_OV[cpId]||{}).mapping_status;
+  if(cur==='virtual_confirmed'){delete CP_OV[cpId];}
+  else{CP_OV[cpId]={mapping_status:'virtual_confirmed'};}
+  saveOV();renderCodeMapping();
+}
+/* 동일 화면 / 동일 Target 체크포인트 목록 */
+function openRelated(kind,id,title){
+  const list=(kind==='screen'?CM.byScreen[id]:CM.byTarget[id])||[], box=document.getElementById('cm-box');
+  const rows=list.map(l=>{const mp=resolveMapping(l.cpId),st=MST[mp.mapping_status]||MST.review;
+    const f=M.functions[l.fi],g=f.validation_groups[l.gi],it=g.items[l.ii];
+    return `<div class="rel-row" data-f="${l.fi}" data-g="${l.gi}" data-i="${l.ii}" data-c="${l.ci}">
+      <div><div>${esc(l.label)}</div><div class="rp">${esc(fnName(f))} › ${esc(g.group)} › ${esc(it.item)}</div></div>
+      <span class="mst ${st.cls} rmst">${st.lb}</span></div>`;}).join('');
+  box.innerHTML=`<h3>${esc(title)}</h3><div class="mdesc">${list.length}개 체크포인트가 이 매핑을 공유합니다. 클릭하면 이동합니다.</div>
+    ${rows||'<div class="mdesc">없음</div>'}<div class="mrow"><button class="btn" id="r-close">닫기</button></div>`;
+  showMask(true);
+  box.querySelector('#r-close').onclick=()=>showMask(false);
+  box.querySelectorAll('.rel-row').forEach(el=>el.onclick=()=>{
+    showMask(false);
+    selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i);
+    SEL.c=+el.dataset.c;
+    const rows=document.querySelectorAll('#d-body .cprow');
+    if(rows[SEL.c]){rows.forEach(r=>r.classList.remove('sel'));rows[SEL.c].classList.add('sel');
+      rows[SEL.c].scrollIntoView({block:'nearest'});}
+    renderCPDetail(M.functions[SEL.f].validation_groups[SEL.g].items[SEL.i]);});
+}
+function showMask(on){const m=document.getElementById('cm-mask');m.classList.toggle('on',on);}
+document.getElementById('cm-mask').addEventListener('click',e=>{if(e.target.id==='cm-mask')showMask(false);});
 
 function markSel(){
   document.querySelectorAll('#tree .trow.item').forEach(el=>{
@@ -378,7 +596,10 @@ document.getElementById('q').addEventListener('input',e=>{
 });
 
 fetch('./validation_model.json').then(r=>r.json()).then(m=>{
-  M=m; buildTree(); selectFunction(0);
+  M=m;
+  try{CM=(window.CodeMapping&&window.CodeMapping.build)?window.CodeMapping.build(M):null;}
+  catch(e){console.error('CodeMapping build 실패',e);CM=null;}
+  buildTree(); selectFunction(0);
 }).catch(()=>{document.getElementById('d-body').innerHTML='<div class="note">validation_model.json 을 불러오지 못했습니다.</div>';});
 </script>
 </body>
