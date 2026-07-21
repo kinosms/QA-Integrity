@@ -217,6 +217,59 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 .rel-row:hover{background:var(--bg);border-color:var(--accent)}
 .rel-row .rp{color:var(--muted);font-size:10.5px;margin-top:2px}
 .rel-row .rmst{margin-left:auto;flex:none}
+/* ===== 검수 현황 (item status list) ===== */
+.prog .p-warn{background:var(--warn)}
+.chkgrp{margin-bottom:6px}
+.chkgh{display:flex;align-items:center;gap:8px;padding:8px 6px;cursor:pointer;border-radius:8px;font-weight:800;font-size:12.5px}
+.chkgh:hover{background:var(--bg)}
+.chkgh .gcap{flex:1}
+.chkgh .gmini{display:flex;gap:4px}
+.chkgh .gd{width:8px;height:8px;border-radius:50%}
+.chkrow{display:flex;align-items:flex-start;gap:9px;padding:8px 10px 8px 20px;border-radius:8px;cursor:pointer}
+.chkrow:hover{background:var(--bg)}
+.chkrow .cn{flex:1;font-size:12.5px}
+.chkrow .cerr{color:var(--fail);font-size:11px;margin-top:3px;display:flex;gap:5px;align-items:flex-start}
+.chkrow .cerr::before{content:"⚠";flex:none}
+.sbadge{flex:none;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.sbadge.ok{background:var(--ok-bg);color:var(--ok)}
+.sbadge.fail{background:var(--fail-bg);color:var(--fail)}
+.sbadge.warn{background:var(--warn-bg);color:var(--warn)}
+.sbadge.idle{background:var(--idle-bg);color:var(--idle)}
+/* ===== 가상 서비스 화면 / 스크린샷 ===== */
+.shot{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.phone{width:240px;flex:none;border:8px solid #1c2333;border-radius:30px;background:#0e1320;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);overflow:hidden;position:relative}
+.phone .notch{height:22px;background:#1c2333;display:flex;align-items:center;justify-content:center}
+.phone .notch::after{content:"";width:60px;height:6px;border-radius:6px;background:#0e1320}
+.pscreen{background:var(--card);min-height:380px;display:flex;flex-direction:column;position:relative}
+.psb{display:flex;justify-content:space-between;padding:4px 12px;font-size:9px;color:var(--dim);font-weight:700}
+.pheader{display:flex;align-items:center;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line);background:var(--card)}
+.pheader .pback{color:var(--dim);font-weight:800}
+.pheader .ptitle{flex:1;font-weight:800;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pheader .pmore{color:var(--dim);font-weight:800}
+.pnotice{background:var(--warn-bg);color:var(--warn);font-size:10px;font-weight:700;padding:6px 11px;display:flex;gap:5px;align-items:center}
+.pbody{flex:1;padding:12px 11px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
+.pbubble{max-width:74%;padding:7px 10px;border-radius:12px;font-size:11px;line-height:1.4}
+.pbubble.in{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:3px}
+.pbubble.out{align-self:flex-end;background:#fae54d;color:#1a1a1a;border-bottom-right-radius:3px}
+.pblock{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px;font-size:10.5px;color:var(--dim)}
+.pblock .pbt{font-weight:800;color:var(--txt);margin-bottom:4px}
+.pinput{display:flex;align-items:center;gap:7px;padding:8px 10px;border-top:1px solid var(--line);background:var(--card)}
+.pinput .pplus{color:var(--dim);font-weight:800}
+.pinput .pfield{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:16px;height:22px}
+.pinput .psend{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:10px}
+.pstamp{position:absolute;top:38px;right:8px;font-size:9px;font-weight:800;padding:3px 8px;border-radius:20px;transform:rotate(6deg)}
+.pstamp.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok)}
+.pstamp.fail{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail)}
+.pstamp.warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn)}
+.pwm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.pwm span{font-size:11px;font-weight:800;color:rgba(120,130,150,.28);transform:rotate(-18deg);border:2px solid rgba(120,130,150,.22);padding:3px 10px;border-radius:8px}
+.shotmeta{flex:1;min-width:180px}
+.shotmeta .smt{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.shotmeta .smrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12px}
+.shotmeta .smrow .k{color:var(--dim)}
+.shotmeta .smrow .v{font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.shotmeta .smnote{font-size:11px;color:var(--dim);margin-top:10px;background:var(--warn-bg);border-radius:8px;padding:8px 10px}
 </style>
 </head>
 <body>
@@ -319,44 +372,72 @@ function selectFunction(fi){
   document.getElementById('crumb').textContent='일반채팅  ›  '+fnName(f);
   document.getElementById('d-crumb').textContent='일반채팅  ›  '+fnName(f);
   document.getElementById('d-title').textContent=fnName(f);
-  document.getElementById('d-status').textContent='개요';
+  {const _ds=document.getElementById('d-status');_ds.textContent='개요';_ds.style.background='';_ds.style.color='';}
   document.getElementById('d-desc').textContent=
     `검증 그룹 ${f.stats.groups} · 검증 항목 ${f.stats.items} · 체크포인트 ${f.stats.checkpoints}`;
   renderOverview(fi);
   markSel();
 }
 function pct(n,d){return d?Math.round(n/d*100):0;}
+/* ---- 가상 수행상태 헬퍼 ---- */
+function vStatus(fi,gi,ii,ci){return window.VirtualRun?VirtualRun.status(CodeMapping.cpId(fi,gi,ii,ci)):'idle';}
+function vMeta(s){return (window.VirtualRun&&VirtualRun.meta[s])||{lb:'미실행',cls:'idle',dot:'○'};}
+function itemAgg(fi,gi,ii,it){
+  const sts=(it.checkpoints||[]).map((c,ci)=>vStatus(fi,gi,ii,ci));
+  if(!sts.length)return 'idle';
+  if(sts.some(s=>s==='fail'))return 'fail';
+  if(sts.some(s=>s==='progress'))return 'progress';
+  if(sts.every(s=>s==='pass'))return 'pass';
+  if(sts.every(s=>s==='idle'))return 'idle';
+  return 'progress';
+}
+function itemFirstError(fi,gi,ii,it){
+  const cps=it.checkpoints||[];
+  for(let ci=0;ci<cps.length;ci++){
+    if(vStatus(fi,gi,ii,ci)==='fail')
+      return VirtualRun.error(CodeMapping.cpId(fi,gi,ii,ci),cps[ci].target,cps[ci].expected_state);
+  }
+  return '';
+}
+function funcCounts(fi){
+  const f=M.functions[fi], c={pass:0,fail:0,progress:0,idle:0}; let total=0;
+  (f.validation_groups||[]).forEach((g,gi)=>(g.items||[]).forEach((it,ii)=>(it.checkpoints||[]).forEach((cp,ci)=>{
+    total++; c[vStatus(fi,gi,ii,ci)]++;})));
+  c.total=total; return c;
+}
+function rollupState(c){return c.fail>0?'fail':(c.pass>=(c.progress+c.idle)?'pass':'progress');}
+
 function renderOverview(fi){
   const f=M.functions[fi], groups=f.validation_groups||[];
-  let cps=[]; groups.forEach(g=>(g.items||[]).forEach(i=>cps=cps.concat(i.checkpoints||[])));
-  const total=cps.length;
-  // 실행 현황
-  let ok=0,fail=0;
-  cps.forEach(c=>{const s=cpStatus(c); if(s==='pass'||s==='ok')ok++; else if(s==='fail')fail++;});
-  const idle=total-ok-fail, done=ok+fail;
-  // 증거 유형 분포
-  const ev={}; cps.forEach(c=>(c.evidence||[]).forEach(e=>ev[e]=(ev[e]||0)+1));
-  const evMax=Math.max(1,...Object.values(ev));
-  const evRows=Object.entries(ev).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
-    `<div class="bar"><span class="bl">${evIcon(k)} ${esc(k)}</span>
-      <span class="bt"><i style="width:${pct(v,evMax)}%"></i></span><span class="bv">${v}</span></div>`).join('')||'<div class="bar"><span class="bl">-</span></div>';
-  // 그룹별 체크포인트
-  const gMax=Math.max(1,...groups.map(g=>groupCP(g)));
-  const gRows=groups.map((g,gi)=>
-    `<div class="bar gbar" data-g="${gi}"><span class="bl" title="${esc(g.group)}">${esc(g.group)}</span>
-      <span class="bt"><i style="width:${pct(groupCP(g),gMax)}%"></i></span><span class="bv">${groupCP(g)}</span></div>`).join('');
+  const c=funcCounts(fi), total=c.total||1, doneRate=pct(total-c.idle,total);
   // 핵심 지표
-  const items=groups.reduce((a,g)=>a+(g.items||[]).length,0);
-  const avg=items?(total/items).toFixed(1):'0';
-  const pcCov=pct(cps.filter(c=>(c.preconditions||[]).length).length,total);
+  let cpAll=0,pcHit=0,itemN=0;
+  groups.forEach(g=>(g.items||[]).forEach(it=>{itemN++;(it.checkpoints||[]).forEach(x=>{cpAll++;if((x.preconditions||[]).length)pcHit++;});}));
+  const avg=itemN?(cpAll/itemN).toFixed(1):'0', pcCov=pct(pcHit,cpAll);
+  // 검수 현황(항목별 상태)
+  const chkHtml=groups.map((g,gi)=>{
+    const gc={pass:0,fail:0,progress:0,idle:0};
+    const rows=g.items.map((it,ii)=>{
+      const st=itemAgg(fi,gi,ii,it),mt=vMeta(st);gc[st]++;
+      const err=st==='fail'?`<div class="cerr">${esc(itemFirstError(fi,gi,ii,it))}</div>`:'';
+      return `<div class="chkrow" data-f="${fi}" data-g="${gi}" data-i="${ii}">
+        <div class="cn">${esc(it.item)}${err}</div>
+        <span class="sbadge ${mt.cls}">${mt.dot} ${mt.lb}</span></div>`;
+    }).join('');
+    const mini=['fail','progress','pass','idle'].filter(k=>gc[k]).map(k=>
+      `<span class="gd" style="background:var(--${vMeta(k).cls==='ok'?'ok':vMeta(k).cls})" title="${vMeta(k).lb} ${gc[k]}"></span>`).join('');
+    return `<div class="chkgrp"><div class="chkgh" data-g="${gi}"><span class="caret">▸</span>
+      <span class="gcap">${esc(g.group)}</span><span class="gmini">${mini}</span></div>${rows}</div>`;
+  }).join('');
   document.getElementById('d-body').innerHTML=`
     <div class="sblock">
-      <div class="st"><span>실행 현황</span><span>${pct(done,total)}% 완료</span></div>
-      <div class="prog"><i class="p-ok" style="width:${pct(ok,total)}%"></i><i class="p-fail" style="width:${pct(fail,total)}%"></i></div>
+      <div class="st"><span>검수 진행 현황</span><span>${doneRate}% 진행</span></div>
+      <div class="prog"><i class="p-ok" style="width:${pct(c.pass,total)}%"></i><i class="p-fail" style="width:${pct(c.fail,total)}%"></i><i class="p-warn" style="width:${pct(c.progress,total)}%"></i></div>
       <div class="leg">
-        <span class="lg"><span class="sw" style="background:var(--ok)"></span>통과 <b>${ok}</b></span>
-        <span class="lg"><span class="sw" style="background:var(--fail)"></span>실패 <b>${fail}</b></span>
-        <span class="lg"><span class="sw" style="background:var(--idle)"></span>미실행 <b>${idle}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--ok)"></span>완료 <b>${c.pass}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--fail)"></span>오류 <b>${c.fail}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--warn)"></span>진행중 <b>${c.progress}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--idle)"></span>미실행 <b>${c.idle}</b></span>
       </div>
     </div>
     <div class="sblock">
@@ -364,18 +445,75 @@ function renderOverview(fi){
       <div class="kpis">
         <div class="kpi"><div class="kv">${avg}</div><div class="kl">항목당 평균 CP</div></div>
         <div class="kpi"><div class="kv">${pcCov}<span class="ku">%</span></div><div class="kl">사전조건 정의율</div></div>
-        <div class="kpi"><div class="kv">${Object.keys(ev).length}</div><div class="kl">증거 유형 수</div></div>
+        <div class="kpi"><div class="kv">${itemN}</div><div class="kl">검증 항목 수</div></div>
       </div>
     </div>
     <div class="sblock">
-      <div class="st"><span>검증 그룹별 체크포인트</span><span>${groups.length}개 그룹</span></div>
-      ${gRows}
+      <div class="st"><span>검수 현황 (검증 항목별)</span><span>${itemN}개 항목</span></div>
+      ${chkHtml}
     </div>
     <div class="sblock">
-      <div class="st"><span>증거(Evidence) 유형 분포</span><span>총 ${total} CP</span></div>
-      ${evRows}
+      <div class="st"><span>관련 서비스 화면 (가상)</span><span>TC 기반</span></div>
+      ${renderPhoneMock(fi,rollupState(c))}
     </div>`;
-  document.querySelectorAll('#d-body .gbar').forEach(el=>el.onclick=()=>openGroupInTree(fi,+el.dataset.g));
+  document.querySelectorAll('#d-body .chkgh').forEach(el=>el.onclick=()=>openGroupInTree(fi,+el.dataset.g));
+  document.querySelectorAll('#d-body .chkrow').forEach(el=>el.onclick=()=>
+    selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i));
+}
+/* 대표 화면 추론 */
+function dominantScreen(fi){
+  if(!CM)return null;
+  const f=M.functions[fi], tally={};
+  f.validation_groups.forEach((g,gi)=>g.items.forEach((it,ii)=>it.checkpoints.forEach((cp,ci)=>{
+    const mp=CM.checkpoints[CodeMapping.cpId(fi,gi,ii,ci)]; if(mp)tally[mp.screen_id]=(tally[mp.screen_id]||0)+1;})));
+  let best=null,bc=-1; for(const k in tally)if(tally[k]>bc){bc=tally[k];best=k;}
+  return best?CM.screens[best]:null;
+}
+/* TC 기반 가상 서비스 화면 + 가상 스크린샷 */
+function renderPhoneMock(fi,state){
+  const f=M.functions[fi], s=dominantScreen(fi);
+  const title=s?s.screen_name:fnName(f);
+  const tg=(s&&s.targets)||[];
+  const hasNotice=tg.indexOf('NoticeBanner')>=0;
+  const hasInput=tg.some(t=>/(Input|Send|Toolbar|PlusMenu|Voice)/.test(t));
+  const chatLike=hasInput||/CHAT_ROOM|GENERAL_CHAT|CHATBOT|SPAM|FREE/.test(s?s.screen_id:'');
+  let body;
+  if(chatLike){
+    body=`${hasNotice?'<div class="pnotice">📌 <span>공지: 오늘 오후 3시 회의 (가상)</span></div>':''}
+      <div class="pbody">
+        <div class="pbubble in">안녕하세요 👋 (가상 메시지)</div>
+        <div class="pbubble out">네, 확인했습니다!</div>
+        <div class="pbubble in">${esc(title)} 화면 예시입니다.</div>
+      </div>
+      ${hasInput?'<div class="pinput"><span class="pplus">＋</span><span class="pfield"></span><span class="psend">➤</span></div>':''}`;
+  }else{
+    const blocks=tg.filter(t=>CodeMapping.region(t)==='body').slice(0,4);
+    const bl=(blocks.length?blocks:tg.slice(0,4)).map(t=>
+      `<div class="pblock"><div class="pbt">${esc(t)}</div>TC 기반 가상 컴포넌트</div>`).join('')||'<div class="pblock">가상 콘텐츠</div>';
+    body=`<div class="pbody">${bl}</div>`;
+  }
+  const stMeta={fail:{cls:'fail',lb:'오류'},pass:{cls:'ok',lb:'통과'},progress:{cls:'warn',lb:'진행중'}}[state]||{cls:'warn',lb:'진행중'};
+  return `<div class="shot">
+    <div class="phone"><div class="notch"></div>
+      <div class="pscreen">
+        <div class="psb"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="pheader"><span class="pback">‹</span><span class="ptitle">${esc(title)}</span><span class="pmore">⋮</span></div>
+        ${body}
+        <div class="pstamp ${stMeta.cls}">${stMeta.lb}</div>
+        <div class="pwm"><span>가상 스크린샷</span></div>
+      </div>
+    </div>
+    <div class="shotmeta">
+      <div class="smt">가상 스크린샷 정보</div>
+      <div class="smrow"><span class="k">Screen</span><span class="v">${esc(title)}</span></div>
+      <div class="smrow"><span class="k">Screen ID</span><span class="v">${esc(s?s.screen_id:'-')}</span></div>
+      <div class="smrow"><span class="k">Activity</span><span class="v">${esc(s?s.activity_candidate:'-')}</span></div>
+      <div class="smrow"><span class="k">Fragment</span><span class="v">${esc(s?s.fragment_candidate:'-')}</span></div>
+      <div class="smrow"><span class="k">Device</span><span class="v">iPhone 15 · iOS 17</span></div>
+      <div class="smrow"><span class="k">수행 상태</span><span class="v">${stMeta.lb}</span></div>
+      <div class="smnote">⚠ 실제 앱 스크린샷이 아니라 TC(검증 모델)로 합성한 <b>가상 화면</b>입니다. 실제 캡처가 연동되면 이 자리에 교체됩니다.</div>
+    </div>
+  </div>`;
 }
 function openGroupInTree(fi,gi){
   const tree=document.getElementById('tree'), fnode=tree.children[fi];
@@ -394,17 +532,19 @@ function selectItem(fi,gi,ii){
   document.getElementById('d-crumb').innerHTML=
     `${esc(fnName(f))} › <b>${esc(g.group)}</b> › ${esc(it.item)}`;
   document.getElementById('d-title').textContent=it.item;
-  document.getElementById('d-status').textContent='미실행';
+  const _st=itemAgg(fi,gi,ii,it),_m=vMeta(_st),_ds=document.getElementById('d-status');
+  _ds.textContent=_m.dot+' '+_m.lb;_ds.style.background='var(--'+_m.cls+'-bg)';_ds.style.color='var(--'+_m.cls+')';
   document.getElementById('d-desc').textContent=`이 검증 항목은 ${itemCP(it)}개의 체크포인트로 세분화되어 있습니다.`;
   renderCheckpoints(it);
   markSel();
 }
 function renderCheckpoints(it){
   const cps=it.checkpoints||[];
-  const rows=cps.map((c,ci)=>
-    `<div class="cprow ${ci===SEL.c?'sel':''}" data-c="${ci}">
+  const rows=cps.map((c,ci)=>{
+    const m=vMeta(vStatus(SEL.f,SEL.g,SEL.i,ci));
+    return `<div class="cprow ${ci===SEL.c?'sel':''}" data-c="${ci}">
       <span class="num">${ci+1}</span><span class="txt">${esc(c.check_point)}</span>
-      <span class="res"><span class="tag">◌ 미실행</span></span></div>`).join('');
+      <span class="res"><span class="sbadge ${m.cls}">${m.dot} ${m.lb}</span></span></div>`;}).join('');
   const body=document.getElementById('d-body');
   body.innerHTML=
     `<div class="cplist"><div class="lh"><span class="n">#</span><span class="t">체크포인트 (${cps.length})</span><span class="r">결과</span></div>${rows}</div>
@@ -418,8 +558,17 @@ function renderCPDetail(it){
   const ep=(c.execution_path||[]).map(s=>`<li>${esc(s)}</li>`).join('')||'<li>-</li>';
   const pc=(c.preconditions||[]).map(s=>`<li>${esc(s)}</li>`).join('')||'<li>-</li>';
   const ev=(c.evidence||[]).map(e=>`<span class="evchip">${evIcon(e)} ${esc(e)}</span>`).join('')||'-';
+  const _cs=vStatus(SEL.f,SEL.g,SEL.i,SEL.c),_cm=vMeta(_cs);
+  const _cid=CodeMapping?CodeMapping.cpId(SEL.f,SEL.g,SEL.i,SEL.c):'';
+  const _resNote=_cs==='fail'
+    ? `<div class="note" style="background:var(--fail-bg)"><b>실행 결과: 오류</b> — ${esc(VirtualRun.error(_cid,c.target,c.expected_state))}<br><span style="color:var(--dim)">※ TC 기반 가상 수행 결과입니다. 실제 테스트 실행이 연동되면 교체됩니다.</span></div>`
+    : _cs==='pass'
+    ? `<div class="note" style="background:var(--ok-bg)"><b>실행 결과: 완료(통과)</b> — 기대 상태 <span class="mono">${esc(c.expected_state||'-')}</span> 충족(가상). ※ TC 기반 가상 수행 결과.</div>`
+    : _cs==='progress'
+    ? `<div class="note"><b>실행 결과: 진행중</b> — 검수 진행 중(가상). ※ TC 기반 가상 수행 결과.</div>`
+    : `<div class="note"><b>실행 결과: 미실행</b> — 아직 검수되지 않았습니다(가상). 실제 테스트 실행 결과를 연동하면 자동 반영됩니다.</div>`;
   document.getElementById('cp-detail').innerHTML=
-   `<div class="sectitle">체크포인트 상세 <span class="tag">◌ 미실행</span></div>
+   `<div class="sectitle">체크포인트 상세 <span class="sbadge ${_cm.cls}">${_cm.dot} ${_cm.lb}</span></div>
     <div class="cards">
       <div class="card"><div class="lab">체크 내용 (Check Point)</div><div class="val">${esc(c.check_point)}</div></div>
       <div class="card"><div class="lab">대상 (Target)</div><div class="val mono">${esc(c.target||'-')}</div></div>
@@ -430,8 +579,7 @@ function renderCPDetail(it){
       <div class="card"><div class="lab">사전조건 (Preconditions)</div><ul class="plist">${pc}</ul></div>
       <div class="card"><div class="lab">증거 (Evidence)</div><div class="evrow">${ev}</div></div>
     </div>
-    <div class="note"><b>실행 결과 (Result): 미실행</b> — 이 검증 모델은 구조 설계 데이터입니다.
-      테스트 실행 결과(통과/실패·Tester·Device·스크린샷)를 연동하면 각 체크포인트의 통과율과 상태가 자동 반영됩니다.</div>
+    ${_resNote}
     <div id="cmap-slot"></div>`;
   renderCodeMapping();
 }

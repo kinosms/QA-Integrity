@@ -189,4 +189,47 @@
     cpId: function (fi, gi, ii, ci) { return 'CP_' + fi + '_' + gi + '_' + ii + '_' + ci; },
     region: region, upperSnake: upperSnake, pascal: pascal
   };
+
+  /* ==========================================================================
+   * VirtualRun — 실제 테스트 실행 결과가 없으므로 TC 체크포인트별 "가상 수행상태"를
+   *   결정론적으로 생성(새로고침해도 동일). 실제 실행 결과가 연동되면 이 레이어를
+   *   actual 결과로 교체하면 됩니다.
+   * ========================================================================*/
+  function hashStr(s) {
+    var h = 2166136261 >>> 0;
+    s = String(s);
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    return h >>> 0;
+  }
+  var STATUS_META = {
+    pass: { lb: '완료', cls: 'ok', dot: '●' },
+    fail: { lb: '오류', cls: 'fail', dot: '▲' },
+    progress: { lb: '진행중', cls: 'warn', dot: '◐' },
+    idle: { lb: '미실행', cls: 'idle', dot: '○' }
+  };
+  // 분포(다양하게): pass 45% · fail 15% · progress 15% · idle 25%
+  function runStatus(seed) {
+    var h = hashStr(seed) % 20;
+    if (h < 9) return 'pass';
+    if (h < 12) return 'fail';
+    if (h < 15) return 'progress';
+    return 'idle';
+  }
+  var ERR_POOL = [
+    function (t, e) { return t + ' 미노출 (기대: ' + e + ')'; },
+    function (t, e) { return t + ' 상태 불일치 — 실제값이 기대(' + e + ')와 다름'; },
+    function (t) { return t + ' 탭 후 화면 전환 실패'; },
+    function (t) { return t + ' 응답 지연 — 타임아웃(5s) 초과'; },
+    function (t) { return t + ' 위치·정렬 어긋남 (레이아웃 깨짐)'; },
+    function (t) { return t + ' 렌더 중 크래시 (NPE 추정)'; },
+    function (t, e) { return '스크린샷 검증 실패 — ' + t + ' 영역이 ' + e + ' 아님'; }
+  ];
+  function runError(seed, target, expected) {
+    var t = target || '대상', e = expected || '기대 상태';
+    return ERR_POOL[hashStr(seed + '|e') % ERR_POOL.length](t, e);
+  }
+  global.VirtualRun = {
+    status: runStatus, error: runError, meta: STATUS_META, hash: hashStr,
+    source: 'virtual_tc'
+  };
 })(typeof window !== 'undefined' ? window : globalThis);
