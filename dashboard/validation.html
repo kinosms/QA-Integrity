@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>일반채팅 — 계층형 검증 모델</title>
+<style>
+:root{
+  --bg:#0f1420; --panel:#161d2e; --panel2:#1c2436; --line:#28324a;
+  --txt:#e6ecf7; --dim:#93a1bd; --accent:#5b9dff; --accent2:#7c5cff;
+  --ok:#37d39b; --warn:#ffb454; --chip:#243049;
+}
+@media (prefers-color-scheme: light){
+  :root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f0f3fa;--line:#e2e8f4;
+  --txt:#1a2233;--dim:#5c6b86;--chip:#eaf0fb;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  font-size:14px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 80px}
+header h1{font-size:20px;margin:0 0 4px}
+header .sub{color:var(--dim);font-size:13px;margin-bottom:16px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tile .n{font-size:26px;font-weight:700}
+.tile .l{color:var(--dim);font-size:12px;margin-top:2px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--line);
+  color:var(--txt);border-radius:10px;padding:9px 12px;font-size:13px}
+.toolbar button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
+  border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12px}
+.toolbar button:hover{color:var(--txt)}
+.fbars{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+@media(max-width:720px){.fbars{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}}
+.fbar{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.fbar:hover{border-color:var(--accent)}
+.fbar .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.fbar .cnt{color:var(--dim)}
+.track{height:7px;background:var(--panel2);border-radius:6px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.func{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.func>.h{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
+.func>.h:hover{background:var(--panel2)}
+.func>.h .title{font-size:16px;font-weight:700;flex:1}
+.badge{background:var(--chip);color:var(--dim);border-radius:20px;padding:3px 10px;font-size:11px;white-space:nowrap}
+.pct{color:var(--ok);font-weight:700;font-size:13px}
+.body{display:none;padding:0 16px 8px}
+.func.open>.body{display:block}
+.group{border-top:1px solid var(--line);padding:10px 0}
+.group>.gh{display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:600}
+.group>.gh .caret,.item>.ih .caret{color:var(--dim);transition:transform .15s;display:inline-block}
+.group.open>.gh .caret,.item.open>.ih .caret{transform:rotate(90deg)}
+.group>.gbody{display:none;padding:6px 0 6px 14px}
+.group.open>.gbody{display:block}
+.item{border-left:2px solid var(--line);padding:6px 0 6px 12px;margin:6px 0}
+.item>.ih{display:flex;gap:8px;align-items:center;cursor:pointer;color:var(--txt)}
+.item>.ih .nm{font-weight:600;font-size:13px}
+.item>.ibody{display:none;padding:6px 0 2px}
+.item.open>.ibody{display:block}
+.cp{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:7px 0}
+.cp .ct{font-size:13.5px;margin-bottom:8px}
+.cp .ct::before{content:"✓";color:var(--ok);font-weight:700;margin-right:6px}
+.kv{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px}
+.kv .row{display:flex;gap:6px;align-items:baseline}
+.kv .k{color:var(--dim);min-width:56px}
+.chip{background:var(--chip);border-radius:6px;padding:2px 8px;font-size:11.5px;display:inline-block;margin:1px 0}
+.chip.t{color:var(--accent)}
+.chip.s{color:var(--ok)}
+.path{color:var(--dim)}
+.hidden{display:none !important}
+footer{color:var(--dim);font-size:12px;margin-top:20px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>일반채팅 — 계층형 검증 모델</h1>
+    <div class="sub">Hierarchical Validation Model · 행 중심 TC를 서비스 → 기능 → 검증 그룹 → 검증 항목 → 체크포인트로 재설계</div>
+  </header>
+  <div class="tiles" id="tiles"></div>
+  <div class="toolbar">
+    <input id="q" placeholder="체크포인트 · 항목 · Target 검색…"/>
+    <button onclick="expandAll(true)">모두 펼치기</button>
+    <button onclick="expandAll(false)">모두 접기</button>
+  </div>
+  <div class="fbars" id="fbars"></div>
+  <div id="tree"></div>
+  <footer id="foot"></footer>
+</div>
+<script>
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let MODEL=null;
+
+function chips(arr,cls){return (arr||[]).map(x=>`<span class="chip ${cls||''}">${esc(x)}</span>`).join(' ')||'<span class="path">-</span>';}
+
+function cpHTML(c){
+  return `<div class="cp" data-txt="${esc((c.check_point||'')+' '+(c.target||'')+' '+(c.item||''))}">
+    <div class="ct">${esc(c.check_point)}</div>
+    <div class="kv">
+      <div class="row"><span class="k">Path</span><span class="path">${(c.execution_path||[]).map(esc).join(' → ')||'-'}</span></div>
+      <div class="row"><span class="k">Pre</span><span>${chips(c.preconditions)}</span></div>
+      <div class="row"><span class="k">Target</span><span>${chips([c.target],'t')}</span></div>
+      <div class="row"><span class="k">Expected</span><span>${chips([c.expected_state],'s')}</span></div>
+      <div class="row"><span class="k">Evidence</span><span>${chips(c.evidence)}</span></div>
+    </div></div>`;
+}
+function itemHTML(it){
+  const cps=(it.checkpoints||[]).map(cpHTML).join('');
+  return `<div class="item"><div class="ih" onclick="tog(this.parentNode)">
+    <span class="caret">▶</span><span class="nm">${esc(it.item)}</span>
+    <span class="badge">${(it.checkpoints||[]).length} CP</span></div>
+    <div class="ibody">${cps}</div></div>`;
+}
+function groupHTML(g){
+  const items=(g.items||[]).map(itemHTML).join('');
+  const nc=(g.items||[]).reduce((a,i)=>a+(i.checkpoints||[]).length,0);
+  return `<div class="group"><div class="gh" onclick="tog(this.parentNode)">
+    <span class="caret">▶</span><span>${esc(g.group)}</span>
+    <span class="badge">${(g.items||[]).length}항목 · ${nc}CP</span></div>
+    <div class="gbody">${items}</div></div>`;
+}
+function funcHTML(f){
+  const groups=(f.validation_groups||[]).map(groupHTML).join('');
+  const s=f.stats||{};
+  return `<div class="func" id="fn_${esc(f.function)}"><div class="h" onclick="tog(this.parentNode)">
+    <span class="title">${esc(f.function_name||f.function)}</span>
+    <span class="badge">그룹 ${s.groups} · 항목 ${s.items} · 체크포인트 ${s.checkpoints}</span>
+    <span class="pct">설계 100%</span></div>
+    <div class="body">${groups}</div></div>`;
+}
+function tog(el){el.classList.toggle('open');}
+function expandAll(v){document.querySelectorAll('.func,.group,.item').forEach(e=>e.classList.toggle('open',v));}
+
+function render(){
+  const t=MODEL.totals;
+  document.getElementById('tiles').innerHTML=[
+    ['기능',t.functions],['검증 그룹',t.groups],['검증 항목',t.items],['체크포인트',t.checkpoints]
+  ].map(([l,n])=>`<div class="tile"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  const max=Math.max(...MODEL.functions.map(f=>f.stats.checkpoints));
+  document.getElementById('fbars').innerHTML=MODEL.functions.map(f=>
+    `<div class="fbar" onclick="jump('${esc(f.function)}')"><div class="top">
+      <span>${esc(f.function_name||f.function)}</span><span class="cnt">${f.stats.checkpoints} CP</span></div>
+      <div class="track"><div class="fill" style="width:${Math.round(f.stats.checkpoints/max*100)}%"></div></div></div>`).join('');
+  document.getElementById('tree').innerHTML=MODEL.functions.map(funcHTML).join('');
+  document.getElementById('foot').textContent=
+    `서비스 ${MODEL.service} · 원본 594 TC 재설계 · 체크포인트는 하나의 결과만 검증하도록 atomic 분해됨`;
+}
+function jump(fn){const el=document.getElementById('fn_'+fn);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}}
+document.getElementById('q').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.cp').forEach(cp=>{
+    const hit=!q||cp.dataset.txt.toLowerCase().includes(q);
+    cp.classList.toggle('hidden',!hit);
+  });
+  if(q){document.querySelectorAll('.func,.group,.item').forEach(e=>e.classList.add('open'));
+    document.querySelectorAll('.item').forEach(it=>{
+      const any=it.querySelectorAll('.cp:not(.hidden)').length>0;it.classList.toggle('hidden',!any);});
+    document.querySelectorAll('.group').forEach(g=>{
+      const any=g.querySelectorAll('.item:not(.hidden)').length>0;g.classList.toggle('hidden',!any);});
+    document.querySelectorAll('.func').forEach(f=>{
+      const any=f.querySelectorAll('.group:not(.hidden)').length>0;f.classList.toggle('hidden',!any);});
+  }else{document.querySelectorAll('.hidden').forEach(e=>e.classList.remove('hidden'));}
+});
+fetch('./validation_model.json').then(r=>r.json()).then(m=>{MODEL=m;render();})
+  .catch(()=>{document.getElementById('tree').innerHTML='<p style="color:var(--dim)">validation_model.json 을 불러오지 못했습니다.</p>';});
+</script>
+</body>
+</html>
