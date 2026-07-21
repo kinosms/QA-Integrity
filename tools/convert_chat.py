@@ -338,6 +338,61 @@ def load_refinement():
         return None
 
 
+def load_split():
+    """build_split.py 가 생성한 step_split.json 로드(없으면 None).
+    { 'splits': { '<new_tc_id>|<orig_step_no>': [ {action, action_parameter, result_state}, ... ] } }"""
+    path = os.path.join(OUT_DIR, 'step_split.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding='utf-8') as f:
+            return json.load(f).get('splits', {})
+    except Exception as e:  # noqa: BLE001
+        print(f'[warn] step_split.json 로드 실패({e}) — 스텝 분리 생략')
+        return None
+
+
+def expand_splits(tc_steps, SPLIT):
+    """액션/시나리오 분리 대상 스텝을 하위 스텝으로 확장하고 TC별 step_no 재부여.
+    하위 스텝은 원 스텝의 화면/타깃/사전조건을 상속하되 action/action_parameter/result_state 를 교체.
+    사전조건은 분리 그룹의 첫 하위 스텝에만 유지(나머지는 해당없음)."""
+    from collections import OrderedDict
+    by_tc = OrderedDict()
+    for s in tc_steps:
+        by_tc.setdefault(s['new_tc_id'], []).append(s)
+
+    out = []
+    for tcid, slist in by_tc.items():
+        new_no = 0
+        for s in slist:
+            subs = SPLIT.get(f"{tcid}|{s['step_no']}")
+            if not subs:
+                new_no += 1
+                ns = dict(s)
+                ns['step_no'] = new_no
+                out.append(ns)
+                continue
+            for i, sub in enumerate(subs):
+                new_no += 1
+                ns = dict(s)
+                ns['step_no'] = new_no
+                ns['action'] = sub['action']
+                ap = sub.get('action_parameter')
+                if ap in (None, '', NA):
+                    ns['action_parameter'] = NA
+                elif isinstance(ap, str):
+                    ns['action_parameter'] = ap
+                else:
+                    ns['action_parameter'] = json.dumps(ap, ensure_ascii=False)
+                ns['result_state'] = sub['result_state'].strip()
+                if i > 0:  # 사전조건은 첫 하위 스텝에만
+                    ns['precondition_data_state'] = NA
+                    ns['precondition_ui_state'] = NA
+                    ns['precondition_permission_state'] = NA
+                out.append(ns)
+    return out
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # 변환 본체
 # ══════════════════════════════════════════════════════════════════════════════
@@ -368,6 +423,10 @@ def convert():
     REFINEMENT = load_refinement()
     if REFINEMENT:
         print(f'[2.6/8] result_state 재작성 데이터 로드 — {len(REFINEMENT)} 스텝')
+
+    SPLIT = load_split()
+    if SPLIT:
+        print(f'[2.7/8] 스텝 분리 데이터 로드 — {len(SPLIT)} 스텝 분리 대상')
 
     # ── 원본 TC 수집 (Excel 행번호 부여) ─────────────────────────────────────
     # load_sheet 는 header 다음 행부터 반환. Excel 행번호 = first_row + index
@@ -600,7 +659,14 @@ def convert():
             'reason': '',
         })
 
-    print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step')
+    # 액션/시나리오 스텝 분리 확장 (있을 때만)
+    if SPLIT:
+        before = len(tc_steps)
+        tc_steps = expand_splits(tc_steps, SPLIT)
+        print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step '
+              f'(스텝 분리 +{len(tc_steps) - before})')
+    else:
+        print(f'[4/8] 신규 TC 변환 완료 — {len(tc_master)} TC / {len(tc_steps)} Step')
 
     # 기본 정렬: 최소 원본행 → new_tc_id
     tc_master.sort(key=lambda t: (t['_min_row'], t['new_tc_id']))
