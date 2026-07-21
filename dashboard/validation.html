@@ -22,9 +22,9 @@
 html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-.app{display:grid;grid-template-columns:64px 300px 360px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+.app{display:grid;grid-template-columns:64px 320px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
 /* top bar */
-.top{grid-column:1/5;display:flex;align-items:center;gap:14px;background:var(--card);
+.top{grid-column:1/4;display:flex;align-items:center;gap:14px;background:var(--card);
   border-bottom:1px solid var(--line);padding:0 18px}
 .top .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
 .top .brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;
@@ -148,9 +148,8 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 .sc .k{color:var(--muted);font-size:10.5px;font-weight:700}
 .sc .v{font-size:16px;font-weight:800}
 @media(max-width:1100px){.app{grid-template-columns:56px 1fr;grid-template-rows:56px auto auto}
-  .pane.tree{grid-row:2/3;grid-column:2/3;max-height:38vh}
-  .mid{grid-row:3/4;grid-column:1/3;border-right:none}
-  .detail{grid-row:4/5;grid-column:1/3}
+  .pane.tree{grid-row:2/3;grid-column:2/3;max-height:42vh}
+  .detail{grid-row:3/4;grid-column:1/3}
   .cards,.cards4{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -183,19 +182,6 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
     <input class="search" id="q" placeholder="기능 · 검증 항목 검색"/>
     <div id="tree"></div>
   </aside>
-  <!-- middle groups/items -->
-  <section class="pane mid">
-    <div class="mhead">
-      <div class="mtitle">
-        <div class="micon" id="m-icon">💬</div>
-        <div>
-          <div class="mname" id="m-name">—</div>
-          <div class="mstat" id="m-stat">—</div>
-        </div>
-      </div>
-    </div>
-    <div class="summary" id="mid-summary"></div>
-  </section>
   <!-- detail -->
   <main class="detail">
     <div class="dhead">
@@ -250,20 +236,22 @@ function buildTree(){
     selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i));
 }
 
-/* ---------- MIDDLE: function summary ---------- */
+/* ---------- FUNCTION OVERVIEW (right pane) ---------- */
 function cpStatus(c){return c.result||c.status||'idle';}  // 실행 결과 연동 대비
 function selectFunction(fi){
-  SEL.f=fi;
+  SEL.f=fi; SEL.g=-1; SEL.i=-1;
   const f=M.functions[fi];
-  document.getElementById('m-name').textContent=fnName(f);
-  document.getElementById('m-stat').textContent=
-    `검증 그룹 ${f.stats.groups} · 검증 항목 ${f.stats.items} · 체크포인트 ${f.stats.checkpoints}`;
   document.getElementById('crumb').textContent='일반채팅  ›  '+fnName(f);
-  renderSummary(fi);
+  document.getElementById('d-crumb').textContent='일반채팅  ›  '+fnName(f);
+  document.getElementById('d-title').textContent=fnName(f);
+  document.getElementById('d-status').textContent='개요';
+  document.getElementById('d-desc').textContent=
+    `검증 그룹 ${f.stats.groups} · 검증 항목 ${f.stats.items} · 체크포인트 ${f.stats.checkpoints}`;
+  renderOverview(fi);
   markSel();
 }
 function pct(n,d){return d?Math.round(n/d*100):0;}
-function renderSummary(fi){
+function renderOverview(fi){
   const f=M.functions[fi], groups=f.validation_groups||[];
   let cps=[]; groups.forEach(g=>(g.items||[]).forEach(i=>cps=cps.concat(i.checkpoints||[])));
   const total=cps.length;
@@ -286,7 +274,7 @@ function renderSummary(fi){
   const items=groups.reduce((a,g)=>a+(g.items||[]).length,0);
   const avg=items?(total/items).toFixed(1):'0';
   const pcCov=pct(cps.filter(c=>(c.preconditions||[]).length).length,total);
-  document.getElementById('mid-summary').innerHTML=`
+  document.getElementById('d-body').innerHTML=`
     <div class="sblock">
       <div class="st"><span>실행 현황</span><span>${pct(done,total)}% 완료</span></div>
       <div class="prog"><i class="p-ok" style="width:${pct(ok,total)}%"></i><i class="p-fail" style="width:${pct(fail,total)}%"></i></div>
@@ -312,7 +300,7 @@ function renderSummary(fi){
       <div class="st"><span>증거(Evidence) 유형 분포</span><span>총 ${total} CP</span></div>
       ${evRows}
     </div>`;
-  document.querySelectorAll('#mid-summary .gbar').forEach(el=>el.onclick=()=>openGroupInTree(fi,+el.dataset.g));
+  document.querySelectorAll('#d-body .gbar').forEach(el=>el.onclick=()=>openGroupInTree(fi,+el.dataset.g));
 }
 function openGroupInTree(fi,gi){
   const tree=document.getElementById('tree'), fnode=tree.children[fi];
@@ -326,11 +314,12 @@ function openGroupInTree(fi,gi){
 /* ---------- DETAIL ---------- */
 function selectItem(fi,gi,ii){
   SEL.f=fi;SEL.g=gi;SEL.i=ii;SEL.c=0;
-  if(document.getElementById('m-name').textContent!==fnName(M.functions[fi])) selectFunction(fi);
   const f=M.functions[fi], g=f.validation_groups[gi], it=g.items[ii];
+  document.getElementById('crumb').textContent='일반채팅  ›  '+fnName(f);
   document.getElementById('d-crumb').innerHTML=
     `${esc(fnName(f))} › <b>${esc(g.group)}</b> › ${esc(it.item)}`;
   document.getElementById('d-title').textContent=it.item;
+  document.getElementById('d-status').textContent='미실행';
   document.getElementById('d-desc').textContent=`이 검증 항목은 ${itemCP(it)}개의 체크포인트로 세분화되어 있습니다.`;
   renderCheckpoints(it);
   markSel();
@@ -374,6 +363,8 @@ function evIcon(e){const m={Screenshot:'🖼',OCR:'🔤',ComponentTree:'🌳',AP
 function markSel(){
   document.querySelectorAll('#tree .trow.item').forEach(el=>{
     el.classList.toggle('sel', +el.dataset.f===SEL.f&&+el.dataset.g===SEL.g&&+el.dataset.i===SEL.i);});
+  document.querySelectorAll('#tree .ftoggle').forEach(el=>{
+    el.classList.toggle('sel', SEL.i<0 && +el.dataset.f===SEL.f);});
 }
 
 /* ---------- SEARCH ---------- */
@@ -388,8 +379,6 @@ document.getElementById('q').addEventListener('input',e=>{
 
 fetch('./validation_model.json').then(r=>r.json()).then(m=>{
   M=m; buildTree(); selectFunction(0);
-  const f=M.functions[0];
-  if(f.validation_groups[0]&&f.validation_groups[0].items[0]) selectItem(0,0,0);
 }).catch(()=>{document.getElementById('d-body').innerHTML='<div class="note">validation_model.json 을 불러오지 못했습니다.</div>';});
 </script>
 </body>
