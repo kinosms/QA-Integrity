@@ -324,6 +324,20 @@ def load_enrichment():
         return None
 
 
+def load_refinement():
+    """build_refinement.py 가 생성한 result_refinement.json 로드(없으면 None).
+    { 'steps': { '<new_tc_id>|<step_no>': '재작성된 result_state' } }"""
+    path = os.path.join(OUT_DIR, 'result_refinement.json')
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding='utf-8') as f:
+            return json.load(f).get('steps', {})
+    except Exception as e:  # noqa: BLE001
+        print(f'[warn] result_refinement.json 로드 실패({e}) — 원본 result_state 유지')
+        return None
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # 변환 본체
 # ══════════════════════════════════════════════════════════════════════════════
@@ -350,6 +364,10 @@ def convert():
               f'State 종류 {len(ENRICHMENT["states"])}')
     else:
         print('[2.5/8] 강화 데이터 없음 — 규칙 기반 사전조건만 사용')
+
+    REFINEMENT = load_refinement()
+    if REFINEMENT:
+        print(f'[2.6/8] result_state 재작성 데이터 로드 — {len(REFINEMENT)} 스텝')
 
     # ── 원본 TC 수집 (Excel 행번호 부여) ─────────────────────────────────────
     # load_sheet 는 header 다음 행부터 반환. Excel 행번호 = first_row + index
@@ -468,6 +486,11 @@ def convert():
             if is_generated:
                 generated_flag = True
             result_state = build_result_state(exp_seg, tgts, result_screen, is_generated)
+            # 재작성(refinement) 우선 적용 — 결론적 검증문으로 다듬은 값이 있으면 교체
+            if REFINEMENT:
+                refined = REFINEMENT.get(f'{new_tc_id}|{step_no}')
+                if refined and refined.strip():
+                    result_state = refined.strip()
 
             # action_parameter (규칙 기반 기본값)
             action_param = NA
