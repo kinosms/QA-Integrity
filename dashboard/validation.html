@@ -3,167 +3,340 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>일반채팅 — 계층형 검증 모델</title>
+<title>QA Analyzer — 계층형 검증 모델</title>
 <style>
 :root{
-  --bg:#0f1420; --panel:#161d2e; --panel2:#1c2436; --line:#28324a;
-  --txt:#e6ecf7; --dim:#93a1bd; --accent:#5b9dff; --accent2:#7c5cff;
-  --ok:#37d39b; --warn:#ffb454; --chip:#243049;
+  --bg:#eef1f7; --card:#ffffff; --rail:#141b2e; --rail-hi:#5b8cff;
+  --line:#e3e8f2; --txt:#1f2738; --dim:#7b8798; --muted:#9aa5b6;
+  --accent:#4f6ef7; --accent-w:#eaefff;
+  --ok:#22b573; --ok-bg:#e7f8f0; --warn:#f0a92c; --warn-bg:#fdf3e2;
+  --fail:#ef4b5d; --fail-bg:#fdeaec; --idle:#9aa5b6; --idle-bg:#eef1f6;
+  --chip:#eef2fa;
 }
-@media (prefers-color-scheme: light){
-  :root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f0f3fa;--line:#e2e8f4;
-  --txt:#1a2233;--dim:#5c6b86;--chip:#eaf0fb;}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0e1320;--card:#161d2e;--line:#28324a;--txt:#e6ecf7;--dim:#93a1bd;
+  --muted:#6b7896;--accent:#5b8cff;--accent-w:#1b2540;--chip:#20293e;
+  --ok-bg:#12301f;--warn-bg:#332614;--fail-bg:#331a1e;--idle-bg:#1c2436;}
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
-  font-size:14px;line-height:1.5}
-.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 80px}
-header h1{font-size:20px;margin:0 0 4px}
-header .sub{color:var(--dim);font-size:13px;margin-bottom:16px}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.tile .n{font-size:26px;font-weight:700}
-.tile .l{color:var(--dim);font-size:12px;margin-top:2px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.toolbar input{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--line);
-  color:var(--txt);border-radius:10px;padding:9px 12px;font-size:13px}
-.toolbar button{background:var(--panel2);border:1px solid var(--line);color:var(--dim);
-  border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12px}
-.toolbar button:hover{color:var(--txt)}
-.fbars{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-@media(max-width:720px){.fbars{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}}
-.fbar{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
-.fbar:hover{border-color:var(--accent)}
-.fbar .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
-.fbar .cnt{color:var(--dim)}
-.track{height:7px;background:var(--panel2);border-radius:6px;overflow:hidden}
-.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.func{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
-.func>.h{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
-.func>.h:hover{background:var(--panel2)}
-.func>.h .title{font-size:16px;font-weight:700;flex:1}
-.badge{background:var(--chip);color:var(--dim);border-radius:20px;padding:3px 10px;font-size:11px;white-space:nowrap}
-.pct{color:var(--ok);font-weight:700;font-size:13px}
-.body{display:none;padding:0 16px 8px}
-.func.open>.body{display:block}
-.group{border-top:1px solid var(--line);padding:10px 0}
-.group>.gh{display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:600}
-.group>.gh .caret,.item>.ih .caret{color:var(--dim);transition:transform .15s;display:inline-block}
-.group.open>.gh .caret,.item.open>.ih .caret{transform:rotate(90deg)}
-.group>.gbody{display:none;padding:6px 0 6px 14px}
-.group.open>.gbody{display:block}
-.item{border-left:2px solid var(--line);padding:6px 0 6px 12px;margin:6px 0}
-.item>.ih{display:flex;gap:8px;align-items:center;cursor:pointer;color:var(--txt)}
-.item>.ih .nm{font-weight:600;font-size:13px}
-.item>.ibody{display:none;padding:6px 0 2px}
-.item.open>.ibody{display:block}
-.cp{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:7px 0}
-.cp .ct{font-size:13.5px;margin-bottom:8px}
-.cp .ct::before{content:"✓";color:var(--ok);font-weight:700;margin-right:6px}
-.kv{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px}
-.kv .row{display:flex;gap:6px;align-items:baseline}
-.kv .k{color:var(--dim);min-width:56px}
-.chip{background:var(--chip);border-radius:6px;padding:2px 8px;font-size:11.5px;display:inline-block;margin:1px 0}
-.chip.t{color:var(--accent)}
-.chip.s{color:var(--ok)}
-.path{color:var(--dim)}
-.hidden{display:none !important}
-footer{color:var(--dim);font-size:12px;margin-top:20px;text-align:center}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.app{display:grid;grid-template-columns:64px 300px 360px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
+/* top bar */
+.top{grid-column:1/5;display:flex;align-items:center;gap:14px;background:var(--card);
+  border-bottom:1px solid var(--line);padding:0 18px}
+.top .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.top .brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;
+  display:grid;place-items:center;font-size:14px}
+.top .crumb{color:var(--dim);font-weight:600}
+.top .spacer{flex:1}
+.pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  border-radius:9px;padding:6px 11px;color:var(--dim);font-size:12px;white-space:nowrap}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#5b8cff,#7c5cff);
+  color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+/* rail */
+.rail{grid-row:2/3;background:var(--rail);display:flex;flex-direction:column;align-items:center;
+  gap:4px;padding:14px 0;color:#8a97b4}
+.rail a{width:44px;height:46px;border-radius:11px;display:grid;place-items:center;color:#8a97b4;
+  text-decoration:none;font-size:17px;position:relative}
+.rail a .lb{font-size:9px;margin-top:2px}
+.rail a.on{background:#243155;color:#fff}
+.rail a:hover{color:#fff}
+.rail a i{font-style:normal;display:flex;flex-direction:column;align-items:center;line-height:1}
+/* panels */
+.pane{grid-row:2/3;background:var(--card);border-right:1px solid var(--line);overflow-y:auto}
+.pane.tree{padding:14px 12px}
+.selbox{width:100%;background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;color:var(--txt);font-weight:600;margin-bottom:9px}
+.search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;color:var(--txt);margin-bottom:12px;font-size:12px}
+.tnode{border-radius:8px}
+.trow{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:12.5px}
+.trow:hover{background:var(--bg)}
+.trow.sel{background:var(--accent-w);color:var(--accent);font-weight:700}
+.trow .caret{width:12px;color:var(--muted);transition:transform .15s;flex:none}
+.trow.open>.caret{transform:rotate(90deg)}
+.trow .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow .cnt{color:var(--muted);font-size:11px;font-weight:600}
+.tchildren{display:none;margin-left:12px;border-left:1px solid var(--line);padding-left:4px}
+.tnode.open>.tchildren{display:block}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--idle);flex:none}
+/* middle: groups/items table */
+.mid{padding:0}
+.mid .mhead{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);
+  padding:14px 16px;z-index:2}
+.mid .mtitle{display:flex;align-items:center;gap:10px}
+.mid .micon{width:34px;height:34px;border-radius:9px;background:var(--accent-w);display:grid;place-items:center;font-size:17px}
+.mid .mname{font-size:17px;font-weight:800}
+.mid .mstat{color:var(--dim);font-size:11.5px;margin-top:3px}
+.tblhead{display:flex;padding:9px 16px;color:var(--muted);font-size:11px;font-weight:700;
+  border-bottom:1px solid var(--line)}
+.tblhead .c1{flex:1}.tblhead .c2{width:70px;text-align:right}.tblhead .c3{width:70px;text-align:right}
+.grow{padding:2px 8px}
+.grow .gh{display:flex;align-items:center;gap:8px;padding:10px 8px;cursor:pointer;border-radius:8px;font-weight:700}
+.grow .gh:hover{background:var(--bg)}
+.grow .caret{width:12px;color:var(--muted);transition:transform .15s}
+.grow.open .caret{transform:rotate(90deg)}
+.grow .gh .gn{flex:1}
+.badge{font-size:11px;font-weight:700;color:var(--dim);width:70px;text-align:right}
+.gitems{display:none}
+.grow.open .gitems{display:block}
+.irow{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 26px;cursor:pointer;border-radius:8px;font-size:12.5px}
+.irow:hover{background:var(--bg)}
+.irow.sel{background:var(--accent-w)}
+.irow .in{flex:1;color:var(--txt)}
+.irow.sel .in{color:var(--accent);font-weight:700}
+.mini{font-size:11px;font-weight:700;color:var(--muted);width:70px;text-align:right}
+/* detail */
+.detail{grid-row:2/3;overflow-y:auto;padding:0}
+.dhead{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:16px 22px;z-index:2}
+.dcrumb{color:var(--dim);font-size:12px;margin-bottom:8px}
+.dcrumb b{color:var(--accent)}
+.dtitle{display:flex;align-items:center;gap:12px}
+.dtitle h2{font-size:19px;margin:0;font-weight:800}
+.status-chip{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--idle-bg);color:var(--idle)}
+.dtitle .spacer{flex:1}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--dim);border-radius:9px;
+  padding:7px 13px;font-size:12px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ddesc{color:var(--dim);font-size:12.5px;margin-top:8px}
+.dbody{padding:18px 22px 60px}
+.cplist{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.cplist .lh{display:flex;padding:10px 14px;color:var(--muted);font-size:11px;font-weight:700;border-bottom:1px solid var(--line)}
+.cplist .lh .n{width:26px}.cplist .lh .t{flex:1}.cplist .lh .r{width:70px;text-align:right}
+.cprow{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
+.cprow:last-child{border-bottom:none}
+.cprow:hover{background:var(--bg)}
+.cprow.sel{background:var(--accent-w)}
+.cprow .num{width:26px;color:var(--muted);font-weight:700}
+.cprow .txt{flex:1}
+.cprow .res{width:70px;text-align:right}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:20px;background:var(--idle-bg);color:var(--idle)}
+.sectitle{font-size:14px;font-weight:800;margin:6px 0 12px;display:flex;align-items:center;gap:8px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+.card .lab{color:var(--dim);font-size:11px;font-weight:700;margin-bottom:6px}
+.card .val{font-size:13.5px;font-weight:600;word-break:break-word}
+.card .val.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);font-size:12.5px}
+.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:8px;align-items:flex-start;padding:3px 0;font-size:12.5px}
+.steps li::before{content:counter(s);width:18px;height:18px;border-radius:50%;background:var(--accent-w);
+  color:var(--accent);font-size:10px;font-weight:800;display:grid;place-items:center;flex:none;margin-top:1px}
+.plist{list-style:none;margin:0;padding:0}
+.plist li{position:relative;padding:3px 0 3px 14px;font-size:12.5px}
+.plist li::before{content:"•";position:absolute;left:2px;color:var(--accent)}
+.evrow{display:flex;gap:8px;flex-wrap:wrap}
+.evchip{background:var(--chip);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;
+  display:flex;align-items:center;gap:6px}
+.note{background:var(--warn-bg);border:1px solid var(--line);border-radius:11px;padding:12px 15px;
+  font-size:12px;color:var(--dim);margin-top:6px}
+.note b{color:var(--txt)}
+.hidden{display:none!important}
+.stat-cluster{display:flex;gap:16px;align-items:center}
+.sc{display:flex;flex-direction:column}
+.sc .k{color:var(--muted);font-size:10.5px;font-weight:700}
+.sc .v{font-size:16px;font-weight:800}
+@media(max-width:1100px){.app{grid-template-columns:56px 1fr;grid-template-rows:56px auto auto}
+  .pane.tree{grid-row:2/3;grid-column:2/3;max-height:38vh}
+  .mid{grid-row:3/4;grid-column:1/3;border-right:none}
+  .detail{grid-row:4/5;grid-column:1/3}
+  .cards,.cards4{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>일반채팅 — 계층형 검증 모델</h1>
-    <div class="sub">Hierarchical Validation Model · 행 중심 TC를 서비스 → 기능 → 검증 그룹 → 검증 항목 → 체크포인트로 재설계</div>
-  </header>
-  <div class="tiles" id="tiles"></div>
-  <div class="toolbar">
-    <input id="q" placeholder="체크포인트 · 항목 · Target 검색…"/>
-    <button onclick="expandAll(true)">모두 펼치기</button>
-    <button onclick="expandAll(false)">모두 접기</button>
+<div class="app">
+  <!-- top -->
+  <div class="top">
+    <div class="brand"><span class="logo">✓</span>QA Analyzer</div>
+    <span class="crumb" id="crumb">일반채팅</span>
+    <div class="spacer"></div>
+    <span class="pill">v26.6.0 (6차)</span>
+    <span class="pill">Android + iOS</span>
+    <span class="pill">🔔</span>
+    <div class="avatar">QA</div>
   </div>
-  <div class="fbars" id="fbars"></div>
-  <div id="tree"></div>
-  <footer id="foot"></footer>
+  <!-- rail -->
+  <nav class="rail">
+    <a href="index.html" title="대시보드"><i>🏠<span class="lb">대시보드</span></i></a>
+    <a class="on" title="검증 결과"><i>🧬<span class="lb">검증결과</span></i></a>
+    <a title="기능/영역"><i>🗂<span class="lb">기능</span></i></a>
+    <a title="리그레션"><i>🔁<span class="lb">리그레션</span></i></a>
+    <a title="테스트 실행"><i>▶<span class="lb">실행</span></i></a>
+    <a title="이슈"><i>⚑<span class="lb">이슈</span></i></a>
+    <a title="리포트"><i>📊<span class="lb">리포트</span></i></a>
+    <a title="설정"><i>⚙<span class="lb">설정</span></i></a>
+  </nav>
+  <!-- tree -->
+  <aside class="pane tree">
+    <div class="selbox">일반채팅 ▾</div>
+    <input class="search" id="q" placeholder="기능 · 검증 항목 검색"/>
+    <div id="tree"></div>
+  </aside>
+  <!-- middle groups/items -->
+  <section class="pane mid">
+    <div class="mhead">
+      <div class="mtitle">
+        <div class="micon" id="m-icon">💬</div>
+        <div>
+          <div class="mname" id="m-name">—</div>
+          <div class="mstat" id="m-stat">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="tblhead"><span class="c1">검증 그룹 / 검증 항목</span><span class="c2">항목</span><span class="c3">체크포인트</span></div>
+    <div id="mid-list"></div>
+  </section>
+  <!-- detail -->
+  <main class="detail">
+    <div class="dhead">
+      <div class="dcrumb" id="d-crumb">—</div>
+      <div class="dtitle">
+        <h2 id="d-title">검증 항목을 선택하세요</h2>
+        <span class="status-chip" id="d-status">미실행</span>
+        <div class="spacer"></div>
+        <button class="btn" id="btn-issue">＋ 이슈 생성</button>
+        <button class="btn primary" id="btn-run">▶ 테스트 실행</button>
+      </div>
+      <div class="ddesc" id="d-desc"></div>
+    </div>
+    <div class="dbody" id="d-body">
+      <div class="note">좌측에서 서비스 → 기능 → 검증 그룹 → 검증 항목을 선택하면 체크포인트와 상세가 표시됩니다.</div>
+    </div>
+  </main>
 </div>
 <script>
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-let MODEL=null;
+let M=null, SEL={f:0,g:0,i:0,c:0};
 
-function chips(arr,cls){return (arr||[]).map(x=>`<span class="chip ${cls||''}">${esc(x)}</span>`).join(' ')||'<span class="path">-</span>';}
+function fnName(f){return f.function_name||f.function;}
+function itemCP(it){return (it.checkpoints||[]).length;}
+function groupCP(g){return (g.items||[]).reduce((a,i)=>a+itemCP(i),0);}
 
-function cpHTML(c){
-  return `<div class="cp" data-txt="${esc((c.check_point||'')+' '+(c.target||'')+' '+(c.item||''))}">
-    <div class="ct">${esc(c.check_point)}</div>
-    <div class="kv">
-      <div class="row"><span class="k">Path</span><span class="path">${(c.execution_path||[]).map(esc).join(' → ')||'-'}</span></div>
-      <div class="row"><span class="k">Pre</span><span>${chips(c.preconditions)}</span></div>
-      <div class="row"><span class="k">Target</span><span>${chips([c.target],'t')}</span></div>
-      <div class="row"><span class="k">Expected</span><span>${chips([c.expected_state],'s')}</span></div>
-      <div class="row"><span class="k">Evidence</span><span>${chips(c.evidence)}</span></div>
-    </div></div>`;
+/* ---------- TREE ---------- */
+function buildTree(){
+  const t=document.getElementById('tree');
+  t.innerHTML=M.functions.map((f,fi)=>{
+    const groups=(f.validation_groups||[]).map((g,gi)=>{
+      const items=(g.items||[]).map((it,ii)=>
+        `<div class="trow item" data-f="${fi}" data-g="${gi}" data-i="${ii}">
+           <span class="caret" style="visibility:hidden">▸</span><span class="dot"></span>
+           <span class="nm">${esc(it.item)}</span><span class="cnt">${itemCP(it)}</span></div>`).join('');
+      return `<div class="tnode">
+        <div class="trow gtoggle"><span class="caret">▸</span><span class="nm">${esc(g.group)}</span><span class="cnt">${groupCP(g)}</span></div>
+        <div class="tchildren">${items}</div></div>`;
+    }).join('');
+    return `<div class="tnode ${fi===SEL.f?'open':''}">
+      <div class="trow ftoggle" data-f="${fi}"><span class="caret">▸</span>
+        <span class="nm" style="font-weight:700">${esc(fnName(f))}</span><span class="cnt">${f.stats.checkpoints}</span></div>
+      <div class="tchildren">${groups}</div></div>`;
+  }).join('');
+  // toggles
+  t.querySelectorAll('.ftoggle').forEach(el=>el.onclick=e=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');
+    selectFunction(+el.dataset.f);});
+  t.querySelectorAll('.gtoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');});
+  t.querySelectorAll('.trow.item').forEach(el=>el.onclick=()=>
+    selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i));
 }
-function itemHTML(it){
-  const cps=(it.checkpoints||[]).map(cpHTML).join('');
-  return `<div class="item"><div class="ih" onclick="tog(this.parentNode)">
-    <span class="caret">▶</span><span class="nm">${esc(it.item)}</span>
-    <span class="badge">${(it.checkpoints||[]).length} CP</span></div>
-    <div class="ibody">${cps}</div></div>`;
-}
-function groupHTML(g){
-  const items=(g.items||[]).map(itemHTML).join('');
-  const nc=(g.items||[]).reduce((a,i)=>a+(i.checkpoints||[]).length,0);
-  return `<div class="group"><div class="gh" onclick="tog(this.parentNode)">
-    <span class="caret">▶</span><span>${esc(g.group)}</span>
-    <span class="badge">${(g.items||[]).length}항목 · ${nc}CP</span></div>
-    <div class="gbody">${items}</div></div>`;
-}
-function funcHTML(f){
-  const groups=(f.validation_groups||[]).map(groupHTML).join('');
-  const s=f.stats||{};
-  return `<div class="func" id="fn_${esc(f.function)}"><div class="h" onclick="tog(this.parentNode)">
-    <span class="title">${esc(f.function_name||f.function)}</span>
-    <span class="badge">그룹 ${s.groups} · 항목 ${s.items} · 체크포인트 ${s.checkpoints}</span>
-    <span class="pct">설계 100%</span></div>
-    <div class="body">${groups}</div></div>`;
-}
-function tog(el){el.classList.toggle('open');}
-function expandAll(v){document.querySelectorAll('.func,.group,.item').forEach(e=>e.classList.toggle('open',v));}
 
-function render(){
-  const t=MODEL.totals;
-  document.getElementById('tiles').innerHTML=[
-    ['기능',t.functions],['검증 그룹',t.groups],['검증 항목',t.items],['체크포인트',t.checkpoints]
-  ].map(([l,n])=>`<div class="tile"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
-  const max=Math.max(...MODEL.functions.map(f=>f.stats.checkpoints));
-  document.getElementById('fbars').innerHTML=MODEL.functions.map(f=>
-    `<div class="fbar" onclick="jump('${esc(f.function)}')"><div class="top">
-      <span>${esc(f.function_name||f.function)}</span><span class="cnt">${f.stats.checkpoints} CP</span></div>
-      <div class="track"><div class="fill" style="width:${Math.round(f.stats.checkpoints/max*100)}%"></div></div></div>`).join('');
-  document.getElementById('tree').innerHTML=MODEL.functions.map(funcHTML).join('');
-  document.getElementById('foot').textContent=
-    `서비스 ${MODEL.service} · 원본 594 TC 재설계 · 체크포인트는 하나의 결과만 검증하도록 atomic 분해됨`;
+/* ---------- MIDDLE ---------- */
+function selectFunction(fi){
+  SEL.f=fi;
+  const f=M.functions[fi];
+  document.getElementById('m-name').textContent=fnName(f);
+  document.getElementById('m-stat').textContent=
+    `검증 그룹 ${f.stats.groups} · 검증 항목 ${f.stats.items} · 체크포인트 ${f.stats.checkpoints}`;
+  document.getElementById('crumb').textContent='일반채팅  ›  '+fnName(f);
+  const list=document.getElementById('mid-list');
+  list.innerHTML=(f.validation_groups||[]).map((g,gi)=>{
+    const items=(g.items||[]).map((it,ii)=>
+      `<div class="irow" data-f="${fi}" data-g="${gi}" data-i="${ii}">
+        <span class="dot"></span><span class="in">${esc(it.item)}</span><span class="mini">${itemCP(it)}</span></div>`).join('');
+    return `<div class="grow ${gi===0?'open':''}">
+      <div class="gh"><span class="caret">▸</span><span class="gn">${esc(g.group)}</span>
+        <span class="badge">${(g.items||[]).length}항목</span><span class="badge">${groupCP(g)}</span></div>
+      <div class="gitems">${items}</div></div>`;
+  }).join('');
+  list.querySelectorAll('.gh').forEach(el=>el.onclick=()=>el.parentNode.classList.toggle('open'));
+  list.querySelectorAll('.irow').forEach(el=>el.onclick=()=>
+    selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i));
+  markSel();
 }
-function jump(fn){const el=document.getElementById('fn_'+fn);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'start'});}}
+
+/* ---------- DETAIL ---------- */
+function selectItem(fi,gi,ii){
+  SEL.f=fi;SEL.g=gi;SEL.i=ii;SEL.c=0;
+  if(document.getElementById('m-name').textContent!==fnName(M.functions[fi])) selectFunction(fi);
+  const f=M.functions[fi], g=f.validation_groups[gi], it=g.items[ii];
+  document.getElementById('d-crumb').innerHTML=
+    `${esc(fnName(f))} › <b>${esc(g.group)}</b> › ${esc(it.item)}`;
+  document.getElementById('d-title').textContent=it.item;
+  document.getElementById('d-desc').textContent=`이 검증 항목은 ${itemCP(it)}개의 체크포인트로 세분화되어 있습니다.`;
+  renderCheckpoints(it);
+  markSel();
+}
+function renderCheckpoints(it){
+  const cps=it.checkpoints||[];
+  const rows=cps.map((c,ci)=>
+    `<div class="cprow ${ci===SEL.c?'sel':''}" data-c="${ci}">
+      <span class="num">${ci+1}</span><span class="txt">${esc(c.check_point)}</span>
+      <span class="res"><span class="tag">◌ 미실행</span></span></div>`).join('');
+  const body=document.getElementById('d-body');
+  body.innerHTML=
+    `<div class="cplist"><div class="lh"><span class="n">#</span><span class="t">체크포인트 (${cps.length})</span><span class="r">결과</span></div>${rows}</div>
+     <div id="cp-detail"></div>`;
+  body.querySelectorAll('.cprow').forEach(el=>el.onclick=()=>{SEL.c=+el.dataset.c;
+    body.querySelectorAll('.cprow').forEach(r=>r.classList.remove('sel'));el.classList.add('sel');renderCPDetail(it);});
+  renderCPDetail(it);
+}
+function renderCPDetail(it){
+  const c=(it.checkpoints||[])[SEL.c]; if(!c){document.getElementById('cp-detail').innerHTML='';return;}
+  const ep=(c.execution_path||[]).map(s=>`<li>${esc(s)}</li>`).join('')||'<li>-</li>';
+  const pc=(c.preconditions||[]).map(s=>`<li>${esc(s)}</li>`).join('')||'<li>-</li>';
+  const ev=(c.evidence||[]).map(e=>`<span class="evchip">${evIcon(e)} ${esc(e)}</span>`).join('')||'-';
+  document.getElementById('cp-detail').innerHTML=
+   `<div class="sectitle">체크포인트 상세 <span class="tag">◌ 미실행</span></div>
+    <div class="cards">
+      <div class="card"><div class="lab">체크 내용 (Check Point)</div><div class="val">${esc(c.check_point)}</div></div>
+      <div class="card"><div class="lab">대상 (Target)</div><div class="val mono">${esc(c.target||'-')}</div></div>
+      <div class="card"><div class="lab">기대 상태 (Expected State)</div><div class="val mono">${esc(c.expected_state||'-')}</div></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="lab">실행 경로 (Execution Path)</div><ol class="steps">${ep}</ol></div>
+      <div class="card"><div class="lab">사전조건 (Preconditions)</div><ul class="plist">${pc}</ul></div>
+      <div class="card"><div class="lab">증거 (Evidence)</div><div class="evrow">${ev}</div></div>
+    </div>
+    <div class="note"><b>실행 결과 (Result): 미실행</b> — 이 검증 모델은 구조 설계 데이터입니다.
+      테스트 실행 결과(통과/실패·Tester·Device·스크린샷)를 연동하면 각 체크포인트의 통과율과 상태가 자동 반영됩니다.</div>`;
+}
+function evIcon(e){const m={Screenshot:'🖼',OCR:'🔤',ComponentTree:'🌳',APIResponse:'🔌',DB:'🗄',Log:'📜',Accessibility:'♿',Video:'🎬'};return m[e]||'📎';}
+
+function markSel(){
+  document.querySelectorAll('.mid-list .irow,.mid .irow').forEach(el=>{
+    el.classList.toggle('sel', +el.dataset.f===SEL.f&&+el.dataset.g===SEL.g&&+el.dataset.i===SEL.i);});
+  document.querySelectorAll('#tree .trow.item').forEach(el=>{
+    el.classList.toggle('sel', +el.dataset.f===SEL.f&&+el.dataset.g===SEL.g&&+el.dataset.i===SEL.i);});
+}
+
+/* ---------- SEARCH ---------- */
 document.getElementById('q').addEventListener('input',e=>{
   const q=e.target.value.trim().toLowerCase();
-  document.querySelectorAll('.cp').forEach(cp=>{
-    const hit=!q||cp.dataset.txt.toLowerCase().includes(q);
-    cp.classList.toggle('hidden',!hit);
+  document.querySelectorAll('#tree .tnode').forEach(n=>{
+    const txt=n.textContent.toLowerCase();
+    n.style.display=(!q||txt.includes(q))?'':'none';
+    if(q&&txt.includes(q))n.classList.add('open');
   });
-  if(q){document.querySelectorAll('.func,.group,.item').forEach(e=>e.classList.add('open'));
-    document.querySelectorAll('.item').forEach(it=>{
-      const any=it.querySelectorAll('.cp:not(.hidden)').length>0;it.classList.toggle('hidden',!any);});
-    document.querySelectorAll('.group').forEach(g=>{
-      const any=g.querySelectorAll('.item:not(.hidden)').length>0;g.classList.toggle('hidden',!any);});
-    document.querySelectorAll('.func').forEach(f=>{
-      const any=f.querySelectorAll('.group:not(.hidden)').length>0;f.classList.toggle('hidden',!any);});
-  }else{document.querySelectorAll('.hidden').forEach(e=>e.classList.remove('hidden'));}
 });
-fetch('./validation_model.json').then(r=>r.json()).then(m=>{MODEL=m;render();})
-  .catch(()=>{document.getElementById('tree').innerHTML='<p style="color:var(--dim)">validation_model.json 을 불러오지 못했습니다.</p>';});
+
+fetch('./validation_model.json').then(r=>r.json()).then(m=>{
+  M=m; buildTree(); selectFunction(0);
+  const f=M.functions[0];
+  if(f.validation_groups[0]&&f.validation_groups[0].items[0]) selectItem(0,0,0);
+}).catch(()=>{document.getElementById('d-body').innerHTML='<div class="note">validation_model.json 을 불러오지 못했습니다.</div>';});
 </script>
 </body>
 </html>
