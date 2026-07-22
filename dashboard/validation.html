@@ -305,8 +305,9 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
   <aside class="pane tree">
     <div class="selbox">일반채팅 ▾</div>
     <div class="viewtog" id="viewtog">
-      <button data-v="function" class="on">기능 기준</button>
-      <button data-v="screen">화면 기준</button>
+      <button data-v="function" class="on">기능</button>
+      <button data-v="screen">화면</button>
+      <button data-v="precond">사전조건</button>
     </div>
     <input class="search" id="q" placeholder="기능 · 검증 항목 검색"/>
     <div id="tree"></div>
@@ -333,6 +334,7 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 <div class="cm-mask" id="cm-mask"><div class="cm-box" id="cm-box"></div></div>
 <script src="./code_mapping.js"></script>
 <script src="./state_norm.js"></script>
+<script src="./precond.js"></script>
 <script>
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 let M=null, CM=null, SEL={f:0,g:0,i:0,c:0};
@@ -348,8 +350,12 @@ function itemCP(it){return (it.checkpoints||[]).length;}
 function groupCP(g){return (g.items||[]).reduce((a,i)=>a+itemCP(i),0);}
 
 /* ---------- TREE ---------- */
-let VIEW='function';
-function buildTree(){ (VIEW==='screen'&&CM) ? buildScreenTree() : buildFunctionTree(); }
+let VIEW='function', PC=null, PC_CONDIDX=[];
+function buildTree(){
+  if(VIEW==='screen'&&CM) buildScreenTree();
+  else if(VIEW==='precond'&&PC) buildPrecondTree();
+  else buildFunctionTree();
+}
 function buildFunctionTree(){
   const t=document.getElementById('tree');
   t.innerHTML=M.functions.map((f,fi)=>{
@@ -419,7 +425,114 @@ function setView(v){
     const node=document.querySelector('#tree .ftoggle[data-screen="'+first+'"]');
     if(node){node.parentNode.classList.add('open');node.classList.add('open','sel');}
     if(first)renderScreenOverview(first);
+  }else if(v==='precond'){
+    const first=PC.categories[0];
+    const node=document.querySelector('#tree .ftoggle[data-cat="'+first.key+'"]');
+    if(node){node.parentNode.classList.add('open');node.classList.add('open','sel');}
+    if(first)renderCategoryOverview(first.key);
   }else{ selectFunction(SEL.f||0); }
+}
+/* 사전조건(Precondition) 기준 트리: 카테고리 → 조건 → 체크포인트 */
+function buildPrecondTree(){
+  const t=document.getElementById('tree'); PC_CONDIDX=[];
+  t.innerHTML=PC.categories.map(cat=>{
+    const conds=cat.conditions.map(ck=>{
+      const cond=PC.conditions[ck], idx=PC_CONDIDX.push(ck)-1;
+      const leaves=cond.locs.map(l=>{const m=vMeta(vStatus(l.fi,l.gi,l.ii,l.ci));
+        return `<div class="trow item" data-f="${l.fi}" data-g="${l.gi}" data-i="${l.ii}" data-c="${l.ci}">
+          <span class="caret" style="visibility:hidden">▸</span><span class="sdot" style="background:var(--${m.cls})"></span>
+          <span class="nm">${esc(l.label)}</span></div>`;}).join('');
+      return `<div class="tnode">
+        <div class="trow gtoggle" data-ci="${idx}"><span class="caret">▸</span><span class="nm">${esc(cond.label)}</span><span class="cnt">${cond.count}</span></div>
+        <div class="tchildren">${leaves}</div></div>`;
+    }).join('');
+    return `<div class="tnode">
+      <div class="trow ftoggle" data-cat="${cat.key}"><span class="caret">▸</span>
+        <span class="nm" style="font-weight:700">${cat.icon} ${esc(cat.label)}</span><span class="cnt">${cat.count}</span></div>
+      <div class="tchildren">${conds}</div></div>`;
+  }).join('');
+  t.querySelectorAll('.ftoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');
+    t.querySelectorAll('.trow').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+    renderCategoryOverview(el.dataset.cat);});
+  t.querySelectorAll('.gtoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');
+    t.querySelectorAll('.trow').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+    renderPrecondOverview(+el.dataset.ci);});
+  t.querySelectorAll('.trow.item').forEach(el=>el.onclick=()=>{
+    t.querySelectorAll('.trow.item').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+    gotoCheckpoint(+el.dataset.f,+el.dataset.g,+el.dataset.i,+el.dataset.c);});
+}
+/* 상태 롤업 + 기여 기능 집계 (locs 배열) */
+function locsRollup(locs){
+  const c={pass:0,fail:0,progress:0,idle:0},fnc={};
+  locs.forEach(l=>{c[vStatus(l.fi,l.gi,l.ii,l.ci)]++;fnc[l.fi]=(fnc[l.fi]||0)+1;});
+  return {c:c,fnc:fnc};
+}
+function statusBlockHtml(c,total,title){
+  return `<div class="sblock">
+    <div class="st"><span>${title||'검수 진행 현황'}</span><span>${pct(total-c.idle,total)}% 진행</span></div>
+    <div class="prog"><i class="p-ok" style="width:${pct(c.pass,total)}%"></i><i class="p-fail" style="width:${pct(c.fail,total)}%"></i><i class="p-warn" style="width:${pct(c.progress,total)}%"></i></div>
+    <div class="leg">
+      <span class="lg"><span class="sw" style="background:var(--ok)"></span>완료 <b>${c.pass}</b></span>
+      <span class="lg"><span class="sw" style="background:var(--fail)"></span>오류 <b>${c.fail}</b></span>
+      <span class="lg"><span class="sw" style="background:var(--warn)"></span>진행중 <b>${c.progress}</b></span>
+      <span class="lg"><span class="sw" style="background:var(--idle)"></span>미실행 <b>${c.idle}</b></span>
+    </div></div>`;
+}
+function fnListHtml(fnc){
+  return Object.keys(fnc).sort((a,b)=>fnc[b]-fnc[a]).map(fi=>
+    `<div class="chkrow" data-fi="${fi}"><div class="cn">${esc(fnName(M.functions[fi]))}</div><span class="sbadge idle">${fnc[fi]} CP</span></div>`).join('');
+}
+/* 조건 1개 세팅 시 커버되는 체크포인트 */
+function renderPrecondOverview(idx){
+  const ck=PC_CONDIDX[idx], cond=PC.conditions[ck], locs=cond.locs;
+  const total=locs.length||1, r=locsRollup(locs), fnN=Object.keys(r.fnc).length;
+  const catMeta=PC.catMeta[cond.category];
+  SEL.i=-1;
+  document.getElementById('crumb').textContent='일반채팅  ›  사전조건  ›  '+cond.label;
+  document.getElementById('d-crumb').textContent='사전조건('+catMeta.label+')';
+  document.getElementById('d-title').textContent=cond.label;
+  {const ds=document.getElementById('d-status');ds.textContent=cond.persistent?'환경 세팅':'테스트별 준비';
+    ds.style.background=cond.persistent?'var(--ok-bg)':'var(--warn-bg)';ds.style.color=cond.persistent?'var(--ok)':'var(--warn)';}
+  document.getElementById('d-desc').textContent=`이 사전조건을 세팅하면 ${locs.length}개 체크포인트(기능 ${fnN}개)를 한 상황에서 검증할 수 있습니다.`;
+  document.getElementById('d-body').innerHTML=`
+    <div class="cmap" style="border-style:solid;border-color:var(--line);background:var(--accent-w)">
+      <div class="cmhead"><h3>${catMeta.icon} 세팅: ${esc(cond.label)}</h3>
+        <span class="spacer" style="flex:1"></span>
+        <span class="mst ${cond.persistent?'confirmed':'suggested'}">${cond.persistent?'한 번 세팅 유지':'테스트별 준비'}</span></div>
+      <div class="cmwarn">속성 분류: <b>${esc(catMeta.label)}</b> · 이 조건이 걸린 체크포인트 <b>${locs.length}개</b> · 관련 기능 <b>${fnN}개</b>.
+        ${cond.persistent?'환경을 한 번 세팅해두면 아래 항목을 연속으로 검증할 수 있습니다.':'테스트 시점마다 데이터/상태를 준비해야 합니다.'}</div>
+    </div>
+    ${statusBlockHtml(r.c,total,'이 조건에서의 검수 현황')}
+    <div class="sblock"><div class="st"><span>이 조건으로 검증 가능한 기능</span><span>${fnN}개</span></div>${fnListHtml(r.fnc)}</div>`;
+  document.querySelectorAll('#d-body .chkrow[data-fi]').forEach(el=>el.onclick=()=>openFunctionInTree(+el.dataset.fi));
+}
+/* 카테고리(세팅 속성) 개요 */
+function renderCategoryOverview(catKey){
+  const cat=PC.categories.find(c=>c.key===catKey), catMeta=PC.catMeta[catKey];
+  const allLocs=[]; cat.conditions.forEach(ck=>allLocs.push(...PC.conditions[ck].locs));
+  const total=allLocs.length||1, r=locsRollup(allLocs);
+  SEL.i=-1;
+  document.getElementById('crumb').textContent='일반채팅  ›  사전조건  ›  '+cat.label;
+  document.getElementById('d-crumb').textContent='사전조건 속성';
+  document.getElementById('d-title').textContent=cat.icon+' '+cat.label;
+  {const ds=document.getElementById('d-status');ds.textContent=cat.persistent?'환경 세팅':'테스트별 준비';
+    ds.style.background=cat.persistent?'var(--ok-bg)':'var(--warn-bg)';ds.style.color=cat.persistent?'var(--ok)':'var(--warn)';}
+  document.getElementById('d-desc').textContent=`${cat.condCount}종의 조건 · 연결 체크포인트 ${cat.count}건. 아래 조건 중 하나를 세팅하면 해당 체크포인트를 검증할 수 있습니다.`;
+  const condRows=cat.conditions.map((ck,i)=>{
+    const cond=PC.conditions[ck], idx=PC_CONDIDX.indexOf(ck);
+    return `<div class="chkrow" data-ci="${idx}"><div class="cn">${esc(cond.label)}</div><span class="sbadge idle">${cond.count} CP</span></div>`;
+  }).join('');
+  document.getElementById('d-body').innerHTML=`
+    ${statusBlockHtml(r.c,total,'이 속성 전체 검수 현황')}
+    <div class="sblock"><div class="st"><span>세팅 조건(값)</span><span>${cat.condCount}종</span></div>${condRows}</div>`;
+  document.querySelectorAll('#d-body .chkrow[data-ci]').forEach(el=>el.onclick=()=>{
+    const idx=+el.dataset.ci;const ck=PC_CONDIDX[idx];
+    const node=document.querySelector('#tree .gtoggle[data-ci="'+idx+'"]');
+    if(node){node.parentNode.classList.add('open');node.classList.add('open');
+      document.querySelectorAll('#tree .trow').forEach(x=>x.classList.remove('sel'));node.classList.add('sel');node.scrollIntoView({block:'center'});}
+    renderPrecondOverview(idx);});
 }
 function openFunctionInTree(fi){
   setView('function');
@@ -874,6 +987,8 @@ fetch('./validation_model.json').then(r=>r.json()).then(m=>{
   M=m;
   try{CM=(window.CodeMapping&&window.CodeMapping.build)?window.CodeMapping.build(M):null;}
   catch(e){console.error('CodeMapping build 실패',e);CM=null;}
+  try{PC=(window.Precond&&window.Precond.build)?window.Precond.build(M):null;}
+  catch(e){console.error('Precond build 실패',e);PC=null;}
   buildTree(); selectFunction(0);
 }).catch(()=>{document.getElementById('d-body').innerHTML='<div class="note">validation_model.json 을 불러오지 못했습니다.</div>';});
 </script>
