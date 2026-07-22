@@ -49,6 +49,12 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 .pane.tree{padding:14px 12px}
 .selbox{width:100%;background:var(--card);border:1px solid var(--line);border-radius:9px;
   padding:9px 11px;color:var(--txt);font-weight:600;margin-bottom:9px}
+.viewtog{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px;margin-bottom:9px}
+.viewtog button{flex:1;border:none;background:transparent;color:var(--dim);font-weight:700;font-size:12px;
+  padding:7px 0;border-radius:7px;cursor:pointer;font-family:inherit}
+.viewtog button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.trow .scnt{color:var(--muted);font-size:10px;font-weight:600;margin-left:4px}
+.trow.item .sdot{width:7px;height:7px;border-radius:50%;flex:none}
 .search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;
   padding:9px 11px;color:var(--txt);margin-bottom:12px;font-size:12px}
 .tnode{border-radius:8px}
@@ -298,6 +304,10 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
   <!-- tree -->
   <aside class="pane tree">
     <div class="selbox">일반채팅 ▾</div>
+    <div class="viewtog" id="viewtog">
+      <button data-v="function" class="on">기능 기준</button>
+      <button data-v="screen">화면 기준</button>
+    </div>
     <input class="search" id="q" placeholder="기능 · 검증 항목 검색"/>
     <div id="tree"></div>
   </aside>
@@ -338,7 +348,9 @@ function itemCP(it){return (it.checkpoints||[]).length;}
 function groupCP(g){return (g.items||[]).reduce((a,i)=>a+itemCP(i),0);}
 
 /* ---------- TREE ---------- */
-function buildTree(){
+let VIEW='function';
+function buildTree(){ (VIEW==='screen'&&CM) ? buildScreenTree() : buildFunctionTree(); }
+function buildFunctionTree(){
   const t=document.getElementById('tree');
   t.innerHTML=M.functions.map((f,fi)=>{
     const groups=(f.validation_groups||[]).map((g,gi)=>{
@@ -355,7 +367,6 @@ function buildTree(){
         <span class="nm" style="font-weight:700">${esc(fnName(f))}</span><span class="cnt">${f.stats.checkpoints}</span></div>
       <div class="tchildren">${groups}</div></div>`;
   }).join('');
-  // toggles
   t.querySelectorAll('.ftoggle').forEach(el=>el.onclick=e=>{
     el.parentNode.classList.toggle('open');el.classList.toggle('open');
     selectFunction(+el.dataset.f);});
@@ -363,6 +374,58 @@ function buildTree(){
     el.parentNode.classList.toggle('open');el.classList.toggle('open');});
   t.querySelectorAll('.trow.item').forEach(el=>el.onclick=()=>
     selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i));
+}
+/* 화면(Screen) 기준 트리: Screen → Target → 체크포인트 */
+function buildScreenTree(){
+  const t=document.getElementById('tree');
+  const ids=Object.keys(CM.byScreen).sort((a,b)=>CM.byScreen[b].length-CM.byScreen[a].length);
+  t.innerHTML=ids.map(id=>{
+    const s=CM.screens[id], entries=CM.byScreen[id];
+    const byT={};
+    entries.forEach(e=>{const mp=CM.checkpoints[e.cpId];const tid=mp.target_id||'∅';
+      (byT[tid]=byT[tid]||{name:mp.target_name||'(대상 미지정)',list:[]}).list.push(e);});
+    const tnodes=Object.keys(byT).sort((a,b)=>byT[b].list.length-byT[a].list.length).map(tid=>{
+      const grp=byT[tid];
+      const leaves=grp.list.map(e=>{const m=vMeta(vStatus(e.fi,e.gi,e.ii,e.ci));
+        return `<div class="trow item" data-f="${e.fi}" data-g="${e.gi}" data-i="${e.ii}" data-c="${e.ci}">
+          <span class="caret" style="visibility:hidden">▸</span><span class="sdot" style="background:var(--${m.cls})"></span>
+          <span class="nm">${esc(e.label)}</span></div>`;}).join('');
+      return `<div class="tnode">
+        <div class="trow gtoggle"><span class="caret">▸</span><span class="nm">${esc(grp.name)}</span><span class="cnt">${grp.list.length}</span></div>
+        <div class="tchildren">${leaves}</div></div>`;
+    }).join('');
+    return `<div class="tnode">
+      <div class="trow ftoggle" data-screen="${id}"><span class="caret">▸</span>
+        <span class="nm" style="font-weight:700">${esc(s.screen_name)}</span><span class="cnt">${entries.length}</span></div>
+      <div class="tchildren">${tnodes}</div></div>`;
+  }).join('');
+  t.querySelectorAll('.ftoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');
+    t.querySelectorAll('.ftoggle').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+    renderScreenOverview(el.dataset.screen);});
+  t.querySelectorAll('.gtoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');});
+  t.querySelectorAll('.trow.item').forEach(el=>el.onclick=()=>{
+    t.querySelectorAll('.trow.item').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+    gotoCheckpoint(+el.dataset.f,+el.dataset.g,+el.dataset.i,+el.dataset.c);});
+}
+function setView(v){
+  if(v===VIEW)return; VIEW=v;
+  document.querySelectorAll('#viewtog button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.getElementById('q').value='';
+  buildTree();
+  if(v==='screen'){
+    const first=Object.keys(CM.byScreen).sort((a,b)=>CM.byScreen[b].length-CM.byScreen[a].length)[0];
+    const node=document.querySelector('#tree .ftoggle[data-screen="'+first+'"]');
+    if(node){node.parentNode.classList.add('open');node.classList.add('open','sel');}
+    if(first)renderScreenOverview(first);
+  }else{ selectFunction(SEL.f||0); }
+}
+function openFunctionInTree(fi){
+  setView('function');
+  const node=document.querySelector('#tree .ftoggle[data-f="'+fi+'"]');
+  if(node){node.parentNode.classList.add('open');node.classList.add('open');node.scrollIntoView({block:'center'});}
+  selectFunction(fi);
 }
 
 /* ---------- FUNCTION OVERVIEW (right pane) ---------- */
@@ -471,9 +534,9 @@ function dominantScreen(fi){
   return best?CM.screens[best]:null;
 }
 /* TC 기반 가상 서비스 화면 + 가상 스크린샷 */
-function renderPhoneMock(fi,state){
-  const f=M.functions[fi], s=dominantScreen(fi);
-  const title=s?s.screen_name:fnName(f);
+function renderPhoneMock(fi,state){return renderPhoneMockFor(dominantScreen(fi),state,fnName(M.functions[fi]));}
+function renderPhoneMockFor(s,state,fallbackTitle){
+  const title=s?s.screen_name:(fallbackTitle||'화면');
   const tg=(s&&s.targets)||[];
   const hasNotice=tg.indexOf('NoticeBanner')>=0;
   const hasInput=tg.some(t=>/(Input|Send|Toolbar|PlusMenu|Voice)/.test(t));
@@ -515,6 +578,50 @@ function renderPhoneMock(fi,state){
       <div class="smnote">⚠ 실제 앱 스크린샷이 아니라 TC(검증 모델)로 합성한 <b>가상 화면</b>입니다. 실제 캡처가 연동되면 이 자리에 교체됩니다.</div>
     </div>
   </div>`;
+}
+/* 화면(Screen) 기준 우측 개요 */
+function renderScreenOverview(id){
+  const s=CM.screens[id], entries=CM.byScreen[id]||[];
+  const c={pass:0,fail:0,progress:0,idle:0}; entries.forEach(e=>c[vStatus(e.fi,e.gi,e.ii,e.ci)]++);
+  const total=entries.length||1, doneRate=pct(total-c.idle,total);
+  const tset=new Set(), fnc={};
+  entries.forEach(e=>{const mp=CM.checkpoints[e.cpId]; if(mp.target_id)tset.add(mp.target_id); fnc[e.fi]=(fnc[e.fi]||0)+1;});
+  const fnRows=Object.keys(fnc).sort((a,b)=>fnc[b]-fnc[a]).map(fi=>
+    `<div class="chkrow" data-fi="${fi}"><div class="cn">${esc(fnName(M.functions[fi]))}</div><span class="sbadge idle">${fnc[fi]} CP</span></div>`).join('');
+  SEL.i=-1;
+  document.getElementById('crumb').textContent='일반채팅  ›  '+s.screen_name;
+  document.getElementById('d-crumb').textContent='화면(가상)  ›  '+s.screen_id;
+  document.getElementById('d-title').textContent=s.screen_name;
+  {const ds=document.getElementById('d-status');ds.textContent='화면 개요';ds.style.background='var(--accent-w)';ds.style.color='var(--accent)';}
+  document.getElementById('d-desc').textContent=`${s.activity_candidate} · ${s.fragment_candidate} · 체크포인트 ${entries.length}`;
+  document.getElementById('d-body').innerHTML=`
+    <div class="sblock">
+      <div class="st"><span>검수 진행 현황</span><span>${doneRate}% 진행</span></div>
+      <div class="prog"><i class="p-ok" style="width:${pct(c.pass,total)}%"></i><i class="p-fail" style="width:${pct(c.fail,total)}%"></i><i class="p-warn" style="width:${pct(c.progress,total)}%"></i></div>
+      <div class="leg">
+        <span class="lg"><span class="sw" style="background:var(--ok)"></span>완료 <b>${c.pass}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--fail)"></span>오류 <b>${c.fail}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--warn)"></span>진행중 <b>${c.progress}</b></span>
+        <span class="lg"><span class="sw" style="background:var(--idle)"></span>미실행 <b>${c.idle}</b></span>
+      </div>
+    </div>
+    <div class="sblock">
+      <div class="st"><span>화면 지표</span></div>
+      <div class="kpis">
+        <div class="kpi"><div class="kv">${entries.length}</div><div class="kl">체크포인트</div></div>
+        <div class="kpi"><div class="kv">${tset.size}</div><div class="kl">Target 수</div></div>
+        <div class="kpi"><div class="kv">${Object.keys(fnc).length}</div><div class="kl">기여 기능 수</div></div>
+      </div>
+    </div>
+    <div class="sblock">
+      <div class="st"><span>이 화면을 검증하는 기능</span><span>${Object.keys(fnc).length}개</span></div>
+      ${fnRows}
+    </div>
+    <div class="sblock">
+      <div class="st"><span>관련 서비스 화면 (가상)</span><span>TC 기반</span></div>
+      ${renderPhoneMockFor(s,rollupState(c),s.screen_name)}
+    </div>`;
+  document.querySelectorAll('#d-body .chkrow[data-fi]').forEach(el=>el.onclick=()=>openFunctionInTree(+el.dataset.fi));
 }
 function openGroupInTree(fi,gi){
   const tree=document.getElementById('tree'), fnode=tree.children[fi];
@@ -729,23 +836,29 @@ function openRelated(kind,id,title){
   showMask(true);
   box.querySelector('#r-close').onclick=()=>showMask(false);
   box.querySelectorAll('.rel-row').forEach(el=>el.onclick=()=>{
-    showMask(false);
-    selectItem(+el.dataset.f,+el.dataset.g,+el.dataset.i);
-    SEL.c=+el.dataset.c;
-    const rows=document.querySelectorAll('#d-body .cprow');
-    if(rows[SEL.c]){rows.forEach(r=>r.classList.remove('sel'));rows[SEL.c].classList.add('sel');
-      rows[SEL.c].scrollIntoView({block:'nearest'});}
-    renderCPDetail(M.functions[SEL.f].validation_groups[SEL.g].items[SEL.i]);});
+    showMask(false);gotoCheckpoint(+el.dataset.f,+el.dataset.g,+el.dataset.i,+el.dataset.c);});
+}
+/* 특정 체크포인트로 이동 + 선택 */
+function gotoCheckpoint(fi,gi,ii,ci){
+  selectItem(fi,gi,ii); SEL.c=ci;
+  const rows=document.querySelectorAll('#d-body .cprow');
+  if(rows[ci]){rows.forEach(r=>r.classList.remove('sel'));rows[ci].classList.add('sel');
+    rows[ci].scrollIntoView({block:'nearest'});}
+  renderCPDetail(M.functions[fi].validation_groups[gi].items[ii]);
 }
 function showMask(on){const m=document.getElementById('cm-mask');m.classList.toggle('on',on);}
 document.getElementById('cm-mask').addEventListener('click',e=>{if(e.target.id==='cm-mask')showMask(false);});
 
 function markSel(){
+  if(VIEW!=='function')return;  // 화면 뷰는 자체 핸들러가 선택 표시를 관리
   document.querySelectorAll('#tree .trow.item').forEach(el=>{
     el.classList.toggle('sel', +el.dataset.f===SEL.f&&+el.dataset.g===SEL.g&&+el.dataset.i===SEL.i);});
   document.querySelectorAll('#tree .ftoggle').forEach(el=>{
     el.classList.toggle('sel', SEL.i<0 && +el.dataset.f===SEL.f);});
 }
+
+/* ---------- VIEW TOGGLE ---------- */
+document.querySelectorAll('#viewtog button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
 
 /* ---------- SEARCH ---------- */
 document.getElementById('q').addEventListener('input',e=>{
