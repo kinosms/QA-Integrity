@@ -322,6 +322,7 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 <!-- 매핑 수정 / 관련 체크포인트 모달 -->
 <div class="cm-mask" id="cm-mask"><div class="cm-box" id="cm-box"></div></div>
 <script src="./code_mapping.js"></script>
+<script src="./state_norm.js"></script>
 <script>
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 let M=null, CM=null, SEL={f:0,g:0,i:0,c:0};
@@ -567,6 +568,18 @@ function renderCPDetail(it){
     : _cs==='progress'
     ? `<div class="note"><b>실행 결과: 진행중</b> — 검수 진행 중(가상). ※ TC 기반 가상 수행 결과.</div>`
     : `<div class="note"><b>실행 결과: 미실행</b> — 아직 검수되지 않았습니다(가상). 실제 테스트 실행 결과를 연동하면 자동 반영됩니다.</div>`;
+  const _nm=window.StateNorm?StateNorm.normalize(c):null;
+  const _normHtml=_nm?`
+    <div class="cards">
+      <div class="card ${_nm.conflict?'edited':''}"><div class="lab">정규화 상태 (Normalized)</div>
+        <div class="val mono">${esc(_nm.normalized_state)}</div><div class="sub">${esc(_nm.canonical_ko)} · ${esc(_nm.verify)}</div></div>
+      <div class="card"><div class="lab">원문 술어</div><div class="val">${esc(_nm.source_verb||'-')}</div>
+        <div class="sub">신뢰도 ${Math.round(_nm.confidence*100)}%</div></div>
+      <div class="card"><div class="lab">술어 ↔ 상태 일관성</div>
+        <div class="val">${_nm.conflict?'⚠ 불일치':(_nm.agree?'✓ 일치':'· 단일 근거')}</div>
+        <div class="sub">${_nm.from_text?'술어→'+_nm.from_text:'술어 미인식'} / ${_nm.from_es?'상태→'+_nm.from_es:'상태 미인식'}</div></div>
+    </div>
+    ${_nm.conflict?`<div class="note" style="background:var(--warn-bg)"><b>⚠ 술어와 기대상태가 다르게 해석됩니다.</b> 텍스트 술어는 <b>${esc((StateNorm.CANON[_nm.from_text]||{}).ko||_nm.from_text)}</b>, expected_state는 <b>${esc((StateNorm.CANON[_nm.from_es]||{}).ko||_nm.from_es)}</b>로 읽힙니다. 한 체크포인트가 두 가지를 동시에 서술하거나 표현이 모호할 수 있어 검수가 필요합니다.</div>`:''}`:'';
   document.getElementById('cp-detail').innerHTML=
    `<div class="sectitle">체크포인트 상세 <span class="sbadge ${_cm.cls}">${_cm.dot} ${_cm.lb}</span></div>
     <div class="cards">
@@ -574,6 +587,7 @@ function renderCPDetail(it){
       <div class="card"><div class="lab">대상 (Target)</div><div class="val mono">${esc(c.target||'-')}</div></div>
       <div class="card"><div class="lab">기대 상태 (Expected State)</div><div class="val mono">${esc(c.expected_state||'-')}</div></div>
     </div>
+    ${_normHtml}
     <div class="cards">
       <div class="card"><div class="lab">실행 경로 (Execution Path)</div><ol class="steps">${ep}</ol></div>
       <div class="card"><div class="lab">사전조건 (Preconditions)</div><ul class="plist">${pc}</ul></div>
