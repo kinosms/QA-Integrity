@@ -55,6 +55,27 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
 .viewtog button.on{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .trow .scnt{color:var(--muted);font-size:10px;font-weight:600;margin-left:4px}
 .trow.item .sdot{width:7px;height:7px;border-radius:50%;flex:none}
+/* profile checklist */
+.pfrow{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:12.5px}
+.pfrow:hover{background:var(--bg)}
+.pfrow .cb{width:15px;height:15px;border:1.5px solid var(--muted);border-radius:4px;flex:none;display:grid;place-items:center;font-size:10px;color:#fff}
+.pfrow.on .cb{background:var(--accent);border-color:var(--accent)}
+.pfrow.on{color:var(--accent);font-weight:700}
+.pfrow .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pfrow .cnt{color:var(--muted);font-size:11px;font-weight:600}
+/* profile result */
+.pfchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.pfchip{background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.pfchip .x{opacity:.8}
+.pfbig{display:flex;gap:12px;margin:4px 0 2px}
+.pfbig .bx{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:13px}
+.pfbig .bv{font-size:24px;font-weight:800;line-height:1}
+.pfbig .bl{color:var(--dim);font-size:11px;font-weight:700;margin-top:6px}
+.rec{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;margin-bottom:7px;cursor:pointer}
+.rec:hover{border-color:var(--accent);background:var(--bg)}
+.rec .rn{flex:1;font-size:12.5px}
+.rec .rp{font-size:10.5px;color:var(--muted)}
+.rec .radd{font-size:11px;font-weight:800;color:var(--accent);white-space:nowrap}
 .search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;
   padding:9px 11px;color:var(--txt);margin-bottom:12px;font-size:12px}
 .tnode{border-radius:8px}
@@ -308,6 +329,7 @@ body{background:var(--bg);color:var(--txt);font-size:13px;line-height:1.45;
       <button data-v="function" class="on">기능</button>
       <button data-v="screen">화면</button>
       <button data-v="precond">사전조건</button>
+      <button data-v="profile">프로파일</button>
     </div>
     <input class="search" id="q" placeholder="기능 · 검증 항목 검색"/>
     <div id="tree"></div>
@@ -350,10 +372,11 @@ function itemCP(it){return (it.checkpoints||[]).length;}
 function groupCP(g){return (g.items||[]).reduce((a,i)=>a+itemCP(i),0);}
 
 /* ---------- TREE ---------- */
-let VIEW='function', PC=null, PC_CONDIDX=[];
+let VIEW='function', PC=null, PC_CONDIDX=[], PROFILE=new Set();
 function buildTree(){
   if(VIEW==='screen'&&CM) buildScreenTree();
   else if(VIEW==='precond'&&PC) buildPrecondTree();
+  else if(VIEW==='profile'&&PC) buildProfileTree();
   else buildFunctionTree();
 }
 function buildFunctionTree(){
@@ -430,7 +453,75 @@ function setView(v){
     const node=document.querySelector('#tree .ftoggle[data-cat="'+first.key+'"]');
     if(node){node.parentNode.classList.add('open');node.classList.add('open','sel');}
     if(first)renderCategoryOverview(first.key);
+  }else if(v==='profile'){
+    renderProfileResult();
   }else{ selectFunction(SEL.f||0); }
+}
+/* ===== 세팅 프로파일: 여러 조건 조합 → 완전 검증 가능한 CP 필터 ===== */
+function buildProfileTree(){
+  const t=document.getElementById('tree');
+  t.innerHTML=`<div class="cmwarn" style="padding:0 4px 8px;color:var(--dim);font-size:11.5px">세팅해 둘 조건을 체크하세요. 우측에 그 조합으로 <b>완전히 검증 가능한 체크포인트</b>가 집계됩니다.</div>`+
+    PC.categories.map(cat=>{
+      const rows=cat.conditions.map(ck=>{
+        const cond=PC.conditions[ck], idx=PC_CONDIDX.indexOf(ck)>=0?PC_CONDIDX.indexOf(ck):(PC_CONDIDX.push(ck)-1);
+        return `<div class="pfrow ${PROFILE.has(ck)?'on':''}" data-ci="${idx}">
+          <span class="cb">${PROFILE.has(ck)?'✓':''}</span><span class="nm">${esc(cond.label)}</span><span class="cnt">${cond.count}</span></div>`;
+      }).join('');
+      return `<div class="tnode ${cat.persistent?'open':''}">
+        <div class="trow ftoggle"><span class="caret">▸</span>
+          <span class="nm" style="font-weight:700">${cat.icon} ${esc(cat.label)}</span><span class="cnt">${cat.condCount}</span></div>
+        <div class="tchildren">${rows}</div></div>`;
+    }).join('');
+  t.querySelectorAll('.ftoggle').forEach(el=>el.onclick=()=>{
+    el.parentNode.classList.toggle('open');el.classList.toggle('open');});
+  t.querySelectorAll('.pfrow').forEach(el=>el.onclick=()=>{
+    const ck=PC_CONDIDX[+el.dataset.ci];
+    if(PROFILE.has(ck))PROFILE.delete(ck); else PROFILE.add(ck);
+    el.classList.toggle('on');el.querySelector('.cb').textContent=PROFILE.has(ck)?'✓':'';
+    renderProfileResult();});
+}
+function renderProfileResult(){
+  const sel=[...PROFILE];
+  let full=[], miss1={}, full0=0;
+  PC.checkpoints.forEach(cp=>{
+    const missing=cp.conds.filter(k=>!PROFILE.has(k));
+    if(missing.length===0){ full.push(cp); if(cp.conds.length===0)full0++; }
+    else if(missing.length===1){ miss1[missing[0]]=(miss1[missing[0]]||0)+1; }
+  });
+  const total=PC.checkpoints.length;
+  const r=locsRollup(full);
+  const recs=Object.keys(miss1).sort((a,b)=>miss1[b]-miss1[a]).slice(0,6);
+  const chips=sel.length?sel.map(ck=>`<span class="pfchip" data-ck="${esc(ck)}">${esc(PC.conditions[ck].label)} <span class="x">✕</span></span>`).join(''):'<span class="cmwarn" style="color:var(--dim)">아직 선택한 조건이 없습니다. 좌측에서 세팅할 조건을 체크하세요.</span>';
+  const recHtml=recs.length?recs.map(ck=>
+    `<div class="rec" data-ck="${esc(ck)}"><div class="rn">${esc(PC.conditions[ck].label)}<div class="rp">${esc(PC.catMeta[PC.conditions[ck].category].label)}</div></div>
+      <span class="radd">+${miss1[ck]} CP 커버 ＋</span></div>`).join('')
+    :'<div class="cmwarn" style="color:var(--dim)">한 조건만 더하면 커버되는 항목이 없습니다.</div>';
+  document.getElementById('crumb').textContent='일반채팅  ›  세팅 프로파일';
+  document.getElementById('d-crumb').textContent='세팅 프로파일 (조건 조합)';
+  document.getElementById('d-title').textContent='세팅 프로파일';
+  {const ds=document.getElementById('d-status');ds.textContent=sel.length+'개 조건';ds.style.background='var(--accent-w)';ds.style.color='var(--accent)';}
+  document.getElementById('d-desc').textContent='선택한 조건을 모두 세팅했을 때, 사전조건이 전부 충족되어 바로 검증 가능한 체크포인트입니다.';
+  document.getElementById('d-body').innerHTML=`
+    <div class="sblock"><div class="st"><span>세팅한 조건</span><span>${sel.length}개</span></div><div class="pfchips">${chips}</div></div>
+    <div class="pfbig">
+      <div class="bx"><div class="bv">${full.length}</div><div class="bl">완전 검증 가능 CP</div></div>
+      <div class="bx"><div class="bv">${pct(full.length,total)}<span class="ku" style="font-size:13px">%</span></div><div class="bl">전체 ${total} 중 커버율</div></div>
+      <div class="bx"><div class="bv">${Object.keys(r.fnc).length}</div><div class="bl">관련 기능</div></div>
+    </div>
+    ${statusBlockHtml(r.c,full.length||1,'완전 검증 가능 항목의 검수 현황')}
+    <div class="sblock"><div class="st"><span>➕ 이 조건을 추가하면 (커버 확장 추천)</span></div>${recHtml}</div>
+    <div class="sblock"><div class="st"><span>완전 검증 가능한 기능</span><span>${Object.keys(r.fnc).length}개</span></div>${fnListHtml(r.fnc)}</div>`;
+  // chip 제거
+  document.querySelectorAll('#d-body .pfchip').forEach(el=>el.onclick=()=>{PROFILE.delete(el.dataset.ck);syncProfileTree();renderProfileResult();});
+  // 추천 추가
+  document.querySelectorAll('#d-body .rec').forEach(el=>el.onclick=()=>{PROFILE.add(el.dataset.ck);syncProfileTree();renderProfileResult();});
+  // 기능 이동
+  document.querySelectorAll('#d-body .chkrow[data-fi]').forEach(el=>el.onclick=()=>openFunctionInTree(+el.dataset.fi));
+}
+function syncProfileTree(){
+  document.querySelectorAll('#tree .pfrow').forEach(el=>{
+    const ck=PC_CONDIDX[+el.dataset.ci], on=PROFILE.has(ck);
+    el.classList.toggle('on',on);el.querySelector('.cb').textContent=on?'✓':'';});
 }
 /* 사전조건(Precondition) 기준 트리: 카테고리 → 조건 → 체크포인트 */
 function buildPrecondTree(){

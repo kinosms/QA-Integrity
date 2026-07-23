@@ -78,15 +78,15 @@
   }
 
   function build(model) {
-    var conditions = {}, byCategory = {};
+    var conditions = {}, byCategory = {}, checkpoints = [];
     (model.functions || []).forEach(function (f, fi) {
       (f.validation_groups || []).forEach(function (g, gi) {
         (g.items || []).forEach(function (it, ii) {
           (it.checkpoints || []).forEach(function (c, ci) {
-            var seen = {};  // 한 체크포인트가 같은 canonical을 중복 카운트하지 않도록
+            var seen = {}, conds = [];  // 한 체크포인트가 같은 canonical을 중복 카운트하지 않도록
             (c.preconditions || []).forEach(function (p) {
               var cl = classify(p), key = cl.canonical;
-              if (seen[key]) return; seen[key] = 1;
+              if (seen[key]) return; seen[key] = 1; conds.push(key);
               if (!conditions[key]) {
                 conditions[key] = { label: key, category: cl.category, persistent: CATS[cl.category].persistent, count: 0, locs: [] };
                 (byCategory[cl.category] = byCategory[cl.category] || []).push(key);
@@ -94,6 +94,7 @@
               conditions[key].count++;
               conditions[key].locs.push({ fi: fi, gi: gi, ii: ii, ci: ci, label: c.check_point });
             });
+            checkpoints.push({ fi: fi, gi: gi, ii: ii, ci: ci, label: c.check_point, conds: conds });
           });
         });
       });
@@ -103,7 +104,7 @@
       var cnt = conds.reduce(function (s, c) { return s + conditions[c].count; }, 0);
       return { key: k, label: CATS[k].label, icon: CATS[k].icon, persistent: CATS[k].persistent, conditions: conds, condCount: conds.length, count: cnt };
     });
-    return { categories: categories, conditions: conditions, byCategory: byCategory, catMeta: CATS };
+    return { categories: categories, conditions: conditions, byCategory: byCategory, catMeta: CATS, checkpoints: checkpoints };
   }
 
   global.Precond = { build: build, classify: classify, CATS: CATS };
